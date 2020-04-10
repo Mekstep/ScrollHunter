@@ -2,9 +2,6 @@
 # Compiler flags
 if (MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /EHsc" CACHE INTERNAL "" FORCE)
-elseif(APPLE)
-  message("hello apple")
-  set(CMAKE_OSX_DEPLOYMENT_TARGET 10.9 CACHE STRING "")
 endif()
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -53,12 +50,12 @@ add_library(lib_ecm STATIC ${SOURCE_FILES})
 target_include_directories(lib_ecm INTERFACE "${CMAKE_SOURCE_DIR}/engine/lib_ecm" )
 target_link_libraries(lib_ecm PRIVATE lib_maths)
 
-#### Add Practical Projects###
 
-## platformer
+
+## scroll hunter
 file(GLOB_RECURSE SOURCES ScrollHunter/*.cpp ScrollHunter/*.h)
 file(GLOB_RECURSE CMPNTS ScrollHunter/components/*.cpp ScrollHunter/components/*.h)
-file(GLOB_RECURSE SCENES ScrollHunter/scenes/*.cpp ScrollHunterr/scenes/*.h)
+file(GLOB_RECURSE SCENES ScrollHunter/scenes/*.cpp ScrollHunter/scenes/*.h)
 add_executable(ScrollHunter ${SOURCES} ${RESOURCE_FILES})
 source_group("components" FILES ${CMPNTS})
 source_group("resources" FILES ${RESOURCE_FILES})
@@ -66,20 +63,10 @@ source_group("resources" FILES ${RESOURCE_FILES})
 target_link_libraries(ScrollHunter lib_engine)
 set(EXECUTABLES ${EXECUTABLES} ScrollHunter)
 
-
 #### Target for copying resources to build dir####
-if(APPLE)
-  add_custom_target(copy_resources ALL
-          COMMAND ${CMAKE_COMMAND} -E copy_directory
-          "${PROJECT_SOURCE_DIR}/res" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/res
-          COMMAND ${CMAKE_COMMAND} -E copy_directory
-          "${CMAKE_SOURCE_DIR}/lib/sfml/extlibs/libs-osx/Frameworks" ${CMAKE_BINARY_DIR}/lib/sfml/Frameworks
-          )
-else()
-  add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND} -E copy_directory
+add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND} -E copy_directory
           "${PROJECT_SOURCE_DIR}/res" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIGURATION>/res
           )
-endif()
 
 #### Link Dependencies ####
 foreach (exe ${EXECUTABLES})

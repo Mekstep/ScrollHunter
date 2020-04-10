@@ -63,6 +63,7 @@ void PlayerPhysicsComponent::update(double dt) {
     }
   }
 
+
   //Are we in air?
   if (!_grounded) {
     // Check to see if we have landed yet
@@ -72,6 +73,9 @@ void PlayerPhysicsComponent::update(double dt) {
   } else {
     setFriction(0.1f);
   }
+  
+
+
 
   // Clamp velocity.
   auto v = getVelocity();
