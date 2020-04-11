@@ -18,6 +18,8 @@ static float loadingspinner = 0.f;
 static float loadingTime;
 static RenderWindow* _window;
 
+
+
 void Loading_update(float dt, const Scene* const scn) {
   //  cout << "Eng: Loading Screen\n";
   if (scn->isLoaded()) {
@@ -75,7 +77,6 @@ void Engine::Render(RenderWindow& window) {
   } else if (_activeScene != nullptr) {
     _activeScene->Render();
   }
-
   Renderer::render();
 }
 
@@ -87,6 +88,11 @@ void Engine::Start(unsigned int width, unsigned int height,
   Renderer::initialise(window);
   Physics::initialise();
   ChangeScene(scn);
+
+  
+
+  sf::Vector2f position(0,0);
+
   while (window.isOpen()) {
     Event event;
     while (window.pollEvent(event)) {

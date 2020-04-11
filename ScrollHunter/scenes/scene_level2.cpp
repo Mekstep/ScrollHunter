@@ -12,13 +12,13 @@ using namespace sf;
 
 static shared_ptr<Entity> player;
 
-sf::Texture mage;
-sf::Texture skele;
-sf::Texture skeletArcher;
-sf::Texture skeletChief;
-sf::Sprite skeleton;
+Texture mage;
+Texture skele;
+Texture skeletArcher;
+Texture skeletChief;
+Sprite skeleton;
 
-sf::View view;
+View view;
 
 void Level2Scene::Load() {
   cout << "Scene 2 Load" << endl;
@@ -29,7 +29,6 @@ void Level2Scene::Load() {
 
   view.reset(sf::FloatRect(0, 0, 1920, 1080));
   view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
-
 
   // Create player
   {
@@ -171,16 +170,37 @@ void Level2Scene::UnLoad() {
 }
 
 void Level2Scene::Update(const double& dt) {
+
   Scene::Update(dt);
+
+  Vector2f position(0, 0);
+
   const auto pp = player->getPosition();
+
   if (ls::getTileAt(pp) == ls::END) {
     Engine::ChangeScene((Scene*)&level3);
   } else if (!player->isAlive()) {
     Engine::ChangeScene((Scene*)&level2);
   }
+
+  position.x = player->getPosition().x + 10 - (1920 / 2);
+  position.y = player->getPosition().y + 10 - (1080 / 2);
+
+  if (position.x < 0)
+  {
+      position.x = 0;
+  }
+  if (position.y < 0)
+  {
+      position.y = 0;
+  }
+
+  view.reset(FloatRect(position.x, position.y, 1920, 1080));
+
 }
 
 void Level2Scene::Render() {
   ls::render(Engine::GetWindow());
+  Engine::GetWindow().setView(view);
   Scene::Render();
 }
