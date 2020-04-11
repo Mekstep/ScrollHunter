@@ -39,6 +39,10 @@ void Entity::setPosition(const sf::Vector2f& _position) {
   Entity::_position = _position;
 }
 
+int Entity::getHealth() const { return _health; }
+
+void Entity::setHealth(int _health) { Entity::_health = _health; }
+
 float Entity::getRotation() const { return _rotation; }
 
 void Entity::setRotation(float _rotation) { Entity::_rotation = _rotation; }

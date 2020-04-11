@@ -49,8 +49,9 @@ protected:
   bool _visible;     // should be rendered
   bool _fordeletion; // should be deleted
   std::set<std::string> _tags;
+  int _health;
 
-  int health;
+  
 
 public:
   void addTag(const std::string& t);
@@ -65,6 +66,10 @@ public:
   virtual void render();
 
   //
+  int getHealth() const;
+
+  void setHealth(int _health);
+
   const sf::Vector2f& getPosition() const;
 
   void setPosition(const sf::Vector2f& _position);
