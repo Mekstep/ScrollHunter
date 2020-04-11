@@ -11,6 +11,12 @@ using namespace std;
 using namespace sf;
 
 static shared_ptr<Entity> player;
+
+sf::Texture skele;
+sf::Texture skeleArcher;
+sf::Texture skeletChief;
+sf::Sprite skeleton;
+
 void Level2Scene::Load() {
   cout << "Scene 2 Load" << endl;
   ls::loadLevelFile("res/level_2.txt", 40.0f);
@@ -32,23 +38,96 @@ void Level2Scene::Load() {
     player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
   }
 
-  // Create Enemy
+  // Create Skeleton
   {
-    auto enemy = makeEntity();
-    enemy->setPosition(ls::getTilePosition(ls::findTiles(ls::ENEMY)[0]) +
-                       Vector2f(0, 24));
+    auto skeleton = makeEntity();
+    skeleton->setPosition(ls::getTilePosition(ls::findTiles('k')[0]) +
+        Vector2f(20, 0));
     // *********************************
     // Add HurtComponent
-	enemy->addComponent<HurtComponent>();
+	skeleton->addComponent<HurtComponent>();
+
     // Add ShapeComponent, Red 16.f Circle
-	auto s = enemy->addComponent<ShapeComponent>();
-	s->setShape<sf::CircleShape>(16.f);
-	s->getShape().setFillColor(Color::Red);
-	s->getShape().setOrigin(8.f, 8.f);
+    auto s = skeleton->addComponent<ShapeComponent>();
+    s->setShape<sf::RectangleShape>(Vector2f(30.f, 50.f));
+    skele.loadFromFile("res/skeleton.png");
+    s->getShape().setTexture(&skele);
+    s->getShape().setOrigin(10.f, 25.f);
+
+    auto turret = makeEntity();
+    turret->setPosition(skeleton->getPosition());
+    //auto t = turret->addComponent<ShapeComponent>();
+    //t->setShape<sf::CircleShape>(15.0f, 3);
+    //t->getShape().setFillColor(Color::Red);
+    //t->getShape().setOrigin(16.f, 16.f);
 
     // Add EnemyAIComponent
-	enemy->addComponent<EnemyAIComponent>();
+	skeleton->addComponent<EnemyAIComponent>();
+    //turret->addComponent<EnemyTurretComponent>();
+    //turret->addComponent<EnemyAIComponent>();
     // *********************************
+  }
+
+  // Create Skeleton Chief
+  {
+      auto skeleChief = makeEntity();
+      skeleChief->setPosition(ls::getTilePosition(ls::findTiles('c')[0]) +
+          Vector2f(20, 0));
+      // *********************************
+      // Add HurtComponent
+      skeleChief->addComponent<HurtComponent>();
+      // Add ShapeComponent, Red 16.f Circle
+      auto s = skeleChief->addComponent<ShapeComponent>();
+      s->setShape<sf::RectangleShape>(Vector2f(30.f, 50.f));
+
+
+      skeletChief.loadFromFile("res/skeletonchief.png");
+      s->getShape().setTexture(&skeletChief);
+      s->getShape().setOrigin(10.f, 25.f);
+
+      auto turret = makeEntity();
+      turret->setPosition(skeleChief->getPosition());
+      //auto t = turret->addComponent<ShapeComponent>();
+      //t->setShape<sf::CircleShape>(15.0f, 3);
+      //t->getShape().setFillColor(Color::Red);
+      //t->getShape().setOrigin(16.f, 16.f);
+
+      // Add EnemyAIComponent
+      skeleChief->addComponent<EnemyAIComponent>();
+      //turret->addComponent<EnemyTurretComponent>();
+      //turret->addComponent<EnemyAIComponent>();
+      // *********************************
+  }
+
+  // Create Skeleton Chief
+  {
+      auto skeleChief = makeEntity();
+      skeleChief->setPosition(ls::getTilePosition(ls::findTiles('a')[0]) +
+          Vector2f(20, 0));
+      // *********************************
+      // Add HurtComponent
+      skeleChief->addComponent<HurtComponent>();
+      // Add ShapeComponent, Red 16.f Circle
+      auto s = skeleChief->addComponent<ShapeComponent>();
+      s->setShape<sf::RectangleShape>(Vector2f(30.f, 50.f));
+
+
+      skeleArcher.loadFromFile("res/skeletonarcher.png");
+      s->getShape().setTexture(&skeleArcher);
+      s->getShape().setOrigin(10.f, 25.f);
+
+      auto turret = makeEntity();
+      turret->setPosition(skeleChief->getPosition());
+      //auto t = turret->addComponent<ShapeComponent>();
+      //t->setShape<sf::CircleShape>(15.0f, 3);
+      //t->getShape().setFillColor(Color::Red);
+      //t->getShape().setOrigin(16.f, 16.f);
+
+      // Add EnemyAIComponent
+      skeleChief->addComponent<EnemyAIComponent>();
+      //turret->addComponent<EnemyTurretComponent>();
+      //turret->addComponent<EnemyAIComponent>();
+      // *********************************
   }
 
   // Create Turret
@@ -57,7 +136,7 @@ void Level2Scene::Load() {
     turret->setPosition(ls::getTilePosition(ls::findTiles('t')[0]) +
                         Vector2f(20, 0));
     auto s = turret->addComponent<ShapeComponent>();
-    s->setShape<sf::CircleShape>(16.f, 3);
+    s->setShape<sf::RectangleShape>(Vector2f(30.f, 50.f));
     s->getShape().setFillColor(Color::Red);
     s->getShape().setOrigin(16.f, 16.f);
     turret->addComponent<EnemyTurretComponent>();

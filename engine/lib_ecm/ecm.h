@@ -50,6 +50,8 @@ protected:
   bool _fordeletion; // should be deleted
   std::set<std::string> _tags;
 
+  int health;
+
 public:
   void addTag(const std::string& t);
   const std::set<std::string>& getTags() const;

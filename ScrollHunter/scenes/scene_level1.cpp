@@ -12,6 +12,8 @@ using namespace sf;
 
 static shared_ptr<Entity> player;
 
+
+
 void Level1Scene::Load() {
   cout << " Scene 1 Load" << endl;
   ls::loadLevelFile("res/level_1.txt", 40.0f);
@@ -24,14 +26,16 @@ void Level1Scene::Load() {
     player = makeEntity();
     player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 	auto s = player->addComponent<SpriteComponent>();
-	sf::Texture sprite;
-	sf::Sprite mage;
-	sprite.loadFromFile("res\mage");
-	mage.setTexture(sprite);
-	mage.setTextureRect(sf::IntRect(0, 0, 38, 64));
+
+    //sprite.loadFromFile("C:/Users/Euan/Desktop/ScrollHunter Build/bin/Debug/res/Mage.png");
+	//mage.setTexture(sprite);
+	//mage.setTextureRect(sf::IntRect(0, 0, 38, 64));
+    //player->addComponent<PhysicsComponent>(true, Vector2f(38.f, 128.f));
 
 	
-	s->setSprite(mage);
+	//s->setSprite(mage);
+
+ 
 	//s->getSprite().setOrigin(10.0f, 15.0f);
 	/*
 	auto s = player->addComponent<ShapeComponent>();
@@ -40,6 +44,7 @@ void Level1Scene::Load() {
     s->getShape().setOrigin(10.f, 15.f);
 	*/
 	player->addComponent<PlayerMovementComponent>();
+
     //player->addComponent<PlayerPhysicsComponent>(Vector2f(30.f, 40.f));
   }
 
