@@ -11,3 +11,13 @@ public:
 
   void Update(const double& dt) override;
 };
+
+class GameOver : public Scene {
+public:
+	GameOver() = default;
+	~GameOver() override = default;
+
+	void Load() override;
+
+	void Update(const double& dt) override;
+};

@@ -26,3 +26,23 @@ void MenuScene::Update(const double& dt) {
 
   Scene::Update(dt);
 }
+
+void GameOver::Load() {
+
+	{
+		auto txt = makeEntity();
+		auto t = txt->addComponent<TextComponent>("GAME OVER!\nPress Space to retry!");
+	}
+
+	setLoaded(true);
+}
+
+void GameOver::Update(const double& dt) {
+	// cout << "Menu Update "<<dt<<"\n";
+
+	if (sf::Keyboard::isKeyPressed(Keyboard::Space)) {
+		Engine::ChangeScene(&level2);
+	}
+
+	Scene::Update(dt);
+}

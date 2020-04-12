@@ -5,6 +5,7 @@
 #include "../components/cmp_hurt_player.h"
 #include "../components/cmp_physics.h"
 #include "../components/cmp_player_physics.h"
+#include "../scenes/scene_menu.h"
 #include "../game.h"
 #include <LevelSystem.h>
 #include <iostream>
@@ -23,6 +24,8 @@ Texture bckgT;
 Sprite bckgS;
 
 View view;
+
+GameOver gameOver;
 
 //ability cooldowns start at max value so you can cast right away
 float qCooldown = 50.f;
@@ -231,7 +234,7 @@ void Level2Scene::Update(const double& dt) {
   if (ls::getTileAt(pp) == ls::END) {
     Engine::ChangeScene((Scene*)&level3);
   } else if (!player->isAlive()) {
-    Engine::ChangeScene((Scene*)&level2);
+    Engine::ChangeScene((Scene*)&gameOver);
   }
 
   
@@ -342,12 +345,15 @@ void Level2Scene::Update(const double& dt) {
 	  eCooldown = 0.f;
   }
 
-  
+  if (Keyboard::isKeyPressed(Keyboard::G))
+  {
+	  Engine::ChangeScene((Scene*)&gameOver);
+  }
 
 }
 
 void Level2Scene::Render() {
-    Engine::GetWindow().draw(bckgS);
+  Engine::GetWindow().draw(bckgS);
   ls::render(Engine::GetWindow());
   Engine::GetWindow().setView(view);
   
