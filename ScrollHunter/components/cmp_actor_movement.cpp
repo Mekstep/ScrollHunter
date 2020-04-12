@@ -1,4 +1,5 @@
 #include "cmp_actor_movement.h"
+#include "cmp_bullet.h"
 #include <LevelSystem.h>
 #include <engine.h>
 #include <iostream>

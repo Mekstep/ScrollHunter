@@ -24,3 +24,4 @@ public:
 
 	void update(double dt) override;
 };
+
