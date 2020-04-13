@@ -12,6 +12,9 @@ public:
   SpriteComponent() = delete;
 
   explicit SpriteComponent(Entity* p);
+
+  ~SpriteComponent() = default;
+
   void update(double dt) override;
   void render() override;
 

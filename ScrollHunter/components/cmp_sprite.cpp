@@ -14,6 +14,9 @@ void SpriteComponent::update(double dt) {
 
 void SpriteComponent::render() { Renderer::queue(_sprite.get()); }
 
+sf::Sprite& SpriteComponent::getSprite() const { return *_sprite; }
+
+
 void ShapeComponent::update(double dt) {
   _shape->setPosition(_parent->getPosition());
   _shape->setRotation(_parent->getRotation());
@@ -26,4 +29,4 @@ sf::Shape& ShapeComponent::getShape() const { return *_shape; }
 ShapeComponent::ShapeComponent(Entity* p)
     : Component(p), _shape(make_shared<sf::CircleShape>()) {}
 
-sf::Sprite& SpriteComponent::getSprite() const { return *_sprite; }
+

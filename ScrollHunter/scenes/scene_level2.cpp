@@ -5,8 +5,10 @@
 #include "../components/cmp_hurt_player.h"
 #include "../components/cmp_physics.h"
 #include "../components/cmp_player_physics.h"
+#include "../components/cmp_spritesheet.h"
 #include "../scenes/scene_menu.h"
 #include "../game.h"
+#include "../Player.h"
 #include <LevelSystem.h>
 #include <iostream>
 using namespace std;
@@ -14,7 +16,7 @@ using namespace sf;
 
 static shared_ptr<Entity> player;
 
-Texture mage;
+
 Texture skele;
 Texture skeletArcher;
 Texture skeletChief;
@@ -56,17 +58,30 @@ void Level2Scene::Load() {
   // Create player
   {
   // *********************************
+	player = Player::makePlayer(this, (ls::getTilePosition(ls::findTiles(ls::START)[0])));
+
+	player->addTag("player");
+	player->addComponent<PlayerMovementComponent>();
+	player->setHealth(100);
+
+	/*
+
 	player = makeEntity();
 	player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
+
 	auto s = player->addComponent<ShapeComponent>();
-	s->setShape<sf::RectangleShape>(Vector2f(20.f, 30.f));
-    mage.loadFromFile("res/mage.png");
-    s->getShape().setTexture(&mage);
+	s->setShape<sf::RectangleShape>(Vector2f(38.f, 64.f));
+	mage.loadFromFile("res/mage.png");
+	s->getShape().setTexture(&mage);
 	s->getShape().setOrigin(10.f, 15.f);
-    
-    player->addTag("player");
-    player->addComponent<PlayerMovementComponent>();
-    player->setHealth(100);
+
+
+
+	*/
+
+
+
+
 
   }
   // *********************************
