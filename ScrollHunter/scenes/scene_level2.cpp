@@ -50,11 +50,8 @@ void Level2Scene::Load() {
 
   // Create player
   {
-  // *********************************
+
 	player = Player::makePlayer(this, (ls::getTilePosition(ls::findTiles(ls::START)[0])));
-
-
-
 	/*
 
 	player = makeEntity();
@@ -65,17 +62,9 @@ void Level2Scene::Load() {
 	mage.loadFromFile("res/mage.png");
 	s->getShape().setTexture(&mage);
 	s->getShape().setOrigin(10.f, 15.f);
-
-
-
 	*/
-
-
-
-
-
   }
-  // *********************************
+
 
 
   // Create Skeleton

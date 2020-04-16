@@ -14,7 +14,7 @@ const Keyboard::Key controls[4] = {
 	Keyboard::Down
 };
 
-Texture mage2;
+Texture qAttack;
 
 //ability cooldowns start at max value so you can cast right away
 float qCooldown = 50.f;
@@ -110,14 +110,14 @@ void PlayerMovementComponent::update(double dt) {
 		bullet->setPosition(_parent->getPosition());
 		//bullet->addComponent<HurtComponent>();
 		bullet->addComponent<BulletComponent>();
-		auto s = bullet->addComponent<ShapeComponent>();
-
-		s->setShape<sf::CircleShape>(8.f);
-		s->getShape().setFillColor(Color::Red);
-		s->getShape().setOrigin(8.f, 8.f);
-		auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f));
+		auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(24.f, 24.f));
+		qAttack.loadFromFile("res/attackOrbSheet.png");
+		s->setSpritesheet(qAttack);
+		s->setFrameCount(16);
+		s->setFrameTime(0.03f);
+		auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(24.f, 24.f));
 		p->setRestitution(.4f);
-		p->setFriction(.005f);
+		p->setFriction(.005f);  
 		p->impulse(sf::rotate(Vector2f(60.f, 20.f), -_parent->getRotation()));
 		qCooldown = 0.f;
 	}
