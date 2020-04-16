@@ -1,20 +1,23 @@
 #include "cmp_bullet_phsics.h"
 #include "system_physics.h"
+#include <LevelSystem.h>
 
 using namespace std;
 using namespace sf;
 
 using namespace Physics;
 
-void BulletPhysicsComponent::update(double dt) {
-  _parent->setPosition(invert_height(bv2_to_sv2(_body->GetPosition())));
+void BulletPhysicsComponent::update(double dt) 
+{
+  //_parent->setPosition(invert_height(bv2_to_sv2(_body->GetPosition())));
+    _parent->setPosition(_parent->getPosition() + Vector2f(-500*dt,0));
   _parent->setRotation((180 / b2_pi) * _body->GetAngle());
+  
+
 }
 
-BulletPhysicsComponent::BulletPhysicsComponent(Entity* p, bool dyn,
-                                   const Vector2f& size)
-    : Component(p), _dynamic(dyn) {
-
+BulletPhysicsComponent::BulletPhysicsComponent(Entity* p, bool dyn, const Vector2f& size) : Component(p), _dynamic(dyn) 
+{
   b2BodyDef BodyDef;
   // Is Dynamic(moving), or static(Stationary)
   BodyDef.type = _dynamic ? b2_dynamicBody : b2_staticBody;
@@ -68,16 +71,20 @@ BulletPhysicsComponent::BulletPhysicsComponent(Entity* p, bool dyn,
 }
 
 
-const sf::Vector2f BulletPhysicsComponent::getVelocity() const {
+const sf::Vector2f BulletPhysicsComponent::getVelocity() const 
+{    
   return bv2_to_sv2(_body->GetLinearVelocity(), true);
 }
-void BulletPhysicsComponent::setVelocity(const sf::Vector2f& v) {
+void BulletPhysicsComponent::setVelocity(const sf::Vector2f& v) 
+{
   _body->SetLinearVelocity(sv2_to_bv2(v, true));
 }
 
-b2Fixture* const BulletPhysicsComponent::getFixture() const { return _fixture; }
+b2Fixture* const BulletPhysicsComponent::getFixture() const 
+{ return _fixture; }
 
-BulletPhysicsComponent::~BulletPhysicsComponent() {
+BulletPhysicsComponent::~BulletPhysicsComponent() 
+{
   auto a = Physics::GetWorld();
   _body->SetActive(false);
   Physics::GetWorld()->DestroyBody(_body);
@@ -87,13 +94,14 @@ BulletPhysicsComponent::~BulletPhysicsComponent() {
 
 void BulletPhysicsComponent::render() {}
 
-bool BulletPhysicsComponent::isTouching(const BulletPhysicsComponent& pc) const {
-  b2Contact* bc;  
+bool BulletPhysicsComponent::isTouching(const BulletPhysicsComponent& pc) const 
+{
+  b2Contact* bc; 
   return isTouching(pc, bc);
 }
 
-bool BulletPhysicsComponent::isTouching(const BulletPhysicsComponent& pc,
-                                  b2Contact const* bc) const {
+bool BulletPhysicsComponent::isTouching(const BulletPhysicsComponent& pc, b2Contact const* bc) const 
+{
   const auto _otherFixture = pc.getFixture();
   const auto& w = *Physics::GetWorld();
   const auto contactList = w.GetContactList();
@@ -116,7 +124,7 @@ bool BulletPhysicsComponent::isTouching(const BulletPhysicsComponent& pc,
 
 std::vector<const b2Contact const*> BulletPhysicsComponent::getTouching() const {
   std::vector<const b2Contact const*> ret;
-
+  
   b2ContactEdge* edge = _body->GetContactList();
   while (edge != NULL) {
     const b2Contact* contact = edge->contact;
@@ -125,7 +133,7 @@ std::vector<const b2Contact const*> BulletPhysicsComponent::getTouching() const 
       
     }
     edge = edge->next;
+    
   }
-  
   return ret;
 }

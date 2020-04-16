@@ -23,6 +23,7 @@ void HurtComponent::update(double dt) {
       //pl->setForDelete();
       //_parent->setForDelete();
     }
+
   }
 }
 

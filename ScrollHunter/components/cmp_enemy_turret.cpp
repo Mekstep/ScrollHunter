@@ -4,10 +4,14 @@
 #include "engine.h"
 #include <SFML/Graphics/CircleShape.hpp>
 #include "cmp_bullet_phsics.h"
+#include <LevelSystem.h>
 using namespace std;
 using namespace sf;
 
-void EnemyTurretComponent::update(double dt) {
+auto walls = ls::findTiles(ls::WALL);
+
+void EnemyTurretComponent::update(double dt) 
+{
   _firetime -= dt;
   if (_firetime <= 0.f) {
     fire();
@@ -29,7 +33,12 @@ void EnemyTurretComponent::fire() const {
   s->setShape<sf::CircleShape>(8.f);
   s->getShape().setFillColor(Color::Red);
   s->getShape().setOrigin(8.f, 8.f);
+
+  
+
   auto p = bullet->addComponent<BulletPhysicsComponent>(true, Vector2f(8.f, 8.f));
+  
+  
 }
 
 EnemyTurretComponent::EnemyTurretComponent(Entity* p)

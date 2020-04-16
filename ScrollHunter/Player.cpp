@@ -17,7 +17,7 @@
 using namespace sf;
 using namespace std;
 
-Texture mage;
+Texture texture;
 
 //create player
 std::shared_ptr<Entity> Player::makePlayer(Scene* scene, const Vector2f& pos) {
@@ -38,8 +38,8 @@ std::shared_ptr<Entity> Player::makePlayer(Scene* scene, const Vector2f& pos) {
 
 	//add spritesheet with dimension of each frame
 	auto anim = player->addComponent<SpriteSheetComponent>(Vector2f(60.f, 130.f));
-	mage.loadFromFile("res/idleSheet.png");
-	anim->setSpritesheet(mage);
+	texture.loadFromFile("res/idleSheet.png");
+	anim->setSpritesheet(texture);
 	anim->setFrameCount(10);
 	anim->setFrameTime(0.1f);
 
