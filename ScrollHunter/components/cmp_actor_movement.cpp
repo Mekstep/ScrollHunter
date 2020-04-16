@@ -1,4 +1,5 @@
 #include "cmp_actor_movement.h"
+#include "cmp_spritesheet.h"
 #include "cmp_bullet.h"
 #include <LevelSystem.h>
 #include <engine.h>
@@ -12,6 +13,17 @@ const Keyboard::Key controls[4] = {
 	Keyboard::Up,
 	Keyboard::Down
 };
+
+Texture mage2;
+
+//ability cooldowns start at max value so you can cast right away
+float qCooldown = 50.f;
+float qCooldownMax = 50.f;
+float wCooldown = 300.f;
+float wCooldownMax = 300.f;
+float eCooldown = 300.f;
+float eCooldownMax = 300.f;
+
 
 
 void ActorMovementComponent::update(double dt) {}
@@ -42,7 +54,9 @@ PlayerMovementComponent::PlayerMovementComponent(Entity* p)
 	: ActorMovementComponent(p) {}
 
 void PlayerMovementComponent::update(double dt) {
-	// Move in four directions based on keys
+	
+
+	//Movement
 	sf::Vector2f direction(0.0f, 0.0f);
 
 	if (Keyboard::isKeyPressed(controls[0])) {
@@ -59,4 +73,119 @@ void PlayerMovementComponent::update(double dt) {
 	}
 
 	move(direction * _speed);
+
+
+	//ABILITIES
+	//Q ability cooldown
+	if (qCooldown < qCooldownMax)
+	{
+		qCooldown += 0.05f;
+	}
+
+	//W ability cooldown
+	if (wCooldown < wCooldownMax)
+	{
+		wCooldown += 0.05f;
+	}
+
+	//E ability cooldown
+	if (eCooldown < eCooldownMax)
+	{
+		eCooldown += 0.05f;
+	}
+
+
+	//Q Ability
+	if (Keyboard::isKeyPressed(Keyboard::Q) && qCooldown >= qCooldownMax)
+	{
+		/*
+		auto anim = _parent->addComponent<SpriteSheetComponent>(Vector2f(240.f, 162.f));
+		mage2.loadFromFile("res/attackSheet.png");
+		anim->setSpritesheet(mage2);
+		anim->setFrameCount(17);
+		anim->setFrameTime(0.1f);
+		*/
+		
+		auto bullet = _parent->scene->makeEntity();
+		bullet->setPosition(_parent->getPosition());
+		//bullet->addComponent<HurtComponent>();
+		bullet->addComponent<BulletComponent>();
+		auto s = bullet->addComponent<ShapeComponent>();
+
+		s->setShape<sf::CircleShape>(8.f);
+		s->getShape().setFillColor(Color::Red);
+		s->getShape().setOrigin(8.f, 8.f);
+		auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f));
+		p->setRestitution(.4f);
+		p->setFriction(.005f);
+		p->impulse(sf::rotate(Vector2f(60.f, 20.f), -_parent->getRotation()));
+		qCooldown = 0.f;
+	}
+
+	//W Ability
+	if (Keyboard::isKeyPressed(Keyboard::W) && wCooldown >= wCooldownMax)
+	{
+		auto bullet = _parent->scene->makeEntity();
+		bullet->setPosition(_parent->getPosition());
+		//bullet->addComponent<HurtComponent>();
+		bullet->addComponent<BulletComponent>();
+		auto s = bullet->addComponent<ShapeComponent>();
+
+		s->setShape<sf::RectangleShape>(Vector2f(30.0f, 30.0f));
+		s->getShape().setFillColor(Color::Blue);
+		s->getShape().setOrigin(8.f, 8.f);
+		auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(30.f, 30.f));
+		p->setRestitution(.4f);
+		p->setFriction(.005f);
+		p->impulse(sf::rotate(Vector2f(20.f, 20.f), -_parent->getRotation()));
+
+		auto bullet2 = _parent->scene->makeEntity();
+		bullet2->setPosition(_parent->getPosition());
+		//bullet->addComponent<HurtComponent>();
+		bullet2->addComponent<BulletComponent>();
+		auto s2 = bullet->addComponent<ShapeComponent>();
+
+		s2->setShape<sf::RectangleShape>(Vector2f(30.0f, 30.0f));
+		s2->getShape().setFillColor(Color::Blue);
+		s2->getShape().setOrigin(8.f, 8.f);
+		auto p2 = bullet->addComponent<PhysicsComponent>(true, Vector2f(30.f, 30.f));
+		p2->setRestitution(.4f);
+		p2->setFriction(.005f);
+		p2->impulse(sf::rotate(Vector2f(20.f, 40.f), _parent->getRotation()));
+
+		auto bullet3 = _parent->scene->makeEntity();
+		bullet3->setPosition(_parent->getPosition());
+		//bullet->addComponent<HurtComponent>();
+		bullet3->addComponent<BulletComponent>();
+		auto s3 = bullet->addComponent<ShapeComponent>();
+
+		s3->setShape<sf::RectangleShape>(Vector2f(30.0f, 30.0f));
+		s3->getShape().setFillColor(Color::Blue);
+		s3->getShape().setOrigin(8.f, 8.f);
+		auto p3 = bullet->addComponent<PhysicsComponent>(true, Vector2f(30.f, 30.f));
+		p3->setRestitution(.4f);
+		p3->setFriction(.005f);
+		p3->impulse(sf::rotate(Vector2f(20.f, 60.f), _parent->getRotation()));
+		wCooldown = 0.f;
+	}
+
+
+	//E ability
+	if (Keyboard::isKeyPressed(Keyboard::E) && eCooldown >= eCooldownMax)
+	{
+		auto bullet = _parent->scene->makeEntity();
+		bullet->setPosition(_parent->getPosition());
+		//bullet->addComponent<HurtComponent>();
+		bullet->addComponent<BulletComponent>();
+		auto s = bullet->addComponent<ShapeComponent>();
+
+		s->setShape<sf::CircleShape>(40.f);
+		s->getShape().setFillColor(Color::Green);
+		s->getShape().setOrigin(8.f, 8.f);
+		auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(40.f, 40.f));
+		p->setRestitution(.4f);
+		p->setFriction(.005f);
+		p->impulse(sf::rotate(Vector2f(60.f, 20.f), -_parent->getRotation()));
+		eCooldown = 0.f;
+	}
 }

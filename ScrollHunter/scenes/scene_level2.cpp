@@ -29,13 +29,6 @@ View view;
 
 GameOver gameOver;
 
-//ability cooldowns start at max value so you can cast right away
-float qCooldown = 50.f;
-float qCooldownMax = 50.f;
-float wCooldown = 300.f;
-float wCooldownMax = 300.f;
-float eCooldown = 300.f;
-float eCooldownMax = 300.f;
 
 void Level2Scene::Load() {
   cout << "Scene 2 Load" << endl;
@@ -60,9 +53,7 @@ void Level2Scene::Load() {
   // *********************************
 	player = Player::makePlayer(this, (ls::getTilePosition(ls::findTiles(ls::START)[0])));
 
-	player->addTag("player");
-	player->addComponent<PlayerMovementComponent>();
-	player->setHealth(100);
+
 
 	/*
 
@@ -255,110 +246,7 @@ void Level2Scene::Update(const double& dt) {
   
 
 
-  //Q ability cooldown
-  if (qCooldown < qCooldownMax)
-  {
-	  qCooldown += 0.05f;
-  }
-
-  //W ability cooldown
-  if (wCooldown < wCooldownMax)
-  {
-	  wCooldown += 0.05f;
-  }
-
-  //E ability cooldown
-  if (eCooldown < eCooldownMax)
-  {
-	  eCooldown += 0.05f;
-  }
-
-
-  //Q Ability
-  if (Keyboard::isKeyPressed(Keyboard::Q) && qCooldown >= qCooldownMax)
-  {
-	  auto bullet = makeEntity();
-	  bullet->setPosition(player->getPosition());
-	  //bullet->addComponent<HurtComponent>();
-	  bullet->addComponent<BulletComponent>();
-	  auto s = bullet->addComponent<ShapeComponent>();
-
-	  s->setShape<sf::CircleShape>(8.f);
-	  s->getShape().setFillColor(Color::Red);
-	  s->getShape().setOrigin(8.f, 8.f);
-	  auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f));
-	  p->setRestitution(.4f);
-	  p->setFriction(.005f);
-	  p->impulse(sf::rotate(Vector2f(60.f, 20.f), -player->getRotation()));
-	  qCooldown = 0.f;
-  }
-
-  //W Ability
-  if (Keyboard::isKeyPressed(Keyboard::W) && wCooldown >= wCooldownMax)
-  {
-	  auto bullet = makeEntity();
-	  bullet->setPosition(player->getPosition());
-	  //bullet->addComponent<HurtComponent>();
-	  bullet->addComponent<BulletComponent>();
-	  auto s = bullet->addComponent<ShapeComponent>();
-
-	  s->setShape<sf::RectangleShape>(Vector2f(30.0f, 30.0f));
-	  s->getShape().setFillColor(Color::Blue);
-	  s->getShape().setOrigin(8.f, 8.f);
-	  auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(30.f, 30.f));
-	  p->setRestitution(.4f);
-	  p->setFriction(.005f);
-	  p->impulse(sf::rotate(Vector2f(20.f, 20.f), -player->getRotation()));
-
-	  auto bullet2 = makeEntity();
-	  bullet2->setPosition(player->getPosition());
-	  //bullet->addComponent<HurtComponent>();
-	  bullet2->addComponent<BulletComponent>();
-	  auto s2 = bullet->addComponent<ShapeComponent>();
-
-	  s2->setShape<sf::RectangleShape>(Vector2f(30.0f, 30.0f));
-	  s2->getShape().setFillColor(Color::Blue);
-	  s2->getShape().setOrigin(8.f, 8.f);
-	  auto p2 = bullet->addComponent<PhysicsComponent>(true, Vector2f(30.f, 30.f));
-	  p2->setRestitution(.4f);
-	  p2->setFriction(.005f);
-	  p2->impulse(sf::rotate(Vector2f(20.f, 40.f), player->getRotation()));
-
-	  auto bullet3 = makeEntity();
-	  bullet3->setPosition(player->getPosition());
-	  //bullet->addComponent<HurtComponent>();
-	  bullet3->addComponent<BulletComponent>();
-	  auto s3 = bullet->addComponent<ShapeComponent>();
-
-	  s3->setShape<sf::RectangleShape>(Vector2f(30.0f, 30.0f));
-	  s3->getShape().setFillColor(Color::Blue);
-	  s3->getShape().setOrigin(8.f, 8.f);
-	  auto p3 = bullet->addComponent<PhysicsComponent>(true, Vector2f(30.f, 30.f));
-	  p3->setRestitution(.4f);
-	  p3->setFriction(.005f);
-	  p3->impulse(sf::rotate(Vector2f(20.f, 60.f), player->getRotation()));
-	  wCooldown = 0.f;
-  }
-
-
-  //E ability
-  if (Keyboard::isKeyPressed(Keyboard::E) && eCooldown >= eCooldownMax)
-  {
-	  auto bullet = makeEntity();
-	  bullet->setPosition(player->getPosition());
-	  //bullet->addComponent<HurtComponent>();
-	  bullet->addComponent<BulletComponent>();
-	  auto s = bullet->addComponent<ShapeComponent>();
-
-	  s->setShape<sf::CircleShape>(40.f);
-	  s->getShape().setFillColor(Color::Green);
-	  s->getShape().setOrigin(8.f, 8.f);
-	  auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(40.f, 40.f));
-	  p->setRestitution(.4f);
-	  p->setFriction(.005f);
-	  p->impulse(sf::rotate(Vector2f(60.f, 20.f), -player->getRotation()));
-	  eCooldown = 0.f;
-  }
+  
 
   if (Keyboard::isKeyPressed(Keyboard::G))
   {

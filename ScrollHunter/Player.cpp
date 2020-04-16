@@ -19,11 +19,14 @@ using namespace std;
 
 Texture mage;
 
+//create player
 std::shared_ptr<Entity> Player::makePlayer(Scene* scene, const Vector2f& pos) {
 
 	auto player = scene->makeEntity();
 	player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 	player->addTag("player");
+	player->addComponent<PlayerMovementComponent>();
+	player->setHealth(100);
 
 	/*
 	auto s = player->addComponent<ShapeComponent>();
@@ -33,6 +36,7 @@ std::shared_ptr<Entity> Player::makePlayer(Scene* scene, const Vector2f& pos) {
 	s->getShape().setOrigin(10.f, 15.f);
 	*/
 
+	//add spritesheet with dimension of each frame
 	auto anim = player->addComponent<SpriteSheetComponent>(Vector2f(60.f, 130.f));
 	mage.loadFromFile("res/idleSheet.png");
 	anim->setSpritesheet(mage);

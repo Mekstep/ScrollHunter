@@ -22,6 +22,6 @@ public:
 	PlayerMovementComponent() = delete;
 	explicit PlayerMovementComponent(Entity* parent);
 
-	void update(double dt) override;
+	void update(double dt);
 };
 
