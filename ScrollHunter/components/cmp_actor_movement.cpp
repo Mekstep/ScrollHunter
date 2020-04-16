@@ -29,7 +29,7 @@ float eCooldownMax = 300.f;
 void ActorMovementComponent::update(double dt) {}
 
 ActorMovementComponent::ActorMovementComponent(Entity* p)
-    : _speed(100.0f), Component(p) {}
+    : _speed(500.0f), Component(p) {}
 
 bool ActorMovementComponent::validMove(const sf::Vector2f& pos) {
   return (LevelSystem::getTileAt(pos) != LevelSystem::WALL);
