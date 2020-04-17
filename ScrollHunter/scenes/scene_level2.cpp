@@ -34,8 +34,6 @@ View view;
 View view2;
 View view3;
 
-GameOver gameOver;
-
 SoundBuffer buffer;
 Sound level;
 
@@ -226,8 +224,5 @@ void Level2Scene::Render()
   Engine::GetWindow().setView(view);
 
   Scene::Render();
-
-  
-
   
 }

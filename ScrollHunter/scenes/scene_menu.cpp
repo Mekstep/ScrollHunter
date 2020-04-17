@@ -1,9 +1,12 @@
 #include "scene_menu.h"
 #include "../components/cmp_text.h"
+#include "../components/cmp_sprite.h"
 #include "../game.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
 #include <SFML/Audio.hpp>
+#include <LevelSystem.h>
+
 
 using namespace std;
 using namespace sf;
@@ -11,14 +14,24 @@ using namespace sf;
 SoundBuffer buff;
 SoundBuffer buff2;
 Sound music;
-Sound gameOver;
+Sound gameOverMusic;
+
+Texture mainMenu;
+Sprite menuGFX;
+
+Texture gameOverImg;
+Sprite gameOverGFX;
+
 
 void MenuScene::Load() {
   cout << "Menu Load \n";
   {
-    auto txt = makeEntity();
-    auto t = txt->addComponent<TextComponent>(
-        "Scroll Hunter\nPress Space to Start");
+	  //load main menu screen
+	  mainMenu.loadFromFile("res/mainMenu.png");
+	  menuGFX.setTexture(mainMenu);
+		
+	  //auto txt = makeEntity();
+      //auto t = txt->addComponent<TextComponent>("Scroll Hunter\nPress Space to Start");
   }
   if (!buff.loadFromFile("res/menu.ogg"))
   {
@@ -28,7 +41,9 @@ void MenuScene::Load() {
   {
       cout << "Couldn't load game Over music!" << endl;
   }
-  gameOver.setBuffer(buff2);
+
+
+  gameOverMusic.setBuffer(buff2);
   music.setBuffer(buff);
   music.play();
   music.setLoop(true);
@@ -46,12 +61,25 @@ void MenuScene::Update(const double& dt) {
   Scene::Update(dt);
 }
 
+void MenuScene::Render()
+{
+	Engine::GetWindow().draw(menuGFX);
+
+
+	Scene::Render();
+
+}
+
 void GameOver::Load() {
 
 	{
-        gameOver.play();
-		auto txt = makeEntity();
-		auto t = txt->addComponent<TextComponent>("GAME OVER!\nPress Space to retry!");
+		//load game over screen
+		gameOverImg.loadFromFile("res/gameOverScreen.png");
+		gameOverGFX.setTexture(gameOverImg);
+
+        gameOverMusic.play();
+		//auto txt = makeEntity();
+		//auto t = txt->addComponent<TextComponent>("GAME OVER!\nPress Space to retry!");
 	}
 
 	setLoaded(true);
@@ -61,9 +89,19 @@ void GameOver::Update(const double& dt) {
 	// cout << "Menu Update "<<dt<<"\n";
 
 	if (sf::Keyboard::isKeyPressed(Keyboard::Space)) {
-        gameOver.stop();
+        gameOverMusic.stop();
 		Engine::ChangeScene(&level2);
 	}
 
 	Scene::Update(dt);
 }
+
+void GameOver::Render()
+{
+	Engine::GetWindow().draw(gameOverGFX);
+
+	Scene::Render();
+
+}
+
+

@@ -3,7 +3,7 @@
 #include "cmp_hurt_player.h"
 #include "engine.h"
 #include <SFML/Graphics/CircleShape.hpp>
-#include "cmp_bullet_phsics.h"
+#include "cmp_bullet_physics.h"
 #include <LevelSystem.h>
 using namespace std;
 using namespace sf;

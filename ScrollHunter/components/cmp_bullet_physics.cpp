@@ -1,4 +1,4 @@
-#include "cmp_bullet_phsics.h"
+#include "cmp_bullet_physics.h"
 #include "system_physics.h"
 #include <LevelSystem.h>
 

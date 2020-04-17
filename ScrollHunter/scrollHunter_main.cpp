@@ -5,11 +5,11 @@
 using namespace std;
 
 MenuScene menu;
-//GameOver gameOver;
+GameOver gameOver;
 Level1Scene level1;
 Level2Scene level2;
 Level3Scene level3;
 
 int main() {
-  Engine::Start(1980, 1080, "Scroll Hunter",&menu);
+  Engine::Start(1920, 1080, "Scroll Hunter",&menu);
 }

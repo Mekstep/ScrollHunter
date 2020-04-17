@@ -7,6 +7,7 @@
 #include "scenes/scene_menu.h"
 
 extern MenuScene menu;
+extern GameOver gameOver;
 extern Level1Scene level1;
 extern Level2Scene level2;
 extern Level3Scene level3;

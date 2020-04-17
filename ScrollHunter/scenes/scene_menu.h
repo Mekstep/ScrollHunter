@@ -10,6 +10,8 @@ public:
   void Load() override;
 
   void Update(const double& dt) override;
+
+  void Render() override;
 };
 
 class GameOver : public Scene {
@@ -20,4 +22,6 @@ public:
 	void Load() override;
 
 	void Update(const double& dt) override;
+
+	void Render() override;
 };
