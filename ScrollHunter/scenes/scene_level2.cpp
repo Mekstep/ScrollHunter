@@ -103,17 +103,17 @@ void Level2Scene::Load()
        Vector2f(20, 0));
    
    // Add ShapeComponent, Red 16.f Circle
-   auto s = skeleton->addComponent<ShapeComponent>();
-   s->setShape<sf::RectangleShape>(Vector2f(160.f, 140.f));
-   skele.loadFromFile("res/skeleton.png");
-   s->getShape().setTexture(&skele);
-   s->getShape().setOrigin(10.f, 25.f);
+   auto anim = skeleton->addComponent<SpriteSheetComponent>(Vector2f(160.f, 140.f));
+   skele.loadFromFile("res/skeletonIdle.png");
+   anim->setSpritesheet(skele);
+   anim->setFrameCount(8);
+   anim->setFrameTime(0.1f);
    
    auto turret = makeEntity();
    turret->setPosition(skeleton->getPosition());
    auto t = turret->addComponent<ShapeComponent>();
    t->setShape<sf::CircleShape>(15.0f, 3);
-   t->getShape().setFillColor(Color::Red);
+   t->getShape().setFillColor(Color::Transparent);
    t->getShape().setOrigin(16.f, 16.f);
    
    // Add EnemyAIComponent
@@ -133,12 +133,11 @@ void Level2Scene::Load()
           Vector2f(20, 0));
 
       // Add ShapeComponent, Red 16.f Circle
-      auto s = skeleChief->addComponent<ShapeComponent>();
-      s->setShape<sf::RectangleShape>(Vector2f(160.f, 140.f));
-
-      skeletChief.loadFromFile("res/skeletonchief.png");
-      s->getShape().setTexture(&skeletChief);
-      s->getShape().setOrigin(10.f, 25.f);
+      auto anim = skeleChief->addComponent<SpriteSheetComponent>(Vector2f(160.f, 180.f));
+      skeletChief.loadFromFile("res/skeletonChiefIdle.png");
+      anim->setSpritesheet(skeletChief);
+      anim->setFrameCount(8);
+      anim->setFrameTime(0.1f);
 
       auto turret = makeEntity();
       turret->setPosition(skeleChief->getPosition());
@@ -164,12 +163,11 @@ void Level2Scene::Load()
           Vector2f(20, 0));
 
       // Add ShapeComponent, Red 16.f Circle
-      auto s = skeleArcher->addComponent<ShapeComponent>();
-      s->setShape<sf::RectangleShape>(Vector2f(160.f, 140.f));
-
-      skeletArcher.loadFromFile("res/skeletonarcher.png");
-      s->getShape().setTexture(&skeletArcher);
-      s->getShape().setOrigin(10.f, 25.f);
+      auto anim = skeleArcher->addComponent<SpriteSheetComponent>(Vector2f(130.f, 140.f));
+      skeletArcher.loadFromFile("res/skeletonArcherIdle.png");
+      anim->setSpritesheet(skeletArcher);
+      anim->setFrameCount(8);
+      anim->setFrameTime(0.1f);
 
       auto turret = makeEntity();
       turret->setPosition(skeleArcher->getPosition());
