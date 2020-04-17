@@ -11,7 +11,6 @@
 #include "../Player.h"
 #include <LevelSystem.h>
 #include <iostream>
-#include "../enemy.h"
 using namespace std;
 using namespace sf;
 
@@ -29,7 +28,12 @@ Sprite skeleton;
 Sprite bckSprites[7];
 Texture bckTextures[7];
 
+Sprite hpBarS;
+Texture hpBarT;
+
 View view;
+View view2;
+View view3;
 
 GameOver gameOver;
 
@@ -39,45 +43,44 @@ void Level2Scene::Load()
   cout << "Scene 2 Load" << endl;
   ls::loadLevelFile("res/level_2.txt", 40.0f);
 
-  //Set Viewport for scrolling screen
+  //Set Viewports for scrolling screen
   view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+  view2.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+  view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
   view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 
-  //Background
-    // *********************************
-    for (int i = 0; i < 7; i++)
-    {
-        if (!bckTextures[i].loadFromFile("res/layer" + to_string(i + 1) + ".png"))
-        {
-            cout << "Couldn't load Background" + to_string(i + 1) + "!" << endl;
-        }
-    
-        bckSprites[i].setTexture(bckTextures[i]);
-    }
 
-  // *********************************
+  //Background
+  // ***************************************************************************
+  for (int i = 0; i < 7; i++)
+  {
+      if (!bckTextures[i].loadFromFile("res/layer" + to_string(i + 1) + ".png"))
+      {
+          cout << "Couldn't load Background" + to_string(i + 1) + "!" << endl;
+      }
+  
+      bckSprites[i].setTexture(bckTextures[i]);
+  }
+  // ***************************************************************************
 
   // Create player
+  //**************************************************************************************
   {
-
 	player = Player::makePlayer(this, (ls::getTilePosition(ls::findTiles(ls::START)[0])));
-	/*
-
-	player = makeEntity();
-	player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
-
-	auto s = player->addComponent<ShapeComponent>();
-	s->setShape<sf::RectangleShape>(Vector2f(38.f, 64.f));
-	mage.loadFromFile("res/mage.png");
-	s->getShape().setTexture(&mage);
-	s->getShape().setOrigin(10.f, 15.f);
-	*/
   }
+  //**************************************************************************************
 
-
+  //HP Bar
+  //***********************************************
+  {
+      hpBarT.loadFromFile("res/hp.png");
+      hpBarS.setTexture(hpBarT);
+      hpBarS.setScale(player->getHealth() / 10, 1);
+  }
+  //***********************************************
 
   // Create Skeleton
-  // *********************************
+  // *****************************************************************
   {
 
    auto skeleton = makeEntity();
@@ -104,11 +107,11 @@ void Level2Scene::Load()
    turret->addComponent<EnemyTurretComponent>();
    turret->addComponent<EnemyAIComponent>();
   }
-  // *********************************
-
+  // *****************************************************************
+  
 
   // Create Skeleton Chief
-  // *********************************
+  // *********************************************************************
   {
       auto skeleChief = makeEntity();
       skeleChief->setHealth(100);
@@ -135,11 +138,11 @@ void Level2Scene::Load()
       //turret->addComponent<EnemyTurretComponent>();
       //turret->addComponent<EnemyAIComponent>();
   }
-  // *********************************
+  // *********************************************************************
 
 
   // Create Skeleton Archer
-  // *********************************
+  // ***********************************************************************
   {
       auto skeleArcher = makeEntity();
       skeleArcher->setHealth(100);
@@ -166,21 +169,7 @@ void Level2Scene::Load()
       //turret->addComponent<EnemyTurretComponent>();
       //turret->addComponent<EnemyAIComponent>();
   }
-  // *********************************
-
-  // Create Turret
-  //*************************
-  {
-    auto turret = makeEntity();
-    turret->setPosition(ls::getTilePosition(ls::findTiles('t')[0]) +
-                        Vector2f(20, 0));
-    auto s = turret->addComponent<ShapeComponent>();
-    s->setShape<sf::RectangleShape>(Vector2f(30.f, 50.f));
-    s->getShape().setFillColor(Color::Red);
-    s->getShape().setOrigin(16.f, 16.f);
-    //turret->addComponent<EnemyTurretComponent>();
-  }
-  //*************************
+  // ***********************************************************************
 
   // Add physics colliders to level tiles.
   {
@@ -211,9 +200,11 @@ void Level2Scene::UnLoad()
 
 void Level2Scene::Update(const double& dt) 
 {
+
+    hpBarS.setScale(player->getHealth() / 10, 1);
+
     //scroll screen as player reaches middle
     //*****************************************************
-
     Vector2f position(0, 0);
 
     position.x = player->getPosition().x + 10 - (1920 / 2);
@@ -229,7 +220,6 @@ void Level2Scene::Update(const double& dt)
     }
 
     view.reset(FloatRect(position.x, 0, screenWidth, screenHeight));
-
     //*****************************************************
 
 
@@ -258,9 +248,7 @@ void Level2Scene::Update(const double& dt)
     //***********************************************************
     
 
-  Scene::Update(dt);
-
-  
+  Scene::Update(dt);  
 
   const auto pp = player->getPosition();
 
@@ -269,31 +257,30 @@ void Level2Scene::Update(const double& dt)
   } else if (!player->isAlive()) {
     Engine::ChangeScene((Scene*)&gameOver);
   }
-
-  
-
-
-  
-
-  if (Keyboard::isKeyPressed(Keyboard::G))
-  {
-	  Engine::ChangeScene((Scene*)&gameOver);
-  }
-
 }
 
 void Level2Scene::Render() 
 {
+  Engine::GetWindow().setView(view2);
+    
   for (int i = 6; i > -1; i--)
   {
       Engine::GetWindow().draw(bckSprites[i]);
   }
-
-    
-
-  ls::render(Engine::GetWindow());
+  
   Engine::GetWindow().setView(view);
 
+  ls::render(Engine::GetWindow());
+
+  Engine::GetWindow().setView(view3);
+
+  Engine::GetWindow().draw(hpBarS);
   
+  Engine::GetWindow().setView(view);
+
   Scene::Render();
+
+  
+
+  
 }
