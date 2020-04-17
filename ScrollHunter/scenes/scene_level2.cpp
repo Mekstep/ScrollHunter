@@ -11,6 +11,7 @@
 #include "../Player.h"
 #include <LevelSystem.h>
 #include <iostream>
+#include <SFML/Audio.hpp>
 using namespace std;
 using namespace sf;
 
@@ -37,6 +38,8 @@ View view3;
 
 GameOver gameOver;
 
+SoundBuffer buffer;
+Sound level;
 
 void Level2Scene::Load() 
 {
@@ -78,6 +81,17 @@ void Level2Scene::Load()
       hpBarS.setScale(player->getHealth() / 10, 1);
   }
   //***********************************************
+
+  //Level Music
+  //************************************************
+  if (!buffer.loadFromFile("res/level.ogg"))
+  {
+      cout << "Couldn't load level music!" << endl;
+  }
+  level.setBuffer(buffer);
+  level.play();
+  level.setLoop(true);
+  //************************************************
 
   // Create Skeleton
   // *****************************************************************
@@ -252,9 +266,13 @@ void Level2Scene::Update(const double& dt)
 
   const auto pp = player->getPosition();
 
-  if (ls::getTileAt(pp) == ls::END) {
+  if (ls::getTileAt(pp) == ls::END) 
+  {
     Engine::ChangeScene((Scene*)&level3);
-  } else if (!player->isAlive()) {
+  } 
+  else if (!player->isAlive()) 
+  {
+    level.stop();
     Engine::ChangeScene((Scene*)&gameOver);
   }
 }
