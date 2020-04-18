@@ -1,5 +1,4 @@
 #include "scene_level1.h"
-#include "scene_level2.h"
 #include "../components/cmp_bullet.h"
 #include "../components/cmp_enemy_ai.h"
 #include "../components/cmp_enemy_turret.h"
@@ -13,35 +12,34 @@
 #include "../Enemies.h"
 #include <LevelSystem.h>
 #include <iostream>
-#include <thread>
-
+#include <SFML/Audio.hpp>
 using namespace std;
 using namespace sf;
 
+static shared_ptr<Entity> player;
+static shared_ptr<Entity> monst;
+
 const int screenWidth = 1920;
 const int screenHeight = 1080;
+
+Sprite bckSprites1[6];
+Texture bckTextures1[6];
+
+Sprite hpBarS1;
+Texture hpBarT1;
+
 
 View scene1view;
 View scene1view2;
 View scene1view3;
 
-static shared_ptr<Entity> player;
+SoundBuffer buffer1;
+Sound level1sound;
 
-Texture templeTile;
-
-Texture skele1;
-Texture skeletArcher1;
-Texture skeletChief1;
-
-Texture tempBG;
-Sprite tempBGS;
-
-
-void Level1Scene::Load() {
-  cout << " Scene 1 Load" << endl;
+void Level1Scene::Load() 
+{
+  cout << "Scene 1 Load" << endl;
   ls::loadLevelFile("res/level_1.txt", 40.0f);
-  templeTile.loadFromFile("res/templeTile.png");
-  tempBG.loadFromFile("res/tempBG.png");
 
   //Set Viewports for scrolling screen
   scene1view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
@@ -49,108 +47,187 @@ void Level1Scene::Load() {
   scene1view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
   scene1view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 
-  //auto ho = Engine::getWindowSize().y - (ls::getHeight() * 40.f);
- // ls::setOffset(Vector2f(0, ho));
 
-  //background
-  tempBGS.setTexture(tempBG);
-  tempBGS.setScale(1.2, 1.2);
-
+  //Background
+  // ***************************************************************************
+  for (int i = 0; i < 6; i++)
+  {
+      if (!bckTextures1[i].loadFromFile("res/sky" + to_string(i + 1) + ".png"))
+      {
+          cout << "Couldn't load Background" + to_string(i + 1) + "!" << endl;
+      }
+  
+      bckSprites1[i].setTexture(bckTextures1[i]);
+  }
+  // ***************************************************************************
 
   // Create player
+  //**************************************************************************************
   {
-	  player = Player::makePlayer(this, (ls::getTilePosition(ls::findTiles(ls::START)[0])));
-
-    //sprite.loadFromFile("C:/Users/Euan/Desktop/ScrollHunter Build/bin/Debug/res/Mage.png");
-	//mage.setTexture(sprite);
-	//mage.setTextureRect(sf::IntRect(0, 0, 38, 64));
-    //player->addComponent<PhysicsComponent>(true, Vector2f(38.f, 128.f));
-
-	
-	//s->setSprite(mage);
-
- 
-	//s->getSprite().setOrigin(10.0f, 15.0f);
-	/*
-	auto s = player->addComponent<ShapeComponent>();
-    s->setShape<sf::RectangleShape>(Vector2f(20.f, 30.f));
-    s->getShape().setFillColor(Color::Magenta);
-    s->getShape().setOrigin(10.f, 15.f);
-	*/
-
-    //player->addComponent<PlayerPhysicsComponent>(Vector2f(30.f, 40.f));
+	player = Player::makePlayer(this, (ls::getTilePosition(ls::findTiles(ls::START)[0])));
   }
+  //**************************************************************************************
+
+  //HP Bar
+  //***********************************************
+  {
+      hpBarT1.loadFromFile("res/hp.png");
+      hpBarS1.setTexture(hpBarT1);
+      hpBarS1.setScale(player->getHealth() / 10, 1);
+  }
+  //***********************************************
+
+  //Level Music
+  //************************************************
+  if (!buffer1.loadFromFile("res/level.ogg"))
+  {
+      cout << "Couldn't load level music!" << endl;
+  }
+  level1sound.setBuffer(buffer1);
+  level1sound.play();
+  level1sound.setLoop(true);
+  //************************************************
 
   // Create Skeleton
-  // *********************************
+  // *****************************************************************
   {
-	  auto skeleton = Enemies::makeSkeleton(this, ls::getTilePosition(ls::findTiles('k')[0]) + Vector2f(20, 0));
+	  auto skeleton = Enemies::makeSkeleton(this, ls::getTilePosition(ls::findTiles('k')[0]) + Vector2f(20, 0)); 
   }
-  // *********************************
-
+  // *****************************************************************
+  
 
   // Create Skeleton Chief
-  // *********************************
+  // *********************************************************************
   {
 	  auto skeletonChief = Enemies::makeSkeletonChief(this, ls::getTilePosition(ls::findTiles('c')[0]) + Vector2f(20, 0));
   }
-  // *********************************
+  // *********************************************************************
 
 
   // Create Skeleton Archer
-  // *********************************
+  // ***********************************************************************
   {
 	  auto skeletonArcher = Enemies::makeSkeletonArcher(this, ls::getTilePosition(ls::findTiles('a')[0]) + Vector2f(20, 0));
   }
-  // *********************************
-
+  // ***********************************************************************
 
   // Add physics colliders to level tiles.
   {
-    auto walls = ls::findTiles(ls::WALL);
-    for (auto w : walls) {
-      auto pos = ls::getTilePosition(w);
-      pos += Vector2f(20.f, 20.f); //offset to center
-      auto e = makeEntity();
-      e->setPosition(pos);
-      e->addComponent<PhysicsComponent>(false, Vector2f(40.f, 40.f));
-	  auto s = e->addComponent<SpriteSheetComponent>(Vector2f(40.f, 40.f));
-	  s->setSpritesheet(templeTile);
-    }
+    // *********************************
+	  auto walls = ls::findTiles(ls::WALL);
+	  for (auto w : walls) {
+		  auto pos = ls::getTilePosition(w);
+		  pos += Vector2f(20.0f, 20.0f); // offset to centre
+		  auto e = makeEntity();
+		  e->setPosition(pos);
+		  e->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
+          e->addTag("wall");
+	  }
+    // *********************************
   }
 
   //Simulate long loading times
-  std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-  cout << " Scene 1 Load Done" << endl;
+  //std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
+  cout << " Scene 1 Load Done" << endl;
   setLoaded(true);
 }
 
-void Level1Scene::UnLoad() {
-  cout << "Scene 1 Unload" << endl;
+void Level1Scene::UnLoad() 
+{
+  cout << "Scene 1 UnLoad" << endl;
   player.reset();
   ls::unload();
   Scene::UnLoad();
 }
 
-void Level1Scene::Update(const double& dt) {
+void Level1Scene::Update(const double& dt) 
+{
 
-  if (ls::getTileAt(player->getPosition()) == ls::END) {
-	  Engine::ChangeScene((Scene*)&level2);
+    hpBarS1.setScale(player->getHealth() / 10, 1);
+
+    //scroll screen as player reaches middle
+    //*****************************************************
+    Vector2f position(0, 0);
+
+    position.x = player->getPosition().x + 10 - (1920 / 2);
+    position.y = player->getPosition().y + 10 - (1080 / 2);
+
+    if (position.x < 0)
+    {
+        position.x = 0;
+    }
+    if (position.y < 0)
+    {
+        position.y = 0;
+    }
+
+    scene1view.reset(FloatRect(position.x, 0, screenWidth, screenHeight));
+    //*****************************************************
+
+
+    //Background Speeds
+    //***********************************************************
+    if(Keyboard::isKeyPressed(Keyboard::Right) && position.x > 0)
+    {
+        bckSprites1[0].move(Vector2f(-350 * dt,0));
+        bckSprites1[1].move(Vector2f(-300 * dt, 0));
+        bckSprites1[2].move(Vector2f(-250 * dt, 0));
+        bckSprites1[3].move(Vector2f(-200 * dt, 0));
+        bckSprites1[4].move(Vector2f(-150 * dt, 0));
+        bckSprites1[5].move(Vector2f(-100 * dt, 0));
+        bckSprites1[6].move(Vector2f(-50 * dt, 0));
+    }
+    if (Keyboard::isKeyPressed(Keyboard::Left) && position.x > 0)
+    {
+        bckSprites1[0].move(Vector2f(350 * dt, 0));
+        bckSprites1[1].move(Vector2f(300 * dt, 0));
+        bckSprites1[2].move(Vector2f(250 * dt, 0));
+        bckSprites1[3].move(Vector2f(200 * dt, 0));
+        bckSprites1[4].move(Vector2f(150 * dt, 0));
+        bckSprites1[5].move(Vector2f(100 * dt, 0));
+        bckSprites1[6].move(Vector2f(50 * dt, 0));
+    }
+    //***********************************************************
+
+  const auto pp = player->getPosition();
+
+  if (ls::getTileAt(pp) == ls::END) 
+  {
+	  scene1view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+	  scene1view2.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+	  scene1view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+	  scene1view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+	  Engine::ChangeScene((Scene*)&level3);
+  } 
+  else if (!player->isAlive()) 
+  {
+    level1sound.stop();
+    Engine::ChangeScene((Scene*)&gameOver);
   }
+
   Scene::Update(dt);
 }
 
-void Level1Scene::Render() {
-	Engine::GetWindow().draw(tempBGS);
+void Level1Scene::Render() 
+{
+  Engine::GetWindow().setView(scene1view2);
+    
+  for (int i = 5; i > -1; i--)
+  {
+      Engine::GetWindow().draw(bckSprites1[i]);
+  }
+  
+  Engine::GetWindow().setView(scene1view);
 
-	Engine::GetWindow().setView(scene1view2);
+  ls::render(Engine::GetWindow());
 
-	Engine::GetWindow().setView(scene1view);
+  Engine::GetWindow().setView(scene1view3);
 
-	ls::render(Engine::GetWindow());
+  Engine::GetWindow().draw(hpBarS1);
+  
+  Engine::GetWindow().setView(scene1view);
 
-	Engine::GetWindow().setView(scene1view3);
-
-	Scene::Render();
+  Scene::Render();
+  
 }

@@ -24,8 +24,8 @@ const int screenHeight = 1080;
 
 Sprite skeleton;
 
-Sprite bckSprites[7];
-Texture bckTextures[7];
+Sprite bckSprites2[6];
+Texture bckTextures2[6];
 
 Sprite hpBarS;
 Texture hpBarT;
@@ -52,14 +52,14 @@ void Level2Scene::Load()
 
   //Background
   // ***************************************************************************
-  for (int i = 0; i < 7; i++)
+  for (int i = 0; i < 6; i++)
   {
-      if (!bckTextures[i].loadFromFile("res/layer" + to_string(i + 1) + ".png"))
+      if (!bckTextures2[i].loadFromFile("res/sky" + to_string(i + 1) + ".png"))
       {
           cout << "Couldn't load Background" + to_string(i + 1) + "!" << endl;
       }
   
-      bckSprites[i].setTexture(bckTextures[i]);
+      bckSprites2[i].setTexture(bckTextures2[i]);
   }
   // ***************************************************************************
 
@@ -129,7 +129,7 @@ void Level2Scene::Load()
   }
 
   //Simulate long loading times
-  std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+  //std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
   cout << " Scene 2 Load Done" << endl;
   setLoaded(true);
@@ -172,33 +172,34 @@ void Level2Scene::Update(const double& dt)
     //***********************************************************
     if(Keyboard::isKeyPressed(Keyboard::Right) && position.x > 0)
     {
-        bckSprites[0].move(Vector2f(-350 * dt,0));
-        bckSprites[1].move(Vector2f(-300 * dt, 0));
-        bckSprites[2].move(Vector2f(-250 * dt, 0));
-        bckSprites[3].move(Vector2f(-200 * dt, 0));
-        bckSprites[4].move(Vector2f(-150 * dt, 0));
-        bckSprites[5].move(Vector2f(-100 * dt, 0));
-        bckSprites[6].move(Vector2f(-50 * dt, 0));
+        bckSprites2[0].move(Vector2f(-350 * dt,0));
+        bckSprites2[1].move(Vector2f(-300 * dt, 0));
+        bckSprites2[2].move(Vector2f(-250 * dt, 0));
+        bckSprites2[3].move(Vector2f(-200 * dt, 0));
+        bckSprites2[4].move(Vector2f(-150 * dt, 0));
+        bckSprites2[5].move(Vector2f(-100 * dt, 0));
+        bckSprites2[6].move(Vector2f(-50 * dt, 0));
     }
     if (Keyboard::isKeyPressed(Keyboard::Left) && position.x > 0)
     {
-        bckSprites[0].move(Vector2f(350 * dt, 0));
-        bckSprites[1].move(Vector2f(300 * dt, 0));
-        bckSprites[2].move(Vector2f(250 * dt, 0));
-        bckSprites[3].move(Vector2f(200 * dt, 0));
-        bckSprites[4].move(Vector2f(150 * dt, 0));
-        bckSprites[5].move(Vector2f(100 * dt, 0));
-        bckSprites[6].move(Vector2f(50 * dt, 0));
+        bckSprites2[0].move(Vector2f(350 * dt, 0));
+        bckSprites2[1].move(Vector2f(300 * dt, 0));
+        bckSprites2[2].move(Vector2f(250 * dt, 0));
+        bckSprites2[3].move(Vector2f(200 * dt, 0));
+        bckSprites2[4].move(Vector2f(150 * dt, 0));
+        bckSprites2[5].move(Vector2f(100 * dt, 0));
+        bckSprites2[6].move(Vector2f(50 * dt, 0));
     }
     //***********************************************************
-    
-
-  Scene::Update(dt);  
 
   const auto pp = player->getPosition();
 
   if (ls::getTileAt(pp) == ls::END) 
   {
+	  scene2view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+	  scene2view2.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+	  scene2view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+	  scene2view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	  Engine::ChangeScene((Scene*)&level3);
   } 
   else if (!player->isAlive()) 
@@ -206,15 +207,17 @@ void Level2Scene::Update(const double& dt)
     level.stop();
     Engine::ChangeScene((Scene*)&gameOver);
   }
+
+  Scene::Update(dt);
 }
 
 void Level2Scene::Render() 
 {
   Engine::GetWindow().setView(scene2view2);
     
-  for (int i = 6; i > -1; i--)
+  for (int i = 5; i > -1; i--)
   {
-      Engine::GetWindow().draw(bckSprites[i]);
+      Engine::GetWindow().draw(bckSprites2[i]);
   }
   
   Engine::GetWindow().setView(scene2view);
