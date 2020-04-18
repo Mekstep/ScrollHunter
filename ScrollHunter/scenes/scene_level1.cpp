@@ -25,12 +25,14 @@ const int screenHeight = 1080;
 Sprite bckSprites1[6];
 Texture bckTextures1[6];
 
+Texture templeTile1;
+
 Sprite hpBarS1;
 Texture hpBarT1;
 
 
 View scene1view;
-View scene1view2;
+View scene1view1;
 View scene1view3;
 
 SoundBuffer buffer1;
@@ -40,10 +42,11 @@ void Level1Scene::Load()
 {
   cout << "Scene 1 Load" << endl;
   ls::loadLevelFile("res/level_1.txt", 40.0f);
+  templeTile1.loadFromFile("res/templeTile.png");
 
   //Set Viewports for scrolling screen
   scene1view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
-  scene1view2.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+  scene1view1.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
   scene1view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
   scene1view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 
@@ -122,6 +125,8 @@ void Level1Scene::Load()
 		  e->setPosition(pos);
 		  e->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
           e->addTag("wall");
+		  auto s = e->addComponent<SpriteSheetComponent>(Vector2f(40.f, 40.f));
+		  s->setSpritesheet(templeTile1);
 	  }
     // *********************************
   }
@@ -195,7 +200,7 @@ void Level1Scene::Update(const double& dt)
   if (ls::getTileAt(pp) == ls::END) 
   {
 	  scene1view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
-	  scene1view2.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+	  scene1view1.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene1view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene1view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 	  Engine::ChangeScene((Scene*)&level3);
@@ -211,7 +216,7 @@ void Level1Scene::Update(const double& dt)
 
 void Level1Scene::Render() 
 {
-  Engine::GetWindow().setView(scene1view2);
+  Engine::GetWindow().setView(scene1view1);
     
   for (int i = 5; i > -1; i--)
   {
