@@ -11,7 +11,7 @@ void PlayerBulletPhysicsComponent::update(double dt)
 {
   //_parent->setPosition(invert_height(bv2_to_sv2(_body->GetPosition())));
     _parent->setPosition(_parent->getPosition() + Vector2f(500*dt,0));
-  _parent->setRotation((180 / b2_pi) * _body->GetAngle());
+    _parent->setRotation((180 / b2_pi) * _body->GetAngle());
   
 
 }

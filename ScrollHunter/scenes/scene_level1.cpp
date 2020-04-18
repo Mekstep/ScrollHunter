@@ -1,4 +1,5 @@
 #include "scene_level1.h"
+#include "scene_level2.h"
 #include "../components/cmp_bullet.h"
 #include "../components/cmp_enemy_ai.h"
 #include "../components/cmp_enemy_turret.h"
@@ -9,12 +10,20 @@
 #include "../scenes/scene_menu.h"
 #include "../game.h"
 #include "../Player.h"
+#include "../Enemies.h"
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
 
 using namespace std;
 using namespace sf;
+
+const int screenWidth = 1920;
+const int screenHeight = 1080;
+
+View scene1view;
+View scene1view2;
+View scene1view3;
 
 static shared_ptr<Entity> player;
 
@@ -34,8 +43,14 @@ void Level1Scene::Load() {
   templeTile.loadFromFile("res/templeTile.png");
   tempBG.loadFromFile("res/tempBG.png");
 
-  auto ho = Engine::getWindowSize().y - (ls::getHeight() * 40.f);
-  ls::setOffset(Vector2f(0, ho));
+  //Set Viewports for scrolling screen
+  scene1view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+  scene1view2.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+  scene1view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+  scene1view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+
+  //auto ho = Engine::getWindowSize().y - (ls::getHeight() * 40.f);
+ // ls::setOffset(Vector2f(0, ho));
 
   //background
   tempBGS.setTexture(tempBG);
@@ -69,36 +84,7 @@ void Level1Scene::Load() {
   // Create Skeleton
   // *********************************
   {
-	  auto skeleton = makeEntity();
-	  skeleton->setHealth(100);
-	  skeleton->setPosition(ls::getTilePosition(ls::findTiles('k')[0]) +
-		  Vector2f(20, 0));
-
-	  auto anim = skeleton->addComponent<SpriteSheetComponent>(Vector2f(160.f, 140.f));
-	  skele1.loadFromFile("res/skeletonIdle.png");
-	  anim->setSpritesheet(skele1);
-	  anim->setFrameCount(8);
-	  anim->setFrameTime(0.1f);
-
-	  /* Add ShapeComponent, Red 16.f Circle
-	  auto s = skeleton->addComponent<ShapeComponent>();
-	  s->setShape<sf::RectangleShape>(Vector2f(30.f, 50.f));
-	  skele.loadFromFile("res/skeleton.png");
-	  s->getShape().setTexture(&skele);
-	  s->getShape().setOrigin(10.f, 25.f);
-	  */
-
-	  //auto turret = makeEntity();
-	  ///turret->setPosition(skeleton->getPosition());
-	  //auto t = turret->addComponent<ShapeComponent>();
-	  //t->setShape<sf::CircleShape>(15.0f, 3);
-	  //t->getShape().setFillColor(Color::Red);
-	  //t->getShape().setOrigin(16.f, 16.f);
-
-	  // Add EnemyAIComponent
-	  skeleton->addComponent<EnemyAIComponent>();
-	  //turret->addComponent<EnemyTurretComponent>();
-	  //turret->addComponent<EnemyAIComponent>();
+	  auto skeleton = Enemies::makeSkeleton(this, ls::getTilePosition(ls::findTiles('k')[0]) + Vector2f(20, 0));
   }
   // *********************************
 
@@ -106,37 +92,7 @@ void Level1Scene::Load() {
   // Create Skeleton Chief
   // *********************************
   {
-	  auto skeleChief = makeEntity();
-	  skeleChief->setHealth(100);
-	  skeleChief->setPosition(ls::getTilePosition(ls::findTiles('c')[0]) +
-		  Vector2f(20, 0));
-
-	  auto anim = skeleChief->addComponent<SpriteSheetComponent>(Vector2f(160.f, 180.f));
-	  skeletChief1.loadFromFile("res/skeletonChiefIdle.png");
-	  anim->setSpritesheet(skeletChief1);
-	  anim->setFrameCount(8);
-	  anim->setFrameTime(0.1f);
-
-	  /* Add ShapeComponent, Red 16.f Circle
-	  auto s = skeleChief->addComponent<ShapeComponent>();
-	  s->setShape<sf::RectangleShape>(Vector2f(30.f, 50.f));
-
-	  skeletChief.loadFromFile("res/skeletonchief.png");
-	  s->getShape().setTexture(&skeletChief);
-	  s->getShape().setOrigin(10.f, 25.f);
-	  */
-
-	  //auto turret = makeEntity();
-	  //turret->setPosition(skeleChief->getPosition());
-	  //auto t = turret->addComponent<ShapeComponent>();
-	  //t->setShape<sf::CircleShape>(15.0f, 3);
-	  //t->getShape().setFillColor(Color::Red);
-	  //t->getShape().setOrigin(16.f, 16.f);
-
-	  // Add EnemyAIComponent
-	  skeleChief->addComponent<EnemyAIComponent>();
-	  //turret->addComponent<EnemyTurretComponent>();
-	  //turret->addComponent<EnemyAIComponent>();
+	  auto skeletonChief = Enemies::makeSkeletonChief(this, ls::getTilePosition(ls::findTiles('c')[0]) + Vector2f(20, 0));
   }
   // *********************************
 
@@ -144,36 +100,7 @@ void Level1Scene::Load() {
   // Create Skeleton Archer
   // *********************************
   {
-	  auto skeleArcher = makeEntity();
-	  skeleArcher->setHealth(100);
-	  skeleArcher->setPosition(ls::getTilePosition(ls::findTiles('a')[0]) +
-		  Vector2f(20, 0));
-
-	  auto anim = skeleArcher->addComponent<SpriteSheetComponent>(Vector2f(130.f, 140.f));
-	  skeletArcher1.loadFromFile("res/skeletonArcherIdle.png");
-	  anim->setSpritesheet(skeletArcher1);
-	  anim->setFrameCount(8);
-	  anim->setFrameTime(0.1f);
-
-	  /* Add ShapeComponent, Red 16.f Circle
-	  auto s = skeleArcher->addComponent<ShapeComponent>();
-	  s->setShape<sf::RectangleShape>(Vector2f(30.f, 50.f));
-
-	  skeletArcher.loadFromFile("res/skeletonarcher.png");
-	  s->getShape().setTexture(&skeletArcher);
-	  s->getShape().setOrigin(10.f, 25.f);
-	  */
-	  //auto turret = makeEntity();
-	  //turret->setPosition(skeleArcher->getPosition());
-	  //auto t = turret->addComponent<ShapeComponent>();
-	  //t->setShape<sf::CircleShape>(15.0f, 3);
-	  //t->getShape().setFillColor(Color::Red);
-	  //t->getShape().setOrigin(16.f, 16.f);
-
-	  // Add EnemyAIComponent
-	  skeleArcher->addComponent<EnemyAIComponent>();
-	  //turret->addComponent<EnemyTurretComponent>();
-	  //turret->addComponent<EnemyAIComponent>();
+	  auto skeletonArcher = Enemies::makeSkeletonArcher(this, ls::getTilePosition(ls::findTiles('a')[0]) + Vector2f(20, 0));
   }
   // *********************************
 
@@ -193,7 +120,7 @@ void Level1Scene::Load() {
   }
 
   //Simulate long loading times
-  std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+  std::this_thread::sleep_for(std::chrono::milliseconds(2000));
   cout << " Scene 1 Load Done" << endl;
 
   setLoaded(true);
@@ -209,13 +136,21 @@ void Level1Scene::UnLoad() {
 void Level1Scene::Update(const double& dt) {
 
   if (ls::getTileAt(player->getPosition()) == ls::END) {
-    Engine::ChangeScene((Scene*)&level2);
+	  Engine::ChangeScene((Scene*)&level2);
   }
   Scene::Update(dt);
 }
 
 void Level1Scene::Render() {
 	Engine::GetWindow().draw(tempBGS);
+
+	Engine::GetWindow().setView(scene1view2);
+
+	Engine::GetWindow().setView(scene1view);
+
 	ls::render(Engine::GetWindow());
+
+	Engine::GetWindow().setView(scene1view3);
+
 	Scene::Render();
 }

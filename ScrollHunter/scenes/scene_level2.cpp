@@ -30,9 +30,10 @@ Texture bckTextures[7];
 Sprite hpBarS;
 Texture hpBarT;
 
-View view;
-View view2;
-View view3;
+
+View scene2view;
+View scene2view2;
+View scene2view3;
 
 SoundBuffer buffer;
 Sound level;
@@ -43,10 +44,10 @@ void Level2Scene::Load()
   ls::loadLevelFile("res/level_2.txt", 40.0f);
 
   //Set Viewports for scrolling screen
-  view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
-  view2.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
-  view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
-  view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+  scene2view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+  scene2view2.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+  scene2view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+  scene2view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 
 
   //Background
@@ -127,6 +128,9 @@ void Level2Scene::Load()
     // *********************************
   }
 
+  //Simulate long loading times
+  std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+
   cout << " Scene 2 Load Done" << endl;
   setLoaded(true);
 }
@@ -160,7 +164,7 @@ void Level2Scene::Update(const double& dt)
         position.y = 0;
     }
 
-    view.reset(FloatRect(position.x, 0, screenWidth, screenHeight));
+    scene2view.reset(FloatRect(position.x, 0, screenWidth, screenHeight));
     //*****************************************************
 
 
@@ -195,7 +199,7 @@ void Level2Scene::Update(const double& dt)
 
   if (ls::getTileAt(pp) == ls::END) 
   {
-    Engine::ChangeScene((Scene*)&level3);
+	  Engine::ChangeScene((Scene*)&level3);
   } 
   else if (!player->isAlive()) 
   {
@@ -206,22 +210,22 @@ void Level2Scene::Update(const double& dt)
 
 void Level2Scene::Render() 
 {
-  Engine::GetWindow().setView(view2);
+  Engine::GetWindow().setView(scene2view2);
     
   for (int i = 6; i > -1; i--)
   {
       Engine::GetWindow().draw(bckSprites[i]);
   }
   
-  Engine::GetWindow().setView(view);
+  Engine::GetWindow().setView(scene2view);
 
   ls::render(Engine::GetWindow());
 
-  Engine::GetWindow().setView(view3);
+  Engine::GetWindow().setView(scene2view3);
 
   Engine::GetWindow().draw(hpBarS);
   
-  Engine::GetWindow().setView(view);
+  Engine::GetWindow().setView(scene2view);
 
   Scene::Render();
   

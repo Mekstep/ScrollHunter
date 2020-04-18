@@ -158,11 +158,11 @@ void PlayerMovementComponent::update(double dt) {
 		bullet->addComponent<BulletComponent>();
 		auto s = bullet->addComponent<ShapeComponent>();
 
-		s->setShape<sf::RectangleShape>(Vector2f(30.0f, 30.0f));
+		s->setShape<sf::RectangleShape>(Vector2f(50.0f, 50.0f));
 		s->getShape().setFillColor(Color::Blue);
 		s->getShape().setOrigin(8.f, 8.f);
 
-		auto p = bullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(30.f, 30.f));
+		auto p = bullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(50.f, 50.f));
 
 		/*
 		auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(30.f, 30.f));
@@ -171,45 +171,7 @@ void PlayerMovementComponent::update(double dt) {
 		p->impulse(sf::rotate(Vector2f(20.f, 20.f), -_parent->getRotation()));
 		*/
 
-		auto bullet2 = _parent->scene->makeEntity();
-		bullet2->setPosition(_parent->getPosition());
-		//bullet->addComponent<HurtComponent>();
-		bullet2->addComponent<BulletComponent>();
-		auto s2 = bullet->addComponent<ShapeComponent>();
-
-		s2->setShape<sf::RectangleShape>(Vector2f(30.0f, 30.0f));
-		s2->getShape().setFillColor(Color::Blue);
-		s2->getShape().setOrigin(8.f, 8.f);
-
-		auto p2 = bullet2->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(30.f, 30.f));
-
-		/*
-		auto p2 = bullet->addComponent<PhysicsComponent>(true, Vector2f(30.f, 30.f));
-		p2->setRestitution(.4f);
-		p2->setFriction(.005f);
-		p2->impulse(sf::rotate(Vector2f(20.f, 40.f), _parent->getRotation()));
-		*/
-
-		auto bullet3 = _parent->scene->makeEntity();
-		bullet3->setPosition(_parent->getPosition());
-		//bullet->addComponent<HurtComponent>();
-		bullet3->addComponent<BulletComponent>();
-		auto s3 = bullet->addComponent<ShapeComponent>();
-
-		s3->setShape<sf::RectangleShape>(Vector2f(30.0f, 30.0f));
-		s3->getShape().setFillColor(Color::Blue);
-		s3->getShape().setOrigin(8.f, 8.f);
-
-		auto p3 = bullet3->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(30.f, 30.f));
-
-		/*
-		auto p3 = bullet->addComponent<PhysicsComponent>(true, Vector2f(30.f, 30.f));
-		p3->setRestitution(.4f);
-		p3->setFriction(.005f);
-		p3->impulse(sf::rotate(Vector2f(20.f, 60.f), _parent->getRotation()));		
-		*/
-
-		wCooldown = 0.f;
+		//wCooldown = 0.f;
 	}
 
 
