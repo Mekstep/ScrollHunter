@@ -90,29 +90,47 @@ void Level2Scene::Load()
   level.setLoop(true);
   //************************************************
 
-  // Create Skeleton
+ // Create Skeletons
   // *****************************************************************
   {
-	  auto skeleton = Enemies::makeSkeleton(this); 
+      auto skeletons = ls::findTiles('k');
+      for (auto s : skeletons)
+      {
+          auto pos = ls::getTilePosition(s);
+          auto skeleton = Enemies::makeSkeleton(this);
+          skeleton->setPosition(pos);
+      }
+	   
   }
   // *****************************************************************
   
 
-  // Create Skeleton Chief
+  // Create Skeleton Chiefs
   // *********************************************************************
   {
-	  auto skeletonChief = Enemies::makeSkeletonChief(this);
+      auto skeletonChiefs = ls::findTiles('c');
+      for (auto s : skeletonChiefs)
+      {
+          auto pos = ls::getTilePosition(s);
+	      auto skeletonChief = Enemies::makeSkeletonChief(this);
+          skeletonChief->setPosition(pos);
+      }
   }
   // *********************************************************************
 
 
-  // Create Skeleton Archer
+  // Create Skeleton Archers
   // ***********************************************************************
   {
-	  auto skeletonArcher = Enemies::makeSkeletonArcher(this);
+      auto skeletonArchers = ls::findTiles('a');
+      for (auto s : skeletonArchers)
+      {
+          auto pos = ls::getTilePosition(s);
+	      auto skeletonArcher = Enemies::makeSkeletonArcher(this);
+          skeletonArcher->setPosition(pos);
+      }
   }
   // ***********************************************************************
-
   // Add physics colliders to level tiles.
   {
     // *********************************

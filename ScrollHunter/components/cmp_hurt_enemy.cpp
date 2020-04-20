@@ -33,8 +33,10 @@ void EnemyHurtComponent::update(double dt) {
 
 }
 
-	EnemyHurtComponent::EnemyHurtComponent(Entity * p, int damage) : Component(p), _enemy(_parent->scene->ents.find("enemy")[0])
+	EnemyHurtComponent::EnemyHurtComponent(Entity * p, int _damage) : Component(p), _enemy(_parent->scene->ents.find("enemy")[0])
 	{
+		damage = _damage;
+
 		if (!hitBuff.loadFromFile("res/hit.flac"))
 		{
 			cout << "Couldn't load whack sound!" << endl;

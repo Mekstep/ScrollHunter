@@ -10,6 +10,6 @@ protected:
 public:
   void update(double dt) override;
   void render() override {}
-  explicit EnemyHurtComponent(Entity* p, int damage);
+  explicit EnemyHurtComponent(Entity* p, int _damage);
   EnemyHurtComponent() = delete;
 };

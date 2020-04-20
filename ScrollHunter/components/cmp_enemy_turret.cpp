@@ -27,7 +27,6 @@ void EnemyTurretComponent::fire() const {
   auto bullet = _parent->scene->makeEntity();
   bullet->setPosition(_parent->getPosition());
   bullet->addComponent<HurtComponent>();
-  bullet->addComponent<BulletComponent>();
   auto s = bullet->addComponent<ShapeComponent>();
 
   s->setShape<sf::CircleShape>(8.f);
