@@ -26,9 +26,6 @@ void HurtComponent::update(double dt) {
         {
             pl->setForDelete();
         }
-
-      //pl->setForDelete();
-      //_parent->setForDelete();
     }
 
     if (ls::getTileAt(_parent->getPosition()) == ls::WALL)

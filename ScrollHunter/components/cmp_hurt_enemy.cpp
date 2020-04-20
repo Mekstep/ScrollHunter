@@ -1,4 +1,5 @@
 #include "cmp_hurt_enemy.h"
+#include "LevelSystem.h"
 #include <engine.h>
 #include <SFML/Audio.hpp>
 
@@ -26,8 +27,10 @@ void EnemyHurtComponent::update(double dt) {
 			{
 				pl->setForDelete();
 			}
-
-
+		}
+		if (ls::getTileAt(_parent->getPosition()) == ls::WALL)
+		{
+			_parent->setForDelete();
 		}
 	}
 
