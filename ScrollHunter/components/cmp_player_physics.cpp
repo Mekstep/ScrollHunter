@@ -120,7 +120,7 @@ void PlayerPhysicsComponent::update(double dt) {
   {
 
 	  bullet = _parent->scene->makeEntity();
-	  bullet->setPosition(_parent->getPosition());
+	  bullet->setPosition(_parent->getPosition() + Vector2f(50,0));
 	  bullet->addComponent<EnemyHurtComponent>(20);
 	  auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(24.f, 24.f));
 	  qAttack.loadFromFile("res/attackOrbSheet.png");
@@ -138,7 +138,7 @@ void PlayerPhysicsComponent::update(double dt) {
   if (Keyboard::isKeyPressed(Keyboard::W) && wCooldown >= wCooldownMax)
   {
 	  bullet2 = _parent->scene->makeEntity();
-	  bullet2->setPosition(_parent->getPosition() + Vector2f(30.f, 0.f));
+	  bullet2->setPosition(_parent->getPosition() + Vector2f(60, 10));
 	  bullet2->addComponent<EnemyHurtComponent>(10);
 	  auto s = bullet2->addComponent<ShapeComponent>();
 
@@ -155,7 +155,7 @@ void PlayerPhysicsComponent::update(double dt) {
   if (Keyboard::isKeyPressed(Keyboard::E) && eCooldown >= eCooldownMax)
   {
 	  bullet3 = _parent->scene->makeEntity();
-	  bullet3->setPosition(_parent->getPosition() + Vector2f(30.f, 0.f));
+	  bullet3->setPosition(_parent->getPosition() + Vector2f(50, 0));
 	  bullet3->addComponent<EnemyHurtComponent>(100);
 	  auto s = bullet3->addComponent<ShapeComponent>();
 
