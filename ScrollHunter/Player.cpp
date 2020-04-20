@@ -25,7 +25,7 @@ std::shared_ptr<Entity> Player::makePlayer(Scene* scene, const Vector2f& pos) {
 	auto player = scene->makeEntity();
 	player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
 	player->addTag("player");
-	player->addComponent<PlayerMovementComponent>();
+	player->addComponent<PlayerPhysicsComponent>(Vector2f(60.f, 130.f));
 	player->setHealth(100);
 
 	/*

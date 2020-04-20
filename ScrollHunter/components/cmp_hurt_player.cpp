@@ -11,7 +11,7 @@ Sound whack;
 
 void HurtComponent::update(double dt) {
   if (auto pl = _player.lock()) {
-    if (length(pl->getPosition() - _parent->getPosition()) < 25.0) {
+    if (length(pl->getPosition() - _parent->getPosition()) < 60.0) {
 
         whack.play();
 

@@ -17,11 +17,4 @@ public:
 };
 
 
-class PlayerMovementComponent : public ActorMovementComponent {
-public:
-	PlayerMovementComponent() = delete;
-	explicit PlayerMovementComponent(Entity* parent);
-
-	void update(double dt);
-};
 

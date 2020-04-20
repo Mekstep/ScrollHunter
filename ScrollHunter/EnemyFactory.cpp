@@ -1,5 +1,5 @@
 #include "ecm.h"
-#include "Enemies.h"
+#include "EnemyFactory.h"
 #include "components/cmp_spritesheet.h"
 #include "components/cmp_enemy_ai.h"
 #include "components/cmp_actor_movement.h"
@@ -12,6 +12,7 @@
 #include "components/cmp_bullet.h"
 #include <LevelSystem.h>
 #include <SFML/Graphics/Transformable.hpp>
+#include "components/cmp_bullet_physics.h"
 
 
 using namespace sf;
@@ -22,11 +23,12 @@ Texture skeletArcher;
 Texture skeletChief;
 
 //create skeleton
-std::shared_ptr<Entity> Enemies::makeSkeleton(Scene* scene, const Vector2f& pos) {
+std::shared_ptr<Entity> Enemies::makeSkeleton(Scene* scene) {
 
 	auto skeleton = scene->makeEntity();
 	skeleton->setHealth(100);
-	skeleton->setPosition(pos);
+	skeleton->setPosition(ls::getTilePosition(ls::findTiles('k')[0]) + Vector2f(20, 0));
+	skeleton->addTag("enemy");
 
 	// Add ShapeComponent, Red 16.f Circle
 	auto anim = skeleton->addComponent<SpriteSheetComponent>(Vector2f(160.f, 140.f));
@@ -35,28 +37,29 @@ std::shared_ptr<Entity> Enemies::makeSkeleton(Scene* scene, const Vector2f& pos)
 	anim->setFrameCount(8);
 	anim->setFrameTime(0.1f);
 
-	auto turret = scene->makeEntity();
-	turret->setPosition(skeleton->getPosition());
-	auto t = turret->addComponent<ShapeComponent>();
-	t->setShape<sf::CircleShape>(15.0f, 3);
-	t->getShape().setFillColor(Color::Transparent);
-	t->getShape().setOrigin(16.f, 16.f);
+	//auto turret = scene->makeEntity();
+	//turret->setPosition(skeleton->getPosition());
+	//auto t = turret->addComponent<ShapeComponent>();
+	//t->setShape<sf::CircleShape>(15.0f, 3);
+	//t->getShape().setFillColor(Color::Red);
+	//t->getShape().setOrigin(16.f, 16.f);
 
 	// Add EnemyAIComponent
 	skeleton->addComponent<EnemyAIComponent>();
-	turret->addComponent<EnemyTurretComponent>();
-	turret->addComponent<EnemyAIComponent>();
+	skeleton->addComponent<EnemyTurretComponent>();
+	//turret->addComponent<EnemyAIComponent>();
 
 
 	return skeleton;
 }
 
 //create skeleton archer
-std::shared_ptr<Entity> Enemies::makeSkeletonArcher(Scene* scene, const Vector2f& pos) {
+std::shared_ptr<Entity> Enemies::makeSkeletonArcher(Scene* scene) {
 
 	auto skeleArcher = scene->makeEntity();
 	skeleArcher->setHealth(100);
-	skeleArcher->setPosition(pos);
+	skeleArcher->setPosition(ls::getTilePosition(ls::findTiles('a')[0]) + Vector2f(20, 0));
+	skeleArcher->addTag("enemy");
 
 	// Add ShapeComponent, Red 16.f Circle
 	auto anim = skeleArcher->addComponent<SpriteSheetComponent>(Vector2f(130.f, 140.f));
@@ -65,8 +68,8 @@ std::shared_ptr<Entity> Enemies::makeSkeletonArcher(Scene* scene, const Vector2f
 	anim->setFrameCount(8);
 	anim->setFrameTime(0.1f);
 
-	auto turret = scene->makeEntity();
-	turret->setPosition(skeleArcher->getPosition());
+	//auto turret = scene->makeEntity();
+	//turret->setPosition(skeleArcher->getPosition());
 	//auto t = turret->addComponent<ShapeComponent>();
 	//t->setShape<sf::CircleShape>(15.0f, 3);
 	//t->getShape().setFillColor(Color::Red);
@@ -74,7 +77,7 @@ std::shared_ptr<Entity> Enemies::makeSkeletonArcher(Scene* scene, const Vector2f
 
 	// Add EnemyAIComponent
 	skeleArcher->addComponent<EnemyAIComponent>();
-	//turret->addComponent<EnemyTurretComponent>();
+	skeleArcher->addComponent<EnemyTurretComponent>();
 	//turret->addComponent<EnemyAIComponent>();
 
 
@@ -82,11 +85,12 @@ std::shared_ptr<Entity> Enemies::makeSkeletonArcher(Scene* scene, const Vector2f
 }
 
 //create skeleton chief
-std::shared_ptr<Entity> Enemies::makeSkeletonChief(Scene* scene, const Vector2f& pos) {
+std::shared_ptr<Entity> Enemies::makeSkeletonChief(Scene* scene) {
 
 	auto skeleChief = scene->makeEntity();
 	skeleChief->setHealth(100);
-	skeleChief->setPosition(pos);
+	skeleChief->setPosition(ls::getTilePosition(ls::findTiles('c')[0]) + Vector2f(20, 0));
+	skeleChief->addTag("enemy");
 
 	// Add ShapeComponent, Red 16.f Circle
 	auto anim = skeleChief->addComponent<SpriteSheetComponent>(Vector2f(160.f, 180.f));
@@ -95,8 +99,8 @@ std::shared_ptr<Entity> Enemies::makeSkeletonChief(Scene* scene, const Vector2f&
 	anim->setFrameCount(8);
 	anim->setFrameTime(0.1f);
 
-	auto turret = scene->makeEntity();
-	turret->setPosition(skeleChief->getPosition());
+	//auto turret = scene->makeEntity();
+	//turret->setPosition(skeleChief->getPosition());
 	//auto t = turret->addComponent<ShapeComponent>();
 	//t->setShape<sf::CircleShape>(15.0f, 3);
 	//t->getShape().setFillColor(Color::Red);
@@ -104,7 +108,7 @@ std::shared_ptr<Entity> Enemies::makeSkeletonChief(Scene* scene, const Vector2f&
 
 	// Add EnemyAIComponent
 	skeleChief->addComponent<EnemyAIComponent>();
-	//turret->addComponent<EnemyTurretComponent>();
+	skeleChief->addComponent<EnemyTurretComponent>();
 	//turret->addComponent<EnemyAIComponent>();
 
 

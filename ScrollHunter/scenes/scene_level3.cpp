@@ -4,7 +4,7 @@
 #include "../game.h"
 #include "../components/cmp_bullet.h"
 #include "../Player.h"
-#include "../Enemies.h"
+#include "../EnemyFactory.h"
 #include "../components/cmp_spritesheet.h"
 #include <LevelSystem.h>
 #include <iostream>

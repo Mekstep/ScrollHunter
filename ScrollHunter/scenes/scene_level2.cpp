@@ -9,7 +9,7 @@
 #include "../scenes/scene_menu.h"
 #include "../game.h"
 #include "../Player.h"
-#include "../Enemies.h"
+#include "../EnemyFactory.h"
 #include <LevelSystem.h>
 #include <iostream>
 #include <SFML/Audio.hpp>
@@ -93,7 +93,7 @@ void Level2Scene::Load()
   // Create Skeleton
   // *****************************************************************
   {
-	  auto skeleton = Enemies::makeSkeleton(this, ls::getTilePosition(ls::findTiles('k')[0]) + Vector2f(20, 0)); 
+	  auto skeleton = Enemies::makeSkeleton(this); 
   }
   // *****************************************************************
   
@@ -101,7 +101,7 @@ void Level2Scene::Load()
   // Create Skeleton Chief
   // *********************************************************************
   {
-	  auto skeletonChief = Enemies::makeSkeletonChief(this, ls::getTilePosition(ls::findTiles('c')[0]) + Vector2f(20, 0));
+	  auto skeletonChief = Enemies::makeSkeletonChief(this);
   }
   // *********************************************************************
 
@@ -109,7 +109,7 @@ void Level2Scene::Load()
   // Create Skeleton Archer
   // ***********************************************************************
   {
-	  auto skeletonArcher = Enemies::makeSkeletonArcher(this, ls::getTilePosition(ls::findTiles('a')[0]) + Vector2f(20, 0));
+	  auto skeletonArcher = Enemies::makeSkeletonArcher(this);
   }
   // ***********************************************************************
 
