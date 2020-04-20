@@ -1,4 +1,5 @@
 #include "cmp_hurt_player.h"
+#include "LevelSystem.h"
 #include <engine.h>
 #include <SFML/Audio.hpp>
 
@@ -28,6 +29,11 @@ void HurtComponent::update(double dt) {
 
       //pl->setForDelete();
       //_parent->setForDelete();
+    }
+
+    if (ls::getTileAt(_parent->getPosition()) == ls::WALL)
+    {
+        _parent->setForDelete();
     }
 
   }
