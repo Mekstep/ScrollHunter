@@ -16,7 +16,7 @@ void EnemyHurtComponent::update(double dt) {
 	{
 		if (length(pl->getPosition() - _parent->getPosition()) < 60.0) {
 
-			pl->setHealth(pl->getHealth() - 10);
+			pl->setHealth(pl->getHealth() - damage);
 
 			_parent->setForDelete();
 
