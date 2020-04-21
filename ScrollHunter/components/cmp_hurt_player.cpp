@@ -16,7 +16,15 @@ void HurtComponent::update(double dt) {
 
         whack.play();
 
-        pl->setHealth(pl->getHealth()-10);
+		if (pl->getShield() == true)
+		{
+			pl->setHealth(pl->getHealth());
+		}
+		else
+		{
+			pl->setHealth(pl->getHealth() - 10);
+		}
+        
 
         _parent->setForDelete();
 

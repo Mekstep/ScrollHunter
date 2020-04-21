@@ -7,6 +7,7 @@
 #include "cmp_bullet.h"
 #include "cmp_bullet_physics.h"
 #include "cmp_player_bullet_physics.h"
+#include "cmp_familiar.h"
 #include <LevelSystem.h>
 #include <engine.h>
 #include <iostream>
@@ -16,19 +17,32 @@ using namespace std;
 using namespace sf;
 using namespace Physics;
 
-shared_ptr<Entity> bullet;
-shared_ptr<Entity> bullet2;
-shared_ptr<Entity> bullet3;
+//shield
+static shared_ptr<Entity> shield;
+static float shieldDuration = 0.f;
+static bool shieldActive = false;
 
-//ability cooldowns start at max value so you can cast right away
-float qCooldown = 5.f;
-float qCooldownMax = 5.f;
-float wCooldown = 30.f;
-float wCooldownMax = 30.f;
-float eCooldown = 30.f;
-float eCooldownMax = 30.f;
+//familiar
+static shared_ptr<Entity> familiar;
+static float familiarDuration = 0.f;
+static bool familiarActive = false;
 
-Texture qAttack;
+//increased defualt attack
+static float increaseDuration = 0.f;
+static bool increaseActive = false;
+static shared_ptr<Entity> increaseBullet;
+static shared_ptr<Entity> increaseBullet2;
+
+static shared_ptr<Entity> bullet;
+static shared_ptr<Entity> bullet2;
+static shared_ptr<Entity> bullet3;
+
+//ability cooldowns
+static float qCooldown = 0.f;
+static float wCooldown = 0.f;
+static float eCooldown = 0.f;
+
+static Texture qAttack;
 
 bool PlayerPhysicsComponent::isGrounded() const {
   auto touch = getTouching();
@@ -55,6 +69,7 @@ bool PlayerPhysicsComponent::isGrounded() const {
 void PlayerPhysicsComponent::update(double dt) {
 
   const auto pos = _parent->getPosition();
+
 
   setVelocity(Vector2f(0.f, 0.f));
 
@@ -97,27 +112,49 @@ void PlayerPhysicsComponent::update(double dt) {
 
   //ABILITIES
   //Q ability cooldown
-  if (qCooldown < qCooldownMax)
+  if (qCooldown > 0.f)
   {
-	  qCooldown += 0.05f;
+	  qCooldown -= dt;
   }
 
   //W ability cooldown
-  if (wCooldown < wCooldownMax)
+  if (wCooldown > 0.f)
   {
-	  wCooldown += 0.05f;
+	  wCooldown -= dt;
   }
 
   //E ability cooldown
-  if (eCooldown < eCooldownMax)
+  if (eCooldown > 0.f)
   {
-	  eCooldown += 0.05f;
+	  eCooldown -= dt;
   }
 
 
   //Q Ability
-  if (Keyboard::isKeyPressed(Keyboard::Q) && qCooldown >= qCooldownMax)
+  if (Keyboard::isKeyPressed(Keyboard::Q) && qCooldown <= 0.f)
   {
+	  if (increaseActive == true)
+	  {
+		  increaseBullet = _parent->scene->makeEntity();
+		  increaseBullet->setPosition(_parent->getPosition() + Vector2f(50, 50));
+		  increaseBullet->addComponent<EnemyHurtComponent>(20);
+		  auto s = increaseBullet->addComponent<SpriteSheetComponent>(Vector2f(24.f, 24.f));
+		  qAttack.loadFromFile("res/attackOrbSheet.png");
+		  s->setSpritesheet(qAttack);
+		  s->setFrameCount(16);
+		  s->setFrameTime(0.03f);
+		  auto p = increaseBullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(24.f, 24.f));
+
+		  increaseBullet2 = _parent->scene->makeEntity();
+		  increaseBullet2->setPosition(_parent->getPosition() + Vector2f(50, -50));
+		  increaseBullet2->addComponent<EnemyHurtComponent>(20);
+		  auto s2 = increaseBullet2->addComponent<SpriteSheetComponent>(Vector2f(24.f, 24.f));
+		  qAttack.loadFromFile("res/attackOrbSheet.png");
+		  s2->setSpritesheet(qAttack);
+		  s2->setFrameCount(16);
+		  s2->setFrameTime(0.03f);
+		  auto p2 = increaseBullet2->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(24.f, 24.f));
+	  }
 
 	  bullet = _parent->scene->makeEntity();
 	  bullet->setPosition(_parent->getPosition() + Vector2f(50,0));
@@ -129,13 +166,12 @@ void PlayerPhysicsComponent::update(double dt) {
 	  s->setFrameTime(0.03f);
 	  auto p = bullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(24.f, 24.f));
 
-	  qCooldown = 0.f;
+	  qCooldown = 1.f;
   }
 
 
-
   //W Ability
-  if (Keyboard::isKeyPressed(Keyboard::W) && wCooldown >= wCooldownMax && _parent->getEssence() > 0)
+  if (Keyboard::isKeyPressed(Keyboard::W) && wCooldown <= 0.f && _parent->getEssence() > 0)
   {
 	  bullet2 = _parent->scene->makeEntity();
 	  bullet2->setPosition(_parent->getPosition() + Vector2f(60, 10));
@@ -153,7 +189,7 @@ void PlayerPhysicsComponent::update(double dt) {
 
 
   //E ability
-  if (Keyboard::isKeyPressed(Keyboard::E) && eCooldown >= eCooldownMax)
+  if (Keyboard::isKeyPressed(Keyboard::E) && eCooldown <= 0.f)
   {
 	  bullet3 = _parent->scene->makeEntity();
 	  bullet3->setPosition(_parent->getPosition() + Vector2f(50, 0));
@@ -166,7 +202,82 @@ void PlayerPhysicsComponent::update(double dt) {
 
 	  auto p = bullet3->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(40.f, 40.f));
 
-	  eCooldown = 0.f;
+	  eCooldown = 5.f;
+  }
+
+  //CASTABLE POWERUPS
+  //1 powerup Shield
+
+
+  if (Keyboard::isKeyPressed(Keyboard::Num1) && shieldActive == false)
+  {
+	  shield = _parent->scene->makeEntity();
+	  auto s = shield->addComponent<ShapeComponent>();
+	  s->setShape<sf::CircleShape>(65.f);
+	  s->getShape().setFillColor(Color::Magenta);
+	  shieldDuration = 10.f;
+	  shieldActive = true;
+	  _parent->setShield(shieldActive);
+  }
+
+  if (shieldActive == true)
+  {
+	  shield->setPosition(_parent->getPosition() - Vector2f(65.f, 65.f));
+	  shieldDuration -= dt;
+  }
+
+  if (shieldDuration < 0.f)
+  {
+	  shieldActive = false;
+	  _parent->setShield(shieldActive);
+	  shield->setForDelete();
+  }
+
+
+
+
+
+
+  //2 powerup Familiar
+  if (Keyboard::isKeyPressed(Keyboard::Num2) && familiarActive == false)
+  {
+	  familiar = _parent->scene->makeEntity();
+	  auto s = familiar->addComponent<ShapeComponent>();
+	  s->setShape<sf::CircleShape>(25.f);
+	  s->getShape().setFillColor(Color::Green);
+	  auto t = familiar->addComponent<FamiliarComponent>();
+	  familiarDuration = 10.f;
+	  familiarActive = true;
+  }
+
+  if (familiarActive == true)
+  {
+	  familiar->setPosition(_parent->getPosition() - Vector2f(100.f, 100.f));
+	  familiarDuration -= dt;
+  }
+
+  if (familiarDuration< 0.f)
+  {
+	  familiarActive = false;
+	  familiar->setForDelete();
+  }
+
+
+  //3 powerup Increase Default attack
+  if (Keyboard::isKeyPressed(Keyboard::Num3))
+  {
+	  increaseDuration = 5.f;
+	  increaseActive = true;
+  }
+
+  if (increaseActive == true)
+  {
+	  increaseDuration -= dt;
+  }
+
+  if (increaseDuration < 0.f)
+  {
+	  increaseActive = false;
   }
 
 

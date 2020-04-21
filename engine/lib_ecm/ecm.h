@@ -51,6 +51,7 @@ protected:
   std::set<std::string> _tags;
   int _health;
   int _essence;
+  bool _shieldActive;
 
   
 
@@ -67,6 +68,10 @@ public:
   virtual void render();
 
   //
+  bool getShield() const;
+
+  void setShield(bool _shieldActive);
+
   int getHealth() const;
 
   void setHealth(int _health);

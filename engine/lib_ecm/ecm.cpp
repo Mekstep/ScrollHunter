@@ -39,6 +39,10 @@ void Entity::setPosition(const sf::Vector2f& _position) {
   Entity::_position = _position;
 }
 
+bool Entity::getShield() const { return _shieldActive; }
+
+void Entity::setShield(bool _shieldActive) { Entity::_shieldActive = _shieldActive; }
+
 int Entity::getHealth() const { return _health; }
 
 void Entity::setHealth(int _health) { Entity::_health = _health; }
