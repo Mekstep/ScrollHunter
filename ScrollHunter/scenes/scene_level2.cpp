@@ -19,18 +19,30 @@ using namespace sf;
 static shared_ptr<Entity> player;
 static shared_ptr<Entity> monst;
 
+//screen dimensions
 const int screenWidth = 1920;
 const int screenHeight = 1080;
 
+//hud and hud background
+static Texture HUD;
+static Texture HUDbg;
+static Sprite HUDs;
+static Sprite HUDbgs;
+
 Sprite skeleton;
 
+//parallax background
 Sprite bckSprites2[6];
 Texture bckTextures2[6];
 
-Sprite hpBarS;
-Texture hpBarT;
+//health bar
+static Sprite hpBarS;
+static Texture hpBarT;
+//mana bar
+static Sprite essBarS;
+static Texture essBarT;
 
-
+//views
 View scene2view;
 View scene2view2;
 View scene2view3;
@@ -54,7 +66,7 @@ void Level2Scene::Load()
   // ***************************************************************************
   for (int i = 0; i < 6; i++)
   {
-      if (!bckTextures2[i].loadFromFile("res/sky" + to_string(i + 1) + ".png"))
+      if (!bckTextures2[i].loadFromFile("res/scene2/sky" + to_string(i + 1) + ".png"))
       {
           cout << "Couldn't load Background" + to_string(i + 1) + "!" << endl;
       }
@@ -70,12 +82,24 @@ void Level2Scene::Load()
   }
   //**************************************************************************************
 
-  //HP Bar
+  //HP Bar & Essence & HUD
   //***********************************************
   {
+	  //hp
       hpBarT.loadFromFile("res/hp.png");
       hpBarS.setTexture(hpBarT);
       hpBarS.setScale(player->getHealth() / 10, 1);
+
+	  //essence
+	  essBarT.loadFromFile("res/es.png");
+	  essBarS.setTexture(essBarT);
+	  essBarS.setScale(player->getEssence() / 10, 1);
+	  essBarS.setPosition(Vector2f(250.f, 75.f));
+
+	  HUD.loadFromFile("res/HUD.png");
+	  HUDs.setTexture(HUD);
+	  HUDbg.loadFromFile("res/HUDbg.png");
+	  HUDbgs.setTexture(HUDbg);
   }
   //***********************************************
 
@@ -163,8 +187,11 @@ void Level2Scene::UnLoad()
 
 void Level2Scene::Update(const double& dt) 
 {
-
+	//hp bar scaling
     hpBarS.setScale(player->getHealth() / 10, 1);
+	//essence bar scaling
+	essBarS.setScale(player->getEssence() / 10, 1);
+
 
     //scroll screen as player reaches middle
     //*****************************************************
@@ -244,7 +271,11 @@ void Level2Scene::Render()
 
   Engine::GetWindow().setView(scene2view3);
 
+  //draw hud
+  Engine::GetWindow().draw(HUDbgs);
   Engine::GetWindow().draw(hpBarS);
+  Engine::GetWindow().draw(essBarS);
+  Engine::GetWindow().draw(HUDs);
   
   Engine::GetWindow().setView(scene2view);
 

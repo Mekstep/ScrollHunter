@@ -135,7 +135,7 @@ void PlayerPhysicsComponent::update(double dt) {
 
 
   //W Ability
-  if (Keyboard::isKeyPressed(Keyboard::W) && wCooldown >= wCooldownMax)
+  if (Keyboard::isKeyPressed(Keyboard::W) && wCooldown >= wCooldownMax && _parent->getEssence() > 0)
   {
 	  bullet2 = _parent->scene->makeEntity();
 	  bullet2->setPosition(_parent->getPosition() + Vector2f(60, 10));
@@ -147,6 +147,7 @@ void PlayerPhysicsComponent::update(double dt) {
 	  s->getShape().setOrigin(8.f, 8.f);
 
 	  auto p = bullet2->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(50.f, 50.f));
+	  _parent->setEssence(_parent->getEssence() - 1);
 	  //wCooldown = 0.f;
   }
 

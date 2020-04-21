@@ -14,6 +14,16 @@ using namespace sf;
 const int screenWidth = 1920;
 const int screenHeight = 1080;
 
+//hud and hud background
+static Texture HUD;
+static Texture HUDbg;
+static Sprite HUDs;
+static Sprite HUDbgs;
+
+//health bar
+static Sprite hpBarS;
+static Texture hpBarT;
+
 View scene3view;
 View scene3view2;
 View scene3view3;
@@ -40,7 +50,7 @@ void Level3Scene::Load() {
 // ***************************************************************************
   for (int i = 0; i < 6; i++)
   {
-	  if (!bckTextures3[i].loadFromFile("res/sky" + to_string(i + 1) + ".png"))
+	  if (!bckTextures3[i].loadFromFile("res/scene3/sky" + to_string(i + 1) + ".png"))
 	  {
 		  cout << "Couldn't load Background" + to_string(i + 1) + "!" << endl;
 	  }
@@ -48,35 +58,83 @@ void Level3Scene::Load() {
 	  bckSprites3[i].setTexture(bckTextures3[i]);
   }
   // ***************************************************************************
-
-  //auto ho = Engine::getWindowSize().y - (ls::getHeight() * 40.f);
-  //ls::setOffset(Vector2f(0, ho));
-
-  // Create player
+// Create player
+  //**************************************************************************************
   {
-    // *********************************
 	  player = Player::makePlayer(this, (ls::getTilePosition(ls::findTiles(ls::START)[0])));
-    // *********************************
   }
+  //**************************************************************************************
 
+ // Create Skeletons
+  // *****************************************************************
+  {
+	  auto skeletons = ls::findTiles('k');
+	  for (auto s : skeletons)
+	  {
+		  auto pos = ls::getTilePosition(s);
+		  auto skeleton = Enemies::makeSkeleton(this);
+		  skeleton->setPosition(pos);
+	  }
+
+  }
+  // *****************************************************************
+
+
+  // Create Skeleton Chiefs
+  // *********************************************************************
+  {
+	  auto skeletonChiefs = ls::findTiles('c');
+	  for (auto s : skeletonChiefs)
+	  {
+		  auto pos = ls::getTilePosition(s);
+		  auto skeletonChief = Enemies::makeSkeletonChief(this);
+		  skeletonChief->setPosition(pos);
+	  }
+  }
+  // *********************************************************************
+
+
+  // Create Skeleton Archers
+  // ***********************************************************************
+  {
+	  auto skeletonArchers = ls::findTiles('a');
+	  for (auto s : skeletonArchers)
+	  {
+		  auto pos = ls::getTilePosition(s);
+		  auto skeletonArcher = Enemies::makeSkeletonArcher(this);
+		  skeletonArcher->setPosition(pos);
+	  }
+  }
+  // ***********************************************************************
   // Add physics colliders to level tiles.
   {
-    // *********************************
+	  // *********************************
 	  auto walls = ls::findTiles(ls::WALL);
 	  for (auto w : walls) {
 		  auto pos = ls::getTilePosition(w);
-		  pos += Vector2f(20.f, 20.f); //offset to center
+		  pos += Vector2f(20.0f, 20.0f); // offset to centre
 		  auto e = makeEntity();
 		  e->setPosition(pos);
-		  e->addComponent<PhysicsComponent>(false, Vector2f(40.f, 40.f));
+		  e->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
+		  e->addTag("wall");
 		  auto s = e->addComponent<SpriteSheetComponent>(Vector2f(40.f, 40.f));
 		  s->setSpritesheet(templeTile);
 	  }
-    // *********************************
-  }
+	  // *********************************
 
-  //Simulate long loading times
-  //std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+	  //HP Bar & HUD
+	  //***********************************************
+	  {
+		  hpBarT.loadFromFile("res/hp.png");
+		  hpBarS.setTexture(hpBarT);
+		  hpBarS.setScale(player->getHealth() / 10, 1);
+		  HUD.loadFromFile("res/HUD.png");
+		  HUDs.setTexture(HUD);
+		  HUDbg.loadFromFile("res/HUDbg.png");
+		  HUDbgs.setTexture(HUDbg);
+	  }
+	  //***********************************************
+  }
 
   cout << " Scene 3 Load Done" << endl;
   setLoaded(true);
@@ -92,6 +150,9 @@ void Level3Scene::UnLoad() {
 
 
 void Level3Scene::Update(const double& dt) {
+
+	hpBarS.setScale(player->getHealth() / 10, 1);
+
 	//scroll screen as player reaches middle
 	//*****************************************************
 	Vector2f position(0, 0);
@@ -148,27 +209,7 @@ void Level3Scene::Update(const double& dt) {
   else if (!player->isAlive()) 
   {
 	  Engine::ChangeScene((Scene*)&level3);
-  }
-
-  static float rocktime = 0.0f;
-  rocktime -= dt;
-
-  if (rocktime <= 0.f){
-    rocktime  = 5.f;
-    auto rock = makeEntity();
-    rock->setPosition(ls::getTilePosition(ls::findTiles('r')[0]) +
-                      Vector2f(0, 40) );
-    rock->addComponent<BulletComponent>(30.f);
-    auto s = rock->addComponent<ShapeComponent>();
-    s->setShape<sf::CircleShape>(40.f);
-    s->getShape().setFillColor(Color::Cyan);
-    s->getShape().setOrigin(40.f, 40.f);
-    auto p = rock->addComponent<PhysicsComponent>(true, Vector2f(75.f, 75.f));
-    p->setRestitution(.4f);
-    p->setFriction(.0001f);
-    p->impulse(Vector2f(-3.f, 0));
-    p->setMass(1000000000.f);
-  }
+  } 
 
   Scene::Update(dt);
   
@@ -187,6 +228,11 @@ void Level3Scene::Render() {
 	ls::render(Engine::GetWindow());
 
 	Engine::GetWindow().setView(scene3view3);
+
+	//draw hud
+	Engine::GetWindow().draw(HUDbgs);
+	Engine::GetWindow().draw(hpBarS);
+	Engine::GetWindow().draw(HUDs);
 
 	Engine::GetWindow().setView(scene3view);
 

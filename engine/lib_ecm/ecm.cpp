@@ -43,6 +43,10 @@ int Entity::getHealth() const { return _health; }
 
 void Entity::setHealth(int _health) { Entity::_health = _health; }
 
+int Entity::getEssence() const { return _essence; }
+
+void Entity::setEssence(int _essence) { Entity::_essence = _essence; }
+
 float Entity::getRotation() const { return _rotation; }
 
 void Entity::setRotation(float _rotation) { Entity::_rotation = _rotation; }

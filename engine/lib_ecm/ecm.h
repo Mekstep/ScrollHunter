@@ -50,6 +50,7 @@ protected:
   bool _fordeletion; // should be deleted
   std::set<std::string> _tags;
   int _health;
+  int _essence;
 
   
 
@@ -69,6 +70,10 @@ public:
   int getHealth() const;
 
   void setHealth(int _health);
+
+  int getEssence() const;
+
+  void setEssence(int _essence);
 
   const sf::Vector2f& getPosition() const;
 

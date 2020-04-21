@@ -35,8 +35,6 @@ View scene1view;
 View scene1view1;
 View scene1view3;
 
-SoundBuffer buffer1;
-Sound level1sound;
 
 void Level1Scene::Load() 
 {
@@ -55,7 +53,7 @@ void Level1Scene::Load()
   // ***************************************************************************
   for (int i = 0; i < 6; i++)
   {
-      if (!bckTextures1[i].loadFromFile("res/sky" + to_string(i + 1) + ".png"))
+      if (!bckTextures1[i].loadFromFile("res/scene1/sky" + to_string(i + 1) + ".png"))
       {
           cout << "Couldn't load Background" + to_string(i + 1) + "!" << endl;
       }
@@ -80,16 +78,6 @@ void Level1Scene::Load()
   }
   //***********************************************
 
-  //Level Music
-  //************************************************
-  if (!buffer1.loadFromFile("res/level.ogg"))
-  {
-      cout << "Couldn't load level music!" << endl;
-  }
-  level1sound.setBuffer(buffer1);
-  level1sound.play();
-  level1sound.setLoop(true);
-  //************************************************
 
   // Create Skeleton
   // *****************************************************************
@@ -203,11 +191,10 @@ void Level1Scene::Update(const double& dt)
 	  scene1view1.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene1view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene1view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
-	  Engine::ChangeScene((Scene*)&level3);
+	  Engine::ChangeScene((Scene*)&level2);
   } 
   else if (!player->isAlive()) 
   {
-    level1sound.stop();
     Engine::ChangeScene((Scene*)&gameOver);
   }
 
