@@ -23,12 +23,9 @@ void HurtComponent::update(double dt) {
 		else
 		{
 			pl->setHealth(pl->getHealth() - 10);
-		}
-        
+		}        
 
         _parent->setForDelete();
-
-        cout << pl->getHealth() << endl;
 
         if (pl->getHealth() <= 0)
         {
@@ -44,8 +41,7 @@ void HurtComponent::update(double dt) {
   }
 }
 
-HurtComponent::HurtComponent(Entity* p)
-    : Component(p), _player(_parent->scene->ents.find("player")[0]) 
+HurtComponent::HurtComponent(Entity* p) : Component(p), _player(_parent->scene->ents.find("player")[0]) 
 {
     if (!hitBuff.loadFromFile("res/hit.flac"))
     {
