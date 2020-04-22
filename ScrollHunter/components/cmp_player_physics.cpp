@@ -144,6 +144,7 @@ void PlayerPhysicsComponent::update(double dt) {
 		  s->setFrameCount(16);
 		  s->setFrameTime(0.03f);
 		  auto p = increaseBullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(24.f, 24.f));
+		  increaseBullet->addComponent<BulletComponent>();
 
 		  increaseBullet2 = _parent->scene->makeEntity();
 		  increaseBullet2->setPosition(_parent->getPosition() + Vector2f(50, -50));
@@ -154,6 +155,7 @@ void PlayerPhysicsComponent::update(double dt) {
 		  s2->setFrameCount(16);
 		  s2->setFrameTime(0.03f);
 		  auto p2 = increaseBullet2->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(24.f, 24.f));
+		  increaseBullet2->addComponent<BulletComponent>();
 	  }
 
 	  bullet = _parent->scene->makeEntity();
@@ -165,6 +167,7 @@ void PlayerPhysicsComponent::update(double dt) {
 	  s->setFrameCount(16);
 	  s->setFrameTime(0.03f);
 	  auto p = bullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(24.f, 24.f));
+	  bullet->addComponent<BulletComponent>();
 
 	  qCooldown = 1.f;
   }
@@ -183,6 +186,7 @@ void PlayerPhysicsComponent::update(double dt) {
 	  s->getShape().setOrigin(8.f, 8.f);
 
 	  auto p = bullet2->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(50.f, 50.f));
+	  bullet2->addComponent<BulletComponent>();
 	  _parent->setEssence(_parent->getEssence() - 1);
 	  //wCooldown = 0.f;
   }
@@ -201,6 +205,7 @@ void PlayerPhysicsComponent::update(double dt) {
 	  s->getShape().setOrigin(8.f, 8.f);
 
 	  auto p = bullet3->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(40.f, 40.f));
+	  bullet3->addComponent<BulletComponent>();
 
 	  eCooldown = 5.f;
   }

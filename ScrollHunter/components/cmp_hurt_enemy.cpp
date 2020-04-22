@@ -3,7 +3,6 @@
 #include "LevelSystem.h"
 #include <engine.h>
 #include <SFML/Audio.hpp>
-#include "../score.h"
 
 using namespace std;
 using namespace sf;
@@ -13,19 +12,16 @@ static Sound whack;
 
 int damage;
 
-static Score score;
-
 void EnemyHurtComponent::update(double dt) {
 
 	for (auto pl : _parent->scene->ents.find("enemy"))
 	{
 		if (length(pl->getPosition() - _parent->getPosition()) < 60.0) {
 
-			pl->setHealth(pl->getHealth() - damage);			
+			pl->setHealth(pl->getHealth() - damage);
 
 			_parent->setForDelete();
 
-			
 			if (pl->getHealth() <= 0)
 			{
 				//drop essence
@@ -39,18 +35,18 @@ void EnemyHurtComponent::update(double dt) {
 
 				if (pl->getType() == "skeleton")
 				{
-					score.setScore(score.getScore() + 10);
+					_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 10);
 				}
 				if (pl->getType() == "archer")
 				{
-					score.setScore(score.getScore() + 20);
+					_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 20);
 				}
 				if (pl->getType() == "chief")
 				{
-					score.setScore(score.getScore() + 30);
+					_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 30);
 				}
 
-				cout << "Score: " << score.getScore() << endl;
+				
 
 				//delete
 				pl->setForDelete();

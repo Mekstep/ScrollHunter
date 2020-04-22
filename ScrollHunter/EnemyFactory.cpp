@@ -94,7 +94,7 @@ std::shared_ptr<Entity> Enemies::makeSkeletonChief(Scene* scene) {
 
 
 	auto skeleChief = scene->makeEntity();
-	skeleChief->setHealth(150);
+	skeleChief->setHealth(100);
 	skeleChief->setPosition(ls::getTilePosition(ls::findTiles('c')[0]) + Vector2f(20, 0));
 	skeleChief->addTag("enemy");
 	skeleChief->setType("chief");

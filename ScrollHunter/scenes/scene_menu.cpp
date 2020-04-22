@@ -55,7 +55,7 @@ void MenuScene::Update(const double& dt) {
 
   if (sf::Keyboard::isKeyPressed(Keyboard::Space)) {
       music.stop();
-	  Engine::ChangeScene(&level2);
+	  Engine::ChangeScene(&level1);
   }
 
   Scene::Update(dt);

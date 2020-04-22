@@ -8,17 +8,19 @@
 #include "../components/cmp_spritesheet.h"
 #include <LevelSystem.h>
 #include <iostream>
+#include <fstream>
+#include <string>
 using namespace std;
 using namespace sf;
 
-const int screenWidth = 1920;
-const int screenHeight = 1080;
+const int static screenWidth = 1920;
+const int static screenHeight = 1080;
 
 //hud and hud background
-static Texture HUD;
-static Texture HUDbg;
-static Sprite HUDs;
-static Sprite HUDbgs;
+static Texture HUD2;
+static Texture HUDbg2;
+static Sprite HUDs2;
+static Sprite HUDbgs2;
 
 //health bar
 static Sprite hpBarS;
@@ -33,7 +35,14 @@ Texture bckTextures3[6];
 
 Texture templeTile;
 
+static Font font;
+static Text scoreT;
+
 static shared_ptr<Entity> player;
+
+static ofstream scoring;
+static ifstream chkScore;
+static string line;
 
 void Level3Scene::Load() {
   cout << "Scene 3 Load" << endl;
@@ -65,6 +74,33 @@ void Level3Scene::Load() {
   }
   //**************************************************************************************
 
+  //Score
+  //***************************************************
+  if (!font.loadFromFile("res/fonts/Gameplay.ttf"))
+  {
+	  cout << "Couldn't load font!" << endl;
+  }
+
+  chkScore.open("keepScore.txt");
+  if (chkScore.is_open())
+  {
+	  while (getline(chkScore, line))
+	  {
+		  cout << line << '\n';
+	  }
+	  chkScore.close();
+  }
+  else cout << "Unable to open file";
+
+  player->scene->ents.find("player")[0]->setScore(stoi(line));
+
+  scoreT.setFont(font);
+  scoreT.setString("Score: " + to_string(player->scene->ents.find("player")[0]->getScore()));
+  scoreT.setCharacterSize(50);
+  scoreT.setFillColor(Color::Red);
+  scoreT.setPosition(900, 10);
+  //***************************************************
+
   //Make Boss
   auto boss = Enemies::makeBoss(this);
 
@@ -92,10 +128,10 @@ void Level3Scene::Load() {
 		  hpBarT.loadFromFile("res/hp.png");
 		  hpBarS.setTexture(hpBarT);
 		  hpBarS.setScale(player->getHealth() / 10, 1);
-		  HUD.loadFromFile("res/HUD.png");
-		  HUDs.setTexture(HUD);
-		  HUDbg.loadFromFile("res/HUDbg.png");
-		  HUDbgs.setTexture(HUDbg);
+		  HUD2.loadFromFile("res/HUD.png");
+		  HUDs2.setTexture(HUD2);
+		  HUDbg2.loadFromFile("res/HUDbg.png");
+		  HUDbgs2.setTexture(HUDbg2);
 	  }
 	  //***********************************************
   }
@@ -116,6 +152,9 @@ void Level3Scene::UnLoad() {
 void Level3Scene::Update(const double& dt) {
 
 	hpBarS.setScale(player->getHealth() / 10, 1);
+
+	//Update Score
+	scoreT.setString("Score: " + to_string(player->scene->ents.find("player")[0]->getScore()));
 
 	//scroll screen as player reaches middle
 	//*****************************************************
@@ -162,6 +201,14 @@ void Level3Scene::Update(const double& dt) {
   const auto pp = player->getPosition();
   if (ls::getTileAt(pp) == ls::END) 
   {
+	  scoring.open("keepScore.txt");
+	  if (scoring.is_open())
+	  {
+		  scoring << player->scene->ents.find("player")[0]->getScore();
+		  scoring.close();
+	  }
+	  else cout << "Unable to open file";
+
 	  scene3view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene3view2.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene3view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
@@ -192,9 +239,10 @@ void Level3Scene::Render() {
 	Engine::GetWindow().setView(scene3view3);
 
 	//draw hud
-	Engine::GetWindow().draw(HUDbgs);
+	Engine::GetWindow().draw(HUDbgs2);
 	Engine::GetWindow().draw(hpBarS);
-	Engine::GetWindow().draw(HUDs);
+	Engine::GetWindow().draw(HUDs2);
+	Engine::GetWindow().draw(scoreT);
 
 	Engine::GetWindow().setView(scene3view);
 
