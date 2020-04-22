@@ -1,1 +1,8 @@
+sudo: required
+
 language: cpp
+
+compiler:
+   - gcc
+   
+   build: cc scrollHunter_main.cpp
