@@ -1,9 +1,9 @@
 language: cpp
 
 before_install:
-  - wget https://googletest.googlecode.com/files/gtest-1.8.1.zip
-  - unzip gtest-1.8.1.zip 
-  - cd gtest-1.8.1/
+  - wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz
+  - unzip gtest-1.8.0.zip 
+  - cd gtest-1.8.0/
   - ./configure --prefix=$TRAVIS_BUILD_DIR --with-pthreads=no
   - make
   - mkdir $TRAVIS_BUILD_DIR/include/
