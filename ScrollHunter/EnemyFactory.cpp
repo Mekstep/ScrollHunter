@@ -13,6 +13,7 @@
 #include <LevelSystem.h>
 #include <SFML/Graphics/Transformable.hpp>
 #include "components/cmp_bullet_physics.h"
+#include "components/cmp_boss_ai.h"
 
 
 using namespace sf;
@@ -21,6 +22,7 @@ using namespace std;
 Texture skele;
 Texture skeletArcher;
 Texture skeletChief;
+Texture bos;
 
 //create skeleton
 std::shared_ptr<Entity> Enemies::makeSkeleton(Scene* scene) {
@@ -118,5 +120,39 @@ std::shared_ptr<Entity> Enemies::makeSkeletonChief(Scene* scene) {
 
 
 	return skeleChief;
+}
+
+//create skeleton chief
+std::shared_ptr<Entity> Enemies::makeBoss(Scene* scene) {
+
+
+
+	auto boss = scene->makeEntity();
+	boss->setHealth(200);
+	boss->setPosition(ls::getTilePosition(ls::findTiles('b')[0]) + Vector2f(20, 0));
+	boss->addTag("enemy");
+	boss->setAimer(false);
+
+	// Add ShapeComponent, Red 16.f Circle
+	auto anim = boss->addComponent<SpriteSheetComponent>(Vector2f(487.f, 440.f));
+	bos.loadFromFile("res/boss.png");
+	anim->setSpritesheet(bos);
+	anim->setFrameCount(8);
+	anim->setFrameTime(0.1f);
+
+	//auto turret = scene->makeEntity();
+	//turret->setPosition(skeleChief->getPosition());
+	//auto t = turret->addComponent<ShapeComponent>();
+	//t->setShape<sf::CircleShape>(15.0f, 3);
+	//t->getShape().setFillColor(Color::Red);
+	//t->getShape().setOrigin(16.f, 16.f);
+
+	// Add EnemyAIComponent
+	boss->addComponent<BossAIComponent>();
+	boss->addComponent<EnemyTurretComponent>();
+	//turret->addComponent<EnemyAIComponent>();
+
+
+	return boss;
 }
 

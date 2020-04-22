@@ -1,6 +1,6 @@
 wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-w                                         a                                                                                                                                                          w kw
-w                                                                                                                                                                                                    wwww
+w                                                                                                                                                                                                      ww
+w                                                                                                                                                                                                      ww
 w                                                                                                                                                                                                      ew
 w                                                                                                                                                                                                      ew
 w                                                                                                                                                                                                      ew
@@ -9,7 +9,7 @@ w                              c                                                
 w          w                                                                                                                                                                                           ew
 w          w                                                                                                                                                                                           ew
 w          w                                                                                                                                                                                           ew
-w     s    w                                 a                                                                                                                                                         ew
+w     s    w               b                 a                                                                                                                                                         ew
 w          w                                                                                                                                                                                           ew
 w          w                                                                                                                                                                                           ew
 w          w                                                                                                                                                                                           ew
@@ -20,5 +20,5 @@ w                                                                               
 w                                                                                                                                                                                                      ew
 w                                                                                                                                                                                                      ew
 w                                                                                                                                                                                                      ew
-w                                      a                                                                                                                                                               ew
+w                                                                                                                                                                                                      ew
 wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww

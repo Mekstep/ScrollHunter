@@ -152,10 +152,10 @@ void Level2Scene::Load()
           auto pos = ls::getTilePosition(s);
 	      auto skeletonArcher = Enemies::makeSkeletonArcher(this);
           skeletonArcher->setPosition(pos);
-
-          
       }
   }
+
+  
   
   // ***********************************************************************
   // Add physics colliders to level tiles.

@@ -3,10 +3,9 @@
 using namespace std;
 using namespace sf;
 
-void EnemyAIComponent::update(double dt) {
-  auto mov = _direction * (float)(dt * _speed);
-  mov.y += _direction.y * 16.f;
-  if (!validMove(_parent->getPosition() + mov)) {
+void EnemyAIComponent::update(double dt) 
+{
+  if (!validMove(_parent->getPosition() + Vector2f(0,80)) || !validMove(_parent->getPosition() - Vector2f(0, 60))) {
     _direction *= -1.f;
   }
 

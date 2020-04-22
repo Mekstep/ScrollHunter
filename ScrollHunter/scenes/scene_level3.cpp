@@ -65,46 +65,10 @@ void Level3Scene::Load() {
   }
   //**************************************************************************************
 
- // Create Skeletons
-  // *****************************************************************
-  {
-	  auto skeletons = ls::findTiles('k');
-	  for (auto s : skeletons)
-	  {
-		  auto pos = ls::getTilePosition(s);
-		  auto skeleton = Enemies::makeSkeleton(this);
-		  skeleton->setPosition(pos);
-	  }
-
-  }
-  // *****************************************************************
+  //Make Boss
+  auto boss = Enemies::makeBoss(this);
 
 
-  // Create Skeleton Chiefs
-  // *********************************************************************
-  {
-	  auto skeletonChiefs = ls::findTiles('c');
-	  for (auto s : skeletonChiefs)
-	  {
-		  auto pos = ls::getTilePosition(s);
-		  auto skeletonChief = Enemies::makeSkeletonChief(this);
-		  skeletonChief->setPosition(pos);
-	  }
-  }
-  // *********************************************************************
-
-
-  // Create Skeleton Archers
-  // ***********************************************************************
-  {
-	  auto skeletonArchers = ls::findTiles('a');
-	  for (auto s : skeletonArchers)
-	  {
-		  auto pos = ls::getTilePosition(s);
-		  auto skeletonArcher = Enemies::makeSkeletonArcher(this);
-		  skeletonArcher->setPosition(pos);
-	  }
-  }
   // ***********************************************************************
   // Add physics colliders to level tiles.
   {
