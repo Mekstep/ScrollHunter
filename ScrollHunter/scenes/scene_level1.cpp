@@ -52,6 +52,7 @@ static Text scoreT;
 
 
 static ofstream scoring;
+static ofstream score;
 static string line;
 
 
@@ -238,6 +239,8 @@ void Level1Scene::Update(const double& dt)
 
   if (ls::getTileAt(pp) == ls::END) 
   {
+      //Save current score at end of level to file so it can be carried over to next scene
+      //****************************************************************
       scoring.open("keepScore.txt");
       if (scoring.is_open())
       {
@@ -245,6 +248,7 @@ void Level1Scene::Update(const double& dt)
           scoring.close();
       }
       else cout << "Unable to open file";
+      //****************************************************************
 
 	  scene1view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene1view1.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
@@ -254,6 +258,17 @@ void Level1Scene::Update(const double& dt)
   } 
   else if (!player->isAlive()) 
   {
+      //Save final score to Scores.txt if you die
+      //*********************************************************************
+      score.open("Scores.txt", std::ios_base::app);
+      if (score.is_open())
+      {
+          score << player->scene->ents.find("player")[0]->getScore() << "\n";
+          score.close();
+      }
+      else cout << "Unable to open file";
+      //*********************************************************************
+
     Engine::ChangeScene((Scene*)&gameOver);
   }
 

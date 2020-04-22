@@ -44,6 +44,7 @@ static Text scoreT;
 static shared_ptr<Entity> player;
 
 static ofstream scoring;
+static ofstream score;
 static ifstream chkScore;
 static string line;
 
@@ -216,6 +217,8 @@ void Level3Scene::Update(const double& dt) {
   const auto pp = player->getPosition();
   if (ls::getTileAt(pp) == ls::END) 
   {
+	  //Save current score at end of level to file so it can be carried over to next scene
+	  //****************************************************************
 	  scoring.open("keepScore.txt");
 	  if (scoring.is_open())
 	  {
@@ -223,6 +226,7 @@ void Level3Scene::Update(const double& dt) {
 		  scoring.close();
 	  }
 	  else cout << "Unable to open file";
+	  //****************************************************************
 
 	  scene3view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene3view2.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
@@ -232,6 +236,17 @@ void Level3Scene::Update(const double& dt) {
   } 
   else if (!player->isAlive()) 
   {
+	  //Save final score to Scores.txt if you die
+	  //*********************************************************************
+	  score.open("Scores.txt", std::ios_base::app);
+	  if (score.is_open())
+	  {
+		  score << player->scene->ents.find("player")[0]->getScore() << "\n";
+		  score.close();
+	  }
+	  else cout << "Unable to open file";
+	  //*********************************************************************
+
 	  Engine::ChangeScene((Scene*)&level3);
   } 
 
