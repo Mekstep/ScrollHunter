@@ -10,6 +10,7 @@
 #include "../game.h"
 #include "../Player.h"
 #include "../EnemyFactory.h"
+#include "../score.h"
 #include <LevelSystem.h>
 #include <iostream>
 #include <SFML/Audio.hpp>
@@ -50,6 +51,11 @@ View scene2view3;
 SoundBuffer buffer;
 Sound level;
 
+Font font;
+Text scoreT;
+
+static Score score;
+
 void Level2Scene::Load() 
 {
   cout << "Scene 2 Load" << endl;
@@ -61,6 +67,19 @@ void Level2Scene::Load()
   scene2view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
   scene2view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 
+  //Score
+  //***************************************************
+  if (!font.loadFromFile("res/fonts/Gameplay.ttf"))
+  {
+      cout << "Couldn't load font!" << endl;
+  }
+
+  scoreT.setFont(font);
+  scoreT.setString(to_string(score.getScore()));
+  scoreT.setCharacterSize(20);
+  scoreT.setFillColor(Color::Red);
+  scoreT.setPosition(900,1000);
+  //***************************************************
 
   //Background
   // ***************************************************************************
@@ -192,8 +211,14 @@ void Level2Scene::Update(const double& dt)
 {
 	//hp bar scaling
     hpBarS.setScale(player->getHealth() / 10, 1);
+
 	//essence bar scaling
 	essBarS.setScale(player->getEssence() / 20, 1);
+
+    //Score Update
+    scoreT.setString(to_string(score.getScore()));
+
+    cout << score.getScore() << endl;
 
 
     //scroll screen as player reaches middle
@@ -277,6 +302,7 @@ void Level2Scene::Render()
   Engine::GetWindow().draw(hpBarS);
   Engine::GetWindow().draw(essBarS);
   Engine::GetWindow().draw(HUDs);
+  Engine::GetWindow().draw(scoreT);
   
   Engine::GetWindow().setView(scene2view);
 

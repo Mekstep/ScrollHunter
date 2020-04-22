@@ -23,5 +23,5 @@ public:
 
     void Update(const double& dt);
 
-    void Render();
+    void Render(RenderWindow& window);
 };

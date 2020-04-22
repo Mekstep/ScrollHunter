@@ -13,7 +13,7 @@ static Sound whack;
 
 int damage;
 
-Score score;
+static Score score;
 
 void EnemyHurtComponent::update(double dt) {
 
