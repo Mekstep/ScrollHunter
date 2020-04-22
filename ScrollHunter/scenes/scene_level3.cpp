@@ -247,6 +247,12 @@ void Level3Scene::Update(const double& dt) {
 	  else cout << "Unable to open file";
 	  //*********************************************************************
 
+	  //Remove the keep score file if you die
+	  if (remove("keepScore.txt") != 0)
+		  perror("Error deleting file");
+	  else
+		  puts("File successfully deleted");
+
 	  Engine::ChangeScene((Scene*)&level3);
   } 
 

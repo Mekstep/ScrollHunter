@@ -18,6 +18,9 @@ static float loadingspinner = 0.f;
 static float loadingTime;
 static RenderWindow* _window;
 
+static String playerInput;
+static Text playerText;
+
 void Loading_update(float dt, const Scene* const scn) {
   //  cout << "Eng: Loading Screen\n";
   if (scn->isLoaded()) {
