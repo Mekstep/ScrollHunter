@@ -183,7 +183,6 @@ void Level3Scene::Update(const double& dt) {
 		bckSprites3[3].move(Vector2f(-200 * dt, 0));
 		bckSprites3[4].move(Vector2f(-150 * dt, 0));
 		bckSprites3[5].move(Vector2f(-100 * dt, 0));
-		bckSprites3[6].move(Vector2f(-50 * dt, 0));
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Left) && position.x > 0)
 	{
@@ -193,7 +192,6 @@ void Level3Scene::Update(const double& dt) {
 		bckSprites3[3].move(Vector2f(200 * dt, 0));
 		bckSprites3[4].move(Vector2f(150 * dt, 0));
 		bckSprites3[5].move(Vector2f(100 * dt, 0));
-		bckSprites3[6].move(Vector2f(50 * dt, 0));
 	}
 	//***********************************************************
 

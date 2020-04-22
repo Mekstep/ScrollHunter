@@ -7,7 +7,7 @@ Entity::Entity(Scene* const s)
       scene(s), _fordeletion(false) {}
 
 void Entity::addTag(const std::string& t) { _tags.insert(t); }
-const std::set<std::string>& Entity::getTags() const { return _tags; }
+const set<string>& Entity::getTags() const { return _tags; }
 
 void Entity::update(double dt) {
   if (!_alive) {
@@ -38,6 +38,14 @@ const sf::Vector2f& Entity::getPosition() const { return _position; }
 void Entity::setPosition(const sf::Vector2f& _position) {
   Entity::_position = _position;
 }
+
+bool Entity::getAimer() const { return _aimer; }
+
+void Entity::setAimer(bool _aimer) { Entity::_aimer = _aimer; }
+
+Vector2f Entity::getDirection() const { return _dir; }
+
+void Entity::setDirection(Vector2f _dir) { Entity::_dir = _dir; }
 
 bool Entity::getShield() const { return _shieldActive; }
 

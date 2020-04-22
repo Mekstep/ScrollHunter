@@ -93,7 +93,7 @@ void Level2Scene::Load()
 	  //essence
 	  essBarT.loadFromFile("res/es.png");
 	  essBarS.setTexture(essBarT);
-	  essBarS.setScale(player->getEssence() / 10, 1);
+	  essBarS.setScale(player->getEssence() / 20, 1);
 	  essBarS.setPosition(Vector2f(250.f, 75.f));
 
 	  HUD.loadFromFile("res/HUD.png");
@@ -128,7 +128,7 @@ void Level2Scene::Load()
   }
   // *****************************************************************
   
-
+  
   // Create Skeleton Chiefs
   // *********************************************************************
   {
@@ -152,8 +152,11 @@ void Level2Scene::Load()
           auto pos = ls::getTilePosition(s);
 	      auto skeletonArcher = Enemies::makeSkeletonArcher(this);
           skeletonArcher->setPosition(pos);
+
+          
       }
   }
+  
   // ***********************************************************************
   // Add physics colliders to level tiles.
   {
@@ -190,7 +193,7 @@ void Level2Scene::Update(const double& dt)
 	//hp bar scaling
     hpBarS.setScale(player->getHealth() / 10, 1);
 	//essence bar scaling
-	essBarS.setScale(player->getEssence() / 10, 1);
+	essBarS.setScale(player->getEssence() / 20, 1);
 
 
     //scroll screen as player reaches middle
@@ -223,7 +226,6 @@ void Level2Scene::Update(const double& dt)
         bckSprites2[3].move(Vector2f(-200 * dt, 0));
         bckSprites2[4].move(Vector2f(-150 * dt, 0));
         bckSprites2[5].move(Vector2f(-100 * dt, 0));
-        bckSprites2[6].move(Vector2f(-50 * dt, 0));
     }
     if (Keyboard::isKeyPressed(Keyboard::Left) && position.x > 0)
     {
@@ -233,7 +235,6 @@ void Level2Scene::Update(const double& dt)
         bckSprites2[3].move(Vector2f(200 * dt, 0));
         bckSprites2[4].move(Vector2f(150 * dt, 0));
         bckSprites2[5].move(Vector2f(100 * dt, 0));
-        bckSprites2[6].move(Vector2f(50 * dt, 0));
     }
     //***********************************************************
 

@@ -6,6 +6,8 @@
 #include <typeindex>
 #include <vector>
 
+using namespace sf;
+
 class Entity;
 class Scene;
 
@@ -16,6 +18,8 @@ protected:
   Entity* const _parent;
   bool _fordeletion; // should be removed
   explicit Component(Entity* const p);
+
+  
 
 public:
   Component() = delete;
@@ -53,6 +57,10 @@ protected:
   int _essence;
   bool _shieldActive;
 
+  Vector2f _dir;
+
+  bool _aimer;
+
   
 
 public:
@@ -68,6 +76,14 @@ public:
   virtual void render();
 
   //
+  bool getAimer() const;
+
+  void setAimer(bool _type);
+
+  Vector2f getDirection() const;
+
+  void setDirection(Vector2f _dir);
+
   bool getShield() const;
 
   void setShield(bool _shieldActive);

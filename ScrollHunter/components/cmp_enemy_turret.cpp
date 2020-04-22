@@ -5,6 +5,7 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include "cmp_bullet_physics.h"
 #include <LevelSystem.h>
+#include "cmp_aimed_bullet_physics.h"
 using namespace std;
 using namespace sf;
 
@@ -25,9 +26,10 @@ void EnemyTurretComponent::update(double dt)
 
 void EnemyTurretComponent::fire() const {
   auto bullet = _parent->scene->makeEntity();
-  bullet->setPosition(_parent->getPosition());
+  bullet->setPosition(_parent->getPosition());  
   bullet->addComponent<HurtComponent>();
   auto s = bullet->addComponent<ShapeComponent>();
+  bullet->addTag("bullet");
 
   s->setShape<sf::CircleShape>(8.f);
   s->getShape().setFillColor(Color::Red);
@@ -35,7 +37,14 @@ void EnemyTurretComponent::fire() const {
 
   
 
-  auto p = bullet->addComponent<BulletPhysicsComponent>(true, Vector2f(8.f, 8.f));
+  if (_parent->getAimer() == true)
+  {
+      bullet->addComponent<AimedBulletComponent>(true, Vector2f(8.f, 8.f));
+  }
+  else
+  {
+      bullet->addComponent<BulletPhysicsComponent>(true, Vector2f(8.f, 8.f));
+  }
   
   
 }

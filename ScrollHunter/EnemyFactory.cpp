@@ -29,6 +29,7 @@ std::shared_ptr<Entity> Enemies::makeSkeleton(Scene* scene) {
 	skeleton->setHealth(100);
 	skeleton->setPosition(ls::getTilePosition(ls::findTiles('k')[0]) + Vector2f(20, 0));
 	skeleton->addTag("enemy");
+	skeleton->setAimer(false);
 
 	// Add ShapeComponent, Red 16.f Circle
 	auto anim = skeleton->addComponent<SpriteSheetComponent>(Vector2f(160.f, 140.f));
@@ -60,6 +61,7 @@ std::shared_ptr<Entity> Enemies::makeSkeletonArcher(Scene* scene) {
 	skeleArcher->setHealth(100);
 	skeleArcher->setPosition(ls::getTilePosition(ls::findTiles('a')[0]) + Vector2f(20, 0));
 	skeleArcher->addTag("enemy");
+	skeleArcher->setAimer(true);
 
 	// Add ShapeComponent, Red 16.f Circle
 	auto anim = skeleArcher->addComponent<SpriteSheetComponent>(Vector2f(130.f, 140.f));
@@ -87,10 +89,13 @@ std::shared_ptr<Entity> Enemies::makeSkeletonArcher(Scene* scene) {
 //create skeleton chief
 std::shared_ptr<Entity> Enemies::makeSkeletonChief(Scene* scene) {
 
+
+
 	auto skeleChief = scene->makeEntity();
 	skeleChief->setHealth(100);
 	skeleChief->setPosition(ls::getTilePosition(ls::findTiles('c')[0]) + Vector2f(20, 0));
 	skeleChief->addTag("enemy");
+	skeleChief->setAimer(false);
 
 	// Add ShapeComponent, Red 16.f Circle
 	auto anim = skeleChief->addComponent<SpriteSheetComponent>(Vector2f(160.f, 180.f));
@@ -114,3 +119,4 @@ std::shared_ptr<Entity> Enemies::makeSkeletonChief(Scene* scene) {
 
 	return skeleChief;
 }
+

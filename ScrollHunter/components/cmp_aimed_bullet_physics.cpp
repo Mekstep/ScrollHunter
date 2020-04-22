@@ -1,4 +1,4 @@
-#include "cmp_bullet_physics.h"
+#include "cmp_aimed_bullet_physics.h"
 #include "system_physics.h"
 #include <LevelSystem.h>
 #include <engine.h>
@@ -7,15 +7,21 @@ using namespace std;
 using namespace sf;
 
 using namespace Physics;
-float speedX=1;
-float speedY=1;
+static float speedX=1;
+static float speedY=1;
 
-void BulletPhysicsComponent::update(double dt) 
-{            
-    _parent->setPosition(_parent->getPosition() + Vector2f(-500 * dt, 0));      
+Vector2f bPos;
+Vector2f pPos;
+
+void AimedBulletComponent::update(double dt)
+{        
+    for (auto bul : _parent->scene->ents.find("bullet"))
+    {
+        bul->setPosition(bul->getPosition() + bul->getDirection() * 1.0f);
+    }           
 }
 
-BulletPhysicsComponent::BulletPhysicsComponent(Entity* p, bool dyn, const Vector2f& size) : Component(p), _dynamic(dyn)
+AimedBulletComponent::AimedBulletComponent(Entity* p, bool dyn, const Vector2f& size) : Component(p), _dynamic(dyn)
 {
   b2BodyDef BodyDef;
   // Is Dynamic(moving), or static(Stationary)
@@ -41,22 +47,29 @@ BulletPhysicsComponent::BulletPhysicsComponent(Entity* p, bool dyn, const Vector
     //_fixture->SetRestitution(.9)
     FixtureDef.restitution = .2;
 
-  } 
+  }
+  //Player Pos
+  auto pl = _parent->scene->ents.find("player");
+  pPos = pl[0]->getPosition();
+
+  bPos = _parent->getPosition();
+  _parent->setDirection(normalize(pPos - bPos));
+ 
 }
 
-const sf::Vector2f BulletPhysicsComponent::getVelocity() const 
+const sf::Vector2f AimedBulletComponent::getVelocity() const
 {    
   return bv2_to_sv2(_body->GetLinearVelocity(), true);
 }
-void BulletPhysicsComponent::setVelocity(const sf::Vector2f& v) 
+void AimedBulletComponent::setVelocity(const sf::Vector2f& v)
 {
   _body->SetLinearVelocity(sv2_to_bv2(v, true));
 }
 
-b2Fixture* const BulletPhysicsComponent::getFixture() const 
+b2Fixture* const AimedBulletComponent::getFixture() const
 { return _fixture; }
 
-BulletPhysicsComponent::~BulletPhysicsComponent() 
+AimedBulletComponent::~AimedBulletComponent()
 {
   auto a = Physics::GetWorld();
   _body->SetActive(false);
@@ -65,15 +78,15 @@ BulletPhysicsComponent::~BulletPhysicsComponent()
   _body = nullptr;
 }
 
-void BulletPhysicsComponent::render() {}
+void AimedBulletComponent::render() {}
 
-bool BulletPhysicsComponent::isTouching(const BulletPhysicsComponent& pc) const 
+bool AimedBulletComponent::isTouching(const AimedBulletComponent& pc) const
 {
   b2Contact* bc; 
   return isTouching(pc, bc);
 }
 
-bool BulletPhysicsComponent::isTouching(const BulletPhysicsComponent& pc, b2Contact const* bc) const 
+bool AimedBulletComponent::isTouching(const AimedBulletComponent& pc, b2Contact const* bc) const
 {
   const auto _otherFixture = pc.getFixture();
   const auto& w = *Physics::GetWorld();
@@ -95,7 +108,7 @@ bool BulletPhysicsComponent::isTouching(const BulletPhysicsComponent& pc, b2Cont
   return false;
 }
 
-std::vector<const b2Contact const*> BulletPhysicsComponent::getTouching() const {
+std::vector<const b2Contact const*> AimedBulletComponent::getTouching() const {
   std::vector<const b2Contact const*> ret;
   
   b2ContactEdge* edge = _body->GetContactList();

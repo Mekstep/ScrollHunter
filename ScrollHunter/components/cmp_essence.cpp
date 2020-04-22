@@ -11,9 +11,9 @@ void EssenceComponent::update(double dt) {
   if (auto pl = _player.lock()) {
     if (length(pl->getPosition() - _parent->getPosition()) < 60.0) {
 
-		if (pl->getEssence() <= 50)
+		if (pl->getEssence() <= 100)
 		{
-			pl->setEssence(pl->getEssence() + 10);
+			pl->setEssence(pl->getEssence() + 20);
 
 			cout << "PLAYER PICKED UP ESSENCE" << endl;
 		}
