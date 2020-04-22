@@ -90,7 +90,7 @@ void GameOver::Update(const double& dt) {
 
 	if (sf::Keyboard::isKeyPressed(Keyboard::Space)) {
         gameOverMusic.stop();
-		Engine::ChangeScene(&level2);
+		Engine::ChangeScene(&level1);
 	}
 
 	Scene::Update(dt);

@@ -118,7 +118,9 @@ void Level2Scene::Load()
   scoreT.setString("Score: " + to_string(player->scene->ents.find("player")[0]->getScore()));
   scoreT.setCharacterSize(50);
   scoreT.setFillColor(Color::Red);
-  scoreT.setPosition(900, 10);
+  scoreT.setOutlineColor(Color::Black);
+  scoreT.setOutlineThickness(5);
+  scoreT.setPosition(820, 1010);
   //***************************************************
 
   //HP Bar & Essence & HUD

@@ -25,6 +25,9 @@ static Sprite HUDbgs2;
 //health bar
 static Sprite hpBarS;
 static Texture hpBarT;
+//mana bar
+static Sprite essBarS;
+static Texture essBarT;
 
 View scene3view;
 View scene3view2;
@@ -98,7 +101,9 @@ void Level3Scene::Load() {
   scoreT.setString("Score: " + to_string(player->scene->ents.find("player")[0]->getScore()));
   scoreT.setCharacterSize(50);
   scoreT.setFillColor(Color::Red);
-  scoreT.setPosition(900, 10);
+  scoreT.setOutlineColor(Color::Black);
+  scoreT.setOutlineThickness(5);
+  scoreT.setPosition(820, 1010);
   //***************************************************
 
   //Make Boss
@@ -122,12 +127,20 @@ void Level3Scene::Load() {
 	  }
 	  // *********************************
 
-	  //HP Bar & HUD
-	  //***********************************************
+	  //HP Bar & Essence & HUD
+  //***********************************************
 	  {
+		  //hp
 		  hpBarT.loadFromFile("res/hp.png");
 		  hpBarS.setTexture(hpBarT);
 		  hpBarS.setScale(player->getHealth() / 10, 1);
+
+		  //essence
+		  essBarT.loadFromFile("res/es.png");
+		  essBarS.setTexture(essBarT);
+		  essBarS.setScale(player->getEssence() / 20, 1);
+		  essBarS.setPosition(Vector2f(250.f, 75.f));
+
 		  HUD2.loadFromFile("res/HUD.png");
 		  HUDs2.setTexture(HUD2);
 		  HUDbg2.loadFromFile("res/HUDbg.png");
@@ -151,8 +164,10 @@ void Level3Scene::UnLoad() {
 
 void Level3Scene::Update(const double& dt) {
 
+	//hp bar scaling
 	hpBarS.setScale(player->getHealth() / 10, 1);
-
+	//essence bar scaling
+	essBarS.setScale(player->getEssence() / 20, 1);
 	//Update Score
 	scoreT.setString("Score: " + to_string(player->scene->ents.find("player")[0]->getScore()));
 
@@ -241,6 +256,7 @@ void Level3Scene::Render() {
 	//draw hud
 	Engine::GetWindow().draw(HUDbgs2);
 	Engine::GetWindow().draw(hpBarS);
+	Engine::GetWindow().draw(essBarS);
 	Engine::GetWindow().draw(HUDs2);
 	Engine::GetWindow().draw(scoreT);
 
