@@ -22,8 +22,6 @@ void EnemyHurtComponent::update(double dt) {
 
 			_parent->setForDelete();
 
-			cout << pl->getHealth() << endl;
-
 			if (pl->getHealth() <= 0)
 			{
 				//drop essence
@@ -34,6 +32,21 @@ void EnemyHurtComponent::update(double dt) {
 				s->getShape().setFillColor(Color::Blue);
 				s->getShape().setOrigin(8.f, 8.f);
 				auto essence = e->addComponent<EssenceComponent>();
+
+				if (pl->getType() == "skeleton")
+				{
+					_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 10);
+				}
+				if (pl->getType() == "archer")
+				{
+					_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 20);
+				}
+				if (pl->getType() == "chief")
+				{
+					_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 30);
+				}
+
+				
 
 				//delete
 				pl->setForDelete();

@@ -12,6 +12,8 @@
 #include "../EnemyFactory.h"
 #include <LevelSystem.h>
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <SFML/Audio.hpp>
 using namespace std;
 using namespace sf;
@@ -27,13 +29,30 @@ Texture bckTextures1[6];
 
 Texture templeTile1;
 
-Sprite hpBarS1;
-Texture hpBarT1;
+//hud and hud background
+static Texture HUD2;
+static Texture HUDbg2;
+static Sprite HUDs2;
+static Sprite HUDbgs2;
+
+//health bar
+static Sprite hpBarS;
+static Texture hpBarT;
+//mana bar
+static Sprite essBarS;
+static Texture essBarT;
 
 
 View scene1view;
 View scene1view1;
 View scene1view3;
+
+static Font font;
+static Text scoreT;
+
+
+static ofstream scoring;
+static string line;
 
 
 void Level1Scene::Load() 
@@ -69,12 +88,40 @@ void Level1Scene::Load()
   }
   //**************************************************************************************
 
-  //HP Bar
+   //Score
+  //***************************************************
+  if (!font.loadFromFile("res/fonts/Gameplay.ttf"))
+  {
+      cout << "Couldn't load font!" << endl;
+  }
+
+  player->scene->ents.find("player")[0]->setScore(0);
+
+  scoreT.setFont(font);
+  scoreT.setString("Score: " + to_string(player->scene->ents.find("player")[0]->getScore()));
+  scoreT.setCharacterSize(50);
+  scoreT.setFillColor(Color::Red);
+  scoreT.setPosition(900, 10);
+  //***************************************************
+
+  //HP Bar & Essence & HUD
   //***********************************************
   {
-      hpBarT1.loadFromFile("res/hp.png");
-      hpBarS1.setTexture(hpBarT1);
-      hpBarS1.setScale(player->getHealth() / 10, 1);
+      //hp
+      hpBarT.loadFromFile("res/hp.png");
+      hpBarS.setTexture(hpBarT);
+      hpBarS.setScale(player->getHealth() / 10, 1);
+
+      //essence
+      essBarT.loadFromFile("res/es.png");
+      essBarS.setTexture(essBarT);
+      essBarS.setScale(player->getEssence() / 20, 1);
+      essBarS.setPosition(Vector2f(250.f, 75.f));
+
+      HUD2.loadFromFile("res/HUD.png");
+      HUDs2.setTexture(HUD2);
+      HUDbg2.loadFromFile("res/HUDbg.png");
+      HUDbgs2.setTexture(HUDbg2);
   }
   //***********************************************
 
@@ -136,8 +183,12 @@ void Level1Scene::UnLoad()
 
 void Level1Scene::Update(const double& dt) 
 {
-
-    hpBarS1.setScale(player->getHealth() / 10, 1);
+    //hp bar scaling
+    hpBarS.setScale(player->getHealth() / 10, 1);
+    //essence bar scaling
+    essBarS.setScale(player->getEssence() / 20, 1);
+    //Update Score
+    scoreT.setString("Score: " + to_string(player->scene->ents.find("player")[0]->getScore()));
 
     //scroll screen as player reaches middle
     //*****************************************************
@@ -185,6 +236,14 @@ void Level1Scene::Update(const double& dt)
 
   if (ls::getTileAt(pp) == ls::END) 
   {
+      scoring.open("keepScore.txt");
+      if (scoring.is_open())
+      {
+          scoring << player->scene->ents.find("player")[0]->getScore();
+          scoring.close();
+      }
+      else cout << "Unable to open file";
+
 	  scene1view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene1view1.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene1view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
@@ -214,7 +273,12 @@ void Level1Scene::Render()
 
   Engine::GetWindow().setView(scene1view3);
 
-  Engine::GetWindow().draw(hpBarS1);
+  //draw hud
+  Engine::GetWindow().draw(HUDbgs2);
+  Engine::GetWindow().draw(hpBarS);
+  Engine::GetWindow().draw(essBarS);
+  Engine::GetWindow().draw(HUDs2);
+  Engine::GetWindow().draw(scoreT);
   
   Engine::GetWindow().setView(scene1view);
 

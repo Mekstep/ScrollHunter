@@ -37,7 +37,7 @@ void EnemyTurretComponent::fire() const {
 
   
 
-  if (_parent->getAimer() == true)
+  if (_parent->getType() == "archer")
   {
       bullet->addComponent<AimedBulletComponent>(true, Vector2f(8.f, 8.f));
   }

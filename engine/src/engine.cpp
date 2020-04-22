@@ -142,6 +142,10 @@ void Engine::ChangeScene(Scene* s) {
   }
 }
 
+int Engine::getScore() const { return _score; }
+
+void Engine::setScore(int _score) { Engine::_score = _score; }
+
 void Scene::Update(const double& dt) { ents.update(dt); }
 
 void Scene::Render() { ents.render(); }

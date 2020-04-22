@@ -12,6 +12,8 @@
 #include "../EnemyFactory.h"
 #include <LevelSystem.h>
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <SFML/Audio.hpp>
 using namespace std;
 using namespace sf;
@@ -20,20 +22,20 @@ static shared_ptr<Entity> player;
 static shared_ptr<Entity> monst;
 
 //screen dimensions
-const int screenWidth = 1920;
-const int screenHeight = 1080;
+const int static screenWidth = 1920;
+const int static screenHeight = 1080;
 
 //hud and hud background
-static Texture HUD;
-static Texture HUDbg;
-static Sprite HUDs;
-static Sprite HUDbgs;
+static Texture HUD2;
+static Texture HUDbg2;
+static Sprite HUDs2;
+static Sprite HUDbgs2;
 
-Sprite skeleton;
+static Sprite skeleton;
 
 //parallax background
-Sprite bckSprites2[6];
-Texture bckTextures2[6];
+static Sprite bckSprites2[6];
+static Texture bckTextures2[6];
 
 //health bar
 static Sprite hpBarS;
@@ -43,12 +45,20 @@ static Sprite essBarS;
 static Texture essBarT;
 
 //views
-View scene2view;
-View scene2view2;
-View scene2view3;
+static View scene2view;
+static View scene2view2;
+static View scene2view3;
 
-SoundBuffer buffer;
-Sound level;
+static SoundBuffer buffer;
+static Sound level;
+
+static Font font;
+static Text scoreT;
+
+
+static ofstream scoring;
+static ifstream chkScore;
+static string line;
 
 void Level2Scene::Load() 
 {
@@ -61,7 +71,9 @@ void Level2Scene::Load()
   scene2view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
   scene2view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 
+  
 
+  
   //Background
   // ***************************************************************************
   for (int i = 0; i < 6; i++)
@@ -82,6 +94,33 @@ void Level2Scene::Load()
   }
   //**************************************************************************************
 
+  //Score
+  //***************************************************
+  if (!font.loadFromFile("res/fonts/Gameplay.ttf"))
+  {
+      cout << "Couldn't load font!" << endl;
+  }
+
+  chkScore.open("keepScore.txt");
+  if (chkScore.is_open())
+  {
+      while (getline(chkScore, line))
+      {
+          cout << line << '\n';
+      }
+      chkScore.close();
+  }
+  else cout << "Unable to open file";
+
+  player->scene->ents.find("player")[0]->setScore(stoi(line));
+
+  scoreT.setFont(font);
+  scoreT.setString("Score: " + to_string(player->scene->ents.find("player")[0]->getScore()));
+  scoreT.setCharacterSize(50);
+  scoreT.setFillColor(Color::Red);
+  scoreT.setPosition(900, 10);
+  //***************************************************
+
   //HP Bar & Essence & HUD
   //***********************************************
   {
@@ -96,10 +135,10 @@ void Level2Scene::Load()
 	  essBarS.setScale(player->getEssence() / 20, 1);
 	  essBarS.setPosition(Vector2f(250.f, 75.f));
 
-	  HUD.loadFromFile("res/HUD.png");
-	  HUDs.setTexture(HUD);
-	  HUDbg.loadFromFile("res/HUDbg.png");
-	  HUDbgs.setTexture(HUDbg);
+	  HUD2.loadFromFile("res/HUD.png");
+	  HUDs2.setTexture(HUD2);
+	  HUDbg2.loadFromFile("res/HUDbg.png");
+	  HUDbgs2.setTexture(HUDbg2);
   }
   //***********************************************
 
@@ -194,6 +233,8 @@ void Level2Scene::Update(const double& dt)
     hpBarS.setScale(player->getHealth() / 10, 1);
 	//essence bar scaling
 	essBarS.setScale(player->getEssence() / 20, 1);
+    //Update Score
+    scoreT.setString("Score: " + to_string(player->scene->ents.find("player")[0]->getScore()));
 
 
     //scroll screen as player reaches middle
@@ -242,6 +283,14 @@ void Level2Scene::Update(const double& dt)
 
   if (ls::getTileAt(pp) == ls::END) 
   {
+      scoring.open("keepScore.txt");
+      if (scoring.is_open())
+      {
+          scoring << player->scene->ents.find("player")[0]->getScore();
+          scoring.close();
+      }
+      else cout << "Unable to open file";
+
 	  scene2view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene2view2.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene2view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
@@ -273,10 +322,11 @@ void Level2Scene::Render()
   Engine::GetWindow().setView(scene2view3);
 
   //draw hud
-  Engine::GetWindow().draw(HUDbgs);
+  Engine::GetWindow().draw(HUDbgs2);
   Engine::GetWindow().draw(hpBarS);
   Engine::GetWindow().draw(essBarS);
-  Engine::GetWindow().draw(HUDs);
+  Engine::GetWindow().draw(HUDs2);
+  Engine::GetWindow().draw(scoreT);
   
   Engine::GetWindow().setView(scene2view);
 

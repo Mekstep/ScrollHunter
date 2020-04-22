@@ -29,6 +29,7 @@ std::shared_ptr<Entity> Player::makePlayer(Scene* scene, const Vector2f& pos) {
 	player->addComponent<PlayerPhysicsComponent>(Vector2f(60.f, 130.f));
 	player->setHealth(100);
 	player->setEssence(100);
+	player->setScore(0);
 	player->addComponent<ContactComponent>(10);
 
 	/*

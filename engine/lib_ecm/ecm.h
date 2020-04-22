@@ -59,7 +59,9 @@ protected:
 
   Vector2f _dir;
 
-  bool _aimer;
+  String _type;
+
+  int _score;
 
   
 
@@ -76,9 +78,13 @@ public:
   virtual void render();
 
   //
-  bool getAimer() const;
+  int getScore() const;
 
-  void setAimer(bool _type);
+  void setScore(int _score);
+
+  String getType() const;
+
+  void setType(String _type);
 
   Vector2f getDirection() const;
 

@@ -39,9 +39,13 @@ void Entity::setPosition(const sf::Vector2f& _position) {
   Entity::_position = _position;
 }
 
-bool Entity::getAimer() const { return _aimer; }
+int Entity::getScore() const { return _score; }
 
-void Entity::setAimer(bool _aimer) { Entity::_aimer = _aimer; }
+void Entity::setScore(int _score) { Entity::_score = _score; }
+
+String Entity::getType() const { return _type; }
+
+void Entity::setType(String _type) { Entity::_type = _type; }
 
 Vector2f Entity::getDirection() const { return _dir; }
 

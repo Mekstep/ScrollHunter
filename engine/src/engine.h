@@ -38,11 +38,20 @@ public:
   static sf::Vector2u getWindowSize();
   static void setVsync(bool b);
 
+  int getScore() const;
+
+  void setScore(int _score);
+
+  int _score;
+
 private:
   static Scene* _activeScene;
   static std::string _gameName;
   static void Update();
   static void Render(sf::RenderWindow& window);
+
+
+  
 };
 
 namespace timing {
