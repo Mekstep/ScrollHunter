@@ -12,6 +12,8 @@
 #include <engine.h>
 #include <iostream>
 #include "cmp_hurt_enemy.h"
+#include "ecm.h"
+
 
 using namespace std;
 using namespace sf;
@@ -33,6 +35,8 @@ static bool increaseActive = false;
 static shared_ptr<Entity> increaseBullet;
 static shared_ptr<Entity> increaseBullet2;
 
+
+
 static shared_ptr<Entity> bullet;
 static shared_ptr<Entity> bullet2;
 static shared_ptr<Entity> bullet3;
@@ -43,6 +47,12 @@ static float wCooldown = 0.f;
 static float eCooldown = 0.f;
 
 static Texture qAttack;
+static Texture wAttack;
+static Texture familiarSheet;
+static Texture shieldSheet;
+static Texture castSheet;
+
+static float timer = 2.f;
 
 bool PlayerPhysicsComponent::isGrounded() const {
   auto touch = getTouching();
@@ -69,6 +79,7 @@ bool PlayerPhysicsComponent::isGrounded() const {
 void PlayerPhysicsComponent::update(double dt) {
 
   const auto pos = _parent->getPosition();
+  
 
 
   setVelocity(Vector2f(0.f, 0.f));
@@ -133,44 +144,46 @@ void PlayerPhysicsComponent::update(double dt) {
   //Q Ability
   if (Keyboard::isKeyPressed(Keyboard::Q) && qCooldown <= 0.f)
   {
+	  bullet = _parent->scene->makeEntity();
+	  bullet->setPosition(_parent->getPosition() + Vector2f(50, 0));
+	  bullet->addComponent<EnemyHurtComponent>(20);
+	  auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(55.f, 55.f));
+	  qAttack.loadFromFile("res/attackOrbSheet.png");
+	  s->setSpritesheet(qAttack);
+	  s->setFrameCount(8);
+	  s->setFrameTime(0.05f);
+	  auto p = bullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(30.f, 30.f));
+	  bullet->addComponent<BulletComponent>();
+
 	  if (increaseActive == true)
 	  {
 		  increaseBullet = _parent->scene->makeEntity();
 		  increaseBullet->setPosition(_parent->getPosition() + Vector2f(50, 50));
 		  increaseBullet->addComponent<EnemyHurtComponent>(20);
-		  auto s = increaseBullet->addComponent<SpriteSheetComponent>(Vector2f(24.f, 24.f));
-		  qAttack.loadFromFile("res/attackOrbSheet.png");
+		  auto s = increaseBullet->addComponent<SpriteSheetComponent>(Vector2f(55.f, 55.f));
 		  s->setSpritesheet(qAttack);
-		  s->setFrameCount(16);
-		  s->setFrameTime(0.03f);
-		  auto p = increaseBullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(24.f, 24.f));
+		  s->setFrameCount(8);
+		  s->setFrameTime(0.05f);
+		  auto p = increaseBullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(30.f, 30.f));
 		  increaseBullet->addComponent<BulletComponent>();
 
 		  increaseBullet2 = _parent->scene->makeEntity();
 		  increaseBullet2->setPosition(_parent->getPosition() + Vector2f(50, -50));
 		  increaseBullet2->addComponent<EnemyHurtComponent>(20);
-		  auto s2 = increaseBullet2->addComponent<SpriteSheetComponent>(Vector2f(24.f, 24.f));
-		  qAttack.loadFromFile("res/attackOrbSheet.png");
+		  auto s2 = increaseBullet2->addComponent<SpriteSheetComponent>(Vector2f(55.f, 55.f));
 		  s2->setSpritesheet(qAttack);
-		  s2->setFrameCount(16);
-		  s2->setFrameTime(0.03f);
-		  auto p2 = increaseBullet2->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(24.f, 24.f));
+		  s2->setFrameCount(8);
+		  s2->setFrameTime(0.05f);
+		  auto p2 = increaseBullet2->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(30.f, 30.f));
 		  increaseBullet2->addComponent<BulletComponent>();
 	  }
 
-	  bullet = _parent->scene->makeEntity();
-	  bullet->setPosition(_parent->getPosition() + Vector2f(50,0));
-	  bullet->addComponent<EnemyHurtComponent>(20);
-	  auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(24.f, 24.f));
-	  qAttack.loadFromFile("res/attackOrbSheet.png");
-	  s->setSpritesheet(qAttack);
-	  s->setFrameCount(16);
-	  s->setFrameTime(0.03f);
-	  auto p = bullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(24.f, 24.f));
-	  bullet->addComponent<BulletComponent>();
 
 	  qCooldown = 1.f;
   }
+
+  
+  
 
 
   //W Ability
@@ -179,16 +192,17 @@ void PlayerPhysicsComponent::update(double dt) {
 	  bullet2 = _parent->scene->makeEntity();
 	  bullet2->setPosition(_parent->getPosition() + Vector2f(60, 10));
 	  bullet2->addComponent<EnemyHurtComponent>(10);
-	  auto s = bullet2->addComponent<ShapeComponent>();
 
-	  s->setShape<sf::RectangleShape>(Vector2f(25.0f, 25.0f));
-	  s->getShape().setFillColor(Color::Blue);
-	  s->getShape().setOrigin(8.f, 8.f);
+	  auto s = bullet2->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+	  wAttack.loadFromFile("res/beamSheet.png");
+	  s->setSpritesheet(wAttack);
+	  s->setFrameCount(8);
+	  s->setFrameTime(0.05f);
 
 	  auto p = bullet2->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(50.f, 50.f));
 	  bullet2->addComponent<BulletComponent>();
 	  _parent->setEssence(_parent->getEssence() - 1);
-	  //wCooldown = 0.f;
+	  wCooldown = 0.06f;
   }
 
 
@@ -196,15 +210,21 @@ void PlayerPhysicsComponent::update(double dt) {
   if (Keyboard::isKeyPressed(Keyboard::E) && eCooldown <= 0.f)
   {
 	  bullet3 = _parent->scene->makeEntity();
-	  bullet3->setPosition(_parent->getPosition() + Vector2f(50, 0));
+	  bullet3->setPosition(_parent->getPosition() + Vector2f(80, 0));
 	  bullet3->addComponent<EnemyHurtComponent>(100);
 	  auto s = bullet3->addComponent<ShapeComponent>();
 
-	  s->setShape<sf::CircleShape>(40.f);
-	  s->getShape().setFillColor(Color::Green);
-	  s->getShape().setOrigin(8.f, 8.f);
+	  //s->setShape<sf::CircleShape>(40.f);
+	  //s->getShape().setFillColor(Color::Green);
+	  //s->getShape().setOrigin(8.f, 8.f);
 
-	  auto p = bullet3->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(40.f, 40.f));
+	  auto sp = bullet3->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
+	  familiarSheet.loadFromFile("res/spell3Sheet.png");
+	  sp->setSpritesheet(familiarSheet);
+	  sp->setFrameCount(91);
+	  sp->setFrameTime(0.03f);
+
+	  auto p = bullet3->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(100.f, 100.f));
 	  bullet3->addComponent<BulletComponent>();
 
 	  eCooldown = 5.f;
@@ -217,9 +237,11 @@ void PlayerPhysicsComponent::update(double dt) {
   if (Keyboard::isKeyPressed(Keyboard::Num1) && shieldActive == false)
   {
 	  shield = _parent->scene->makeEntity();
-	  auto s = shield->addComponent<ShapeComponent>();
-	  s->setShape<sf::CircleShape>(65.f);
-	  s->getShape().setFillColor(Color::Magenta);
+	  auto s = shield->addComponent<SpriteSheetComponent>(Vector2f(150.f, 150.f));
+	  shieldSheet.loadFromFile("res/shieldSheet.png");
+	  s->setSpritesheet(shieldSheet);
+	  s->setFrameCount(8);
+	  s->setFrameTime(0.09f);
 	  shieldDuration = 10.f;
 	  shieldActive = true;
 	  _parent->setShield(shieldActive);
@@ -227,7 +249,7 @@ void PlayerPhysicsComponent::update(double dt) {
 
   if (shieldActive == true)
   {
-	  shield->setPosition(_parent->getPosition() - Vector2f(65.f, 65.f));
+	  shield->setPosition(_parent->getPosition());
 	  shieldDuration -= dt;
   }
 
@@ -247,9 +269,13 @@ void PlayerPhysicsComponent::update(double dt) {
   if (Keyboard::isKeyPressed(Keyboard::Num2) && familiarActive == false)
   {
 	  familiar = _parent->scene->makeEntity();
-	  auto s = familiar->addComponent<ShapeComponent>();
-	  s->setShape<sf::CircleShape>(25.f);
-	  s->getShape().setFillColor(Color::Green);
+	  //auto s = familiar->addComponent<ShapeComponent>();
+	  //s->setShape<sf::CircleShape>(25.f);
+	  auto sp = familiar->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
+	  familiarSheet.loadFromFile("res/familiarSheet.png");
+	  sp->setSpritesheet(familiarSheet);
+	  sp->setFrameCount(61);
+	  sp->setFrameTime(0.05f);
 	  auto t = familiar->addComponent<FamiliarComponent>();
 	  familiarDuration = 10.f;
 	  familiarActive = true;
@@ -257,7 +283,7 @@ void PlayerPhysicsComponent::update(double dt) {
 
   if (familiarActive == true)
   {
-	  familiar->setPosition(_parent->getPosition() - Vector2f(100.f, 100.f));
+	  familiar->setPosition(_parent->getPosition() - Vector2f(50.f, 50.f));
 	  familiarDuration -= dt;
   }
 

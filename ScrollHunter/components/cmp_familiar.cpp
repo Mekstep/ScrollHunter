@@ -2,6 +2,7 @@
 #include "cmp_bullet.h"
 #include "cmp_hurt_player.h"
 #include "cmp_hurt_enemy.h"
+#include "cmp_spritesheet.h"
 #include "engine.h"
 #include <SFML/Graphics/CircleShape.hpp>
 #include "cmp_player_bullet_physics.h"
@@ -10,6 +11,8 @@ using namespace std;
 using namespace sf;
 
 static auto walls = ls::findTiles(ls::WALL);
+
+static Texture tex;
 
 void FamiliarComponent::update(double dt) 
 {
@@ -25,15 +28,15 @@ void FamiliarComponent::fire() const {
   auto bullet = _parent->scene->makeEntity();
   bullet->setPosition(_parent->getPosition());
   bullet->addComponent<EnemyHurtComponent>(10);
-  auto s = bullet->addComponent<ShapeComponent>();
-
-  s->setShape<sf::CircleShape>(8.f);
-  s->getShape().setFillColor(Color::Blue);
-  s->getShape().setOrigin(8.f, 8.f);
+  auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(55.f, 55.f));
+  tex.loadFromFile("res/attackOrbSheet.png");
+  s->setSpritesheet(tex);
+  s->setFrameCount(8);
+  s->setFrameTime(0.05f);
 
   
 
-  auto p = bullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(8.f, 8.f));
+  auto p = bullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(30.f, 30.f));
   
   
 }

@@ -1,5 +1,6 @@
 #include "cmp_hurt_enemy.h"
 #include "cmp_essence.h"
+#include "cmp_spritesheet.h"
 #include "LevelSystem.h"
 #include <engine.h>
 #include <SFML/Audio.hpp>
@@ -9,6 +10,8 @@ using namespace sf;
 
 static SoundBuffer hitBuff;
 static Sound whack;
+
+static Texture tex;
 
 int damage;
 
@@ -27,10 +30,11 @@ void EnemyHurtComponent::update(double dt) {
 				//drop essence
 				auto e = pl->scene->makeEntity();
 				e->setPosition(_parent->getPosition());
-				auto s = e->addComponent<ShapeComponent>();
-				s->setShape<sf::RectangleShape>(Vector2f(25.0f, 25.0f));
-				s->getShape().setFillColor(Color::Blue);
-				s->getShape().setOrigin(8.f, 8.f);
+				auto sp = e->addComponent<SpriteSheetComponent>(Vector2f(24.f, 24.f));
+				tex.loadFromFile("res/essenceOrbSheet.png");
+				sp->setSpritesheet(tex);
+				sp->setFrameCount(16);
+				sp->setFrameTime(0.05f);
 				auto essence = e->addComponent<EssenceComponent>();
 
 				if (pl->getType() == "skeleton")

@@ -62,7 +62,7 @@ static string line;
 void Level1Scene::Load() 
 {
   cout << "Scene 1 Load" << endl;
-  ls::loadLevelFile("res/level_1.txt", 40.0f);
+  ls::loadLevelFile("res/level_2.txt", 40.0f);
   templeTile1.loadFromFile("res/templeTile.png");
 
   //Set Viewports for scrolling screen
@@ -137,12 +137,12 @@ void Level1Scene::Load()
       hpBarT.loadFromFile("res/hp.png");
       hpBarS.setTexture(hpBarT);
       hpBarS.setScale(player->getHealth() / 10, 1);
-
+	  hpBarS.setPosition(Vector2f(163.f, 995.f));
       //essence
       essBarT.loadFromFile("res/es.png");
       essBarS.setTexture(essBarT);
-      essBarS.setScale(player->getEssence() / 20, 1);
-      essBarS.setPosition(Vector2f(250.f, 75.f));
+      essBarS.setScale(player->getEssence() / 10, 1);
+	  essBarS.setPosition(Vector2f(164.f, 1041.f));
 
       HUD2.loadFromFile("res/HUD.png");
       HUDs2.setTexture(HUD2);
@@ -212,7 +212,7 @@ void Level1Scene::Update(const double& dt)
     //hp bar scaling
     hpBarS.setScale(player->getHealth() / 10, 1);
     //essence bar scaling
-    essBarS.setScale(player->getEssence() / 20, 1);
+    essBarS.setScale(player->getEssence() / 10, 1);
     //Update Score
     scoreT.setString("Score: " + to_string(player->scene->ents.find("player")[0]->getScore()));
 
