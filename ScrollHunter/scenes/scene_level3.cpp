@@ -33,8 +33,8 @@ View scene3view;
 View scene3view2;
 View scene3view3;
 
-Sprite bckSprites3[6];
-Texture bckTextures3[6];
+Sprite bckSprites3[4];
+Texture bckTextures3[4];
 
 Texture templeTile;
 
@@ -64,9 +64,9 @@ void Level3Scene::Load() {
 
   //Background
 // ***************************************************************************
-  for (int i = 0; i < 6; i++)
+  for (int i = 0; i < 4; i++)
   {
-	  if (!bckTextures3[i].loadFromFile("res/scene3/sky" + to_string(i + 1) + ".png"))
+	  if (!bckTextures3[i].loadFromFile("res/temple/temple" + to_string(i + 1) + ".png"))
 	  {
 		  cout << "Couldn't load Background" + to_string(i + 1) + "!" << endl;
 	  }
@@ -225,8 +225,6 @@ void Level3Scene::Update(const double& dt) {
 		bckSprites3[1].move(Vector2f(-300 * dt, 0));
 		bckSprites3[2].move(Vector2f(-250 * dt, 0));
 		bckSprites3[3].move(Vector2f(-200 * dt, 0));
-		bckSprites3[4].move(Vector2f(-150 * dt, 0));
-		bckSprites3[5].move(Vector2f(-100 * dt, 0));
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Left) && position.x > 0)
 	{
@@ -234,8 +232,6 @@ void Level3Scene::Update(const double& dt) {
 		bckSprites3[1].move(Vector2f(300 * dt, 0));
 		bckSprites3[2].move(Vector2f(250 * dt, 0));
 		bckSprites3[3].move(Vector2f(200 * dt, 0));
-		bckSprites3[4].move(Vector2f(150 * dt, 0));
-		bckSprites3[5].move(Vector2f(100 * dt, 0));
 	}
 	//***********************************************************
 
@@ -295,7 +291,7 @@ void Level3Scene::Update(const double& dt) {
 void Level3Scene::Render() {
 	Engine::GetWindow().setView(scene3view2);
 
-	for (int i = 5; i > -1; i--)
+	for (int i = 3; i > -1; i--)
 	{
 		Engine::GetWindow().draw(bckSprites3[i]);
 	}
