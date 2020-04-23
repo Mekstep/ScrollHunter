@@ -62,7 +62,7 @@ static string line;
 void Level1Scene::Load() 
 {
   cout << "Scene 1 Load" << endl;
-  ls::loadLevelFile("res/level_2.txt", 40.0f);
+  ls::loadLevelFile("res/level_1.txt", 40.0f);
   templeTile1.loadFromFile("res/templeTile.png");
 
   //Set Viewports for scrolling screen
@@ -186,8 +186,9 @@ void Level1Scene::Load()
 		  e->setPosition(pos);
 		  e->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
           e->addTag("wall");
-		  auto s = e->addComponent<SpriteSheetComponent>(Vector2f(40.f, 40.f));
-		  s->setSpritesheet(templeTile1);
+		  e->setVisible(false);
+		  //auto s = e->addComponent<SpriteSheetComponent>(Vector2f(40.f, 40.f));
+		  //s->setSpritesheet(templeTile1);
 	  }
     // *********************************
   }
