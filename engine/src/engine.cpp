@@ -190,7 +190,12 @@ void Engine::Start(unsigned int width, unsigned int height,
 
 
     }
-    if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+    if (Keyboard::isKeyPressed(Keyboard::Escape)) 
+    {
+        if (remove("PlayerName.txt") != 0)
+            perror("Error deleting file");
+        else
+            puts("File successfully deleted");
       window.close();
     }
 

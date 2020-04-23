@@ -55,6 +55,7 @@ static Sound level;
 static Font font;
 static Text scoreT;
 static Text plName;
+static string playerName;
 
 
 static ofstream scoring;
@@ -121,7 +122,7 @@ void Level2Scene::Load()
   scoreT.setFont(font);
   scoreT.setString("Score: " + to_string(player->scene->ents.find("player")[0]->getScore()));
   scoreT.setCharacterSize(50);
-  scoreT.setFillColor(Color::Red);
+  scoreT.setFillColor(Color::White);
   scoreT.setOutlineColor(Color::Black);
   scoreT.setOutlineThickness(5);
   scoreT.setPosition(820, 1010);
@@ -133,6 +134,7 @@ void Level2Scene::Load()
       while (getline(nameF, line))
       {
           plName.setString(line);
+          playerName = line;
       }
       nameF.close();
   }
@@ -140,7 +142,7 @@ void Level2Scene::Load()
 
   plName.setFont(font);
   plName.setCharacterSize(50);
-  plName.setFillColor(Color::Red);
+  plName.setFillColor(Color::White);
   plName.setOutlineColor(Color::Black);
   plName.setOutlineThickness(5);
   plName.setPosition(1520, 1010);
@@ -332,7 +334,7 @@ void Level2Scene::Update(const double& dt)
       score.open("Scores.txt", std::ios_base::app);
       if (score.is_open())
       {
-          score << player->scene->ents.find("player")[0]->getScore() << "\n";
+          score << playerName << ", " << player->scene->ents.find("player")[0]->getScore() << "\n";
           score.close();
       }
       else cout << "Unable to open file";
