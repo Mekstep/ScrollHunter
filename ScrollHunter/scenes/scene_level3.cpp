@@ -40,12 +40,14 @@ Texture templeTile;
 
 static Font font;
 static Text scoreT;
+static Text plName;
 
 static shared_ptr<Entity> player;
 
 static ofstream scoring;
 static ofstream score;
 static ifstream chkScore;
+static ifstream nameF;
 static string line;
 
 void Level3Scene::Load() {
@@ -85,6 +87,7 @@ void Level3Scene::Load() {
 	  cout << "Couldn't load font!" << endl;
   }
 
+  //Get score from last level
   chkScore.open("keepScore.txt");
   if (chkScore.is_open())
   {
@@ -105,6 +108,25 @@ void Level3Scene::Load() {
   scoreT.setOutlineColor(Color::Black);
   scoreT.setOutlineThickness(5);
   scoreT.setPosition(820, 1010);
+
+  //Set name from name file
+  nameF.open("PlayerName.txt");
+  if (nameF.is_open())
+  {
+	  while (getline(nameF, line))
+	  {
+		  plName.setString(line);
+	  }
+	  nameF.close();
+  }
+  else cout << "Unable to open file";
+
+  plName.setFont(font);
+  plName.setCharacterSize(50);
+  plName.setFillColor(Color::Red);
+  plName.setOutlineColor(Color::Black);
+  plName.setOutlineThickness(5);
+  plName.setPosition(1520, 1010);
   //***************************************************
 
   //Make Boss
@@ -253,6 +275,12 @@ void Level3Scene::Update(const double& dt) {
 	  else
 		  puts("File successfully deleted");
 
+	  //Remove player name file if you die
+	  if (remove("PlayerName.txt") != 0)
+		  perror("Error deleting file");
+	  else
+		  puts("File successfully deleted");
+
 	  Engine::ChangeScene((Scene*)&level3);
   } 
 
@@ -280,6 +308,7 @@ void Level3Scene::Render() {
 	Engine::GetWindow().draw(essBarS);
 	Engine::GetWindow().draw(HUDs2);
 	Engine::GetWindow().draw(scoreT);
+	Engine::GetWindow().draw(plName);
 
 	Engine::GetWindow().setView(scene3view);
 

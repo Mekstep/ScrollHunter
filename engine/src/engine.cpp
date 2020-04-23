@@ -6,7 +6,10 @@
 #include <SFML/Graphics.hpp>
 #include <future>
 #include <iostream>
+#include <fstream>
 #include <stdexcept>
+#include <string>
+#include <conio.h>
 
 using namespace sf;
 using namespace std;
@@ -18,8 +21,14 @@ static float loadingspinner = 0.f;
 static float loadingTime;
 static RenderWindow* _window;
 
-static String playerInput;
-static Text playerText;
+string playerName;
+Text playerText;
+
+static Font font;
+static Text plName;
+
+static ofstream nameFile;
+static string line;
 
 void Loading_update(float dt, const Scene* const scn) {
   //  cout << "Eng: Loading Screen\n";
@@ -48,7 +57,9 @@ void Loading_render() {
 float frametimes[256] = {};
 uint8_t ftc = 0;
 
-void Engine::Update() {
+void Engine::Update() 
+{
+
   static sf::Clock clock;
   float dt = clock.restart().asSeconds();
   {
@@ -63,7 +74,7 @@ void Engine::Update() {
       _window->setTitle(avg + toStrDecPt(2, davg));
     }
   }
-
+  
   if (loading) {
     Loading_update(dt, _activeScene);
   } else if (_activeScene != nullptr) {
@@ -73,12 +84,14 @@ void Engine::Update() {
 }
 
 void Engine::Render(RenderWindow& window) {
+    
   if (loading) {
     Loading_render();
-  } else if (_activeScene != nullptr) {
+  } else if (_activeScene != nullptr) {     
     _activeScene->Render();
-  }
+  }  
   Renderer::render();
+  
 }
 
 void Engine::Start(unsigned int width, unsigned int height,
@@ -90,16 +103,92 @@ void Engine::Start(unsigned int width, unsigned int height,
   Physics::initialise();
   ChangeScene(scn);
 
+  if (!font.loadFromFile("res/fonts/Gameplay.ttf"))
+  {
+      cout << "Couldn't load font!" << endl;
+  }
+
+  plName.setFont(font);
+  plName.setString("Type your name and hit enter");
+  plName.setCharacterSize(20);
   
+  //Set up Initial window to ask for player name
+  //****************************************************************
+  sf::RenderWindow window2(sf::VideoMode(500, 500), "Text reader!");
+
+  while (window2.isOpen()) {
+      Event event;
+      while (window2.pollEvent(event)) {
+          switch (event.type)
+          {
+          case sf::Event::Closed:
+              window2.close();
+
+              break;
+
+          case sf::Event::TextEntered:
+
+              //Add userinput to playername string
+              playerName += event.text.unicode;
+              playerText.setString(playerName);
+              playerText.setColor(Color::White);
+              playerText.setPosition(0, 250);
+              cout << playerName << endl;
+
+              //Save player name to file and pass to main menu
+              //*******************************************
+              if (Keyboard::isKeyPressed(Keyboard::Enter)) 
+              {
+                  nameFile.open("PlayerName.txt");
+                  if (nameFile.is_open())
+                  {
+                      nameFile << playerName;
+                      nameFile.close();
+                  }
+                  else cout << "Unable to open file";
+                  
+
+                  window2.close();
+              }
+              //*******************************************
+
+              break;
+          }
+
+
+      }
+      if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+          window2.close();
+      }
+
+      window2.clear();     
+      Update();      
+      Render(window2);      
+      window2.draw(plName);
+      window2.draw(playerText);
+      window2.display();
+      
+  }
+  //****************************************************************
 
   sf::Vector2f position(0,0);
 
   while (window.isOpen()) {
     Event event;
     while (window.pollEvent(event)) {
-      if (event.type == Event::Closed) {
-        window.close();
-      }
+        switch (event.type)
+        {
+        case sf::Event::Closed:
+            if (remove("PlayerName.txt") != 0)
+                perror("Error deleting file");
+            else
+                puts("File successfully deleted");
+            window.close();
+
+            break;
+        }
+
+
     }
     if (Keyboard::isKeyPressed(Keyboard::Escape)) {
       window.close();

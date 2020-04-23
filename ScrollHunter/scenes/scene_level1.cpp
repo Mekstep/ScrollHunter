@@ -49,10 +49,12 @@ View scene1view3;
 
 static Font font;
 static Text scoreT;
+static Text plName;
 
 
 static ofstream scoring;
 static ofstream score;
+static ifstream nameF;
 static string line;
 
 
@@ -89,7 +91,7 @@ void Level1Scene::Load()
   }
   //**************************************************************************************
 
-   //Score
+   //Score & Name
   //***************************************************
   if (!font.loadFromFile("res/fonts/Gameplay.ttf"))
   {
@@ -105,6 +107,25 @@ void Level1Scene::Load()
   scoreT.setOutlineColor(Color::Black);
   scoreT.setOutlineThickness(5);
   scoreT.setPosition(820, 1010);
+
+  //Set name from name file
+  nameF.open("PlayerName.txt");
+  if (nameF.is_open())
+  {
+      while (getline(nameF, line))
+      {
+          plName.setString(line);
+      }
+      nameF.close();
+  }
+  else cout << "Unable to open file";
+
+  plName.setFont(font);  
+  plName.setCharacterSize(50);
+  plName.setFillColor(Color::Red);
+  plName.setOutlineColor(Color::Black);
+  plName.setOutlineThickness(5);
+  plName.setPosition(1520, 1010);
   //***************************************************
 
   //HP Bar & Essence & HUD
@@ -275,6 +296,12 @@ void Level1Scene::Update(const double& dt)
       else
           puts("File successfully deleted");
 
+      //Remove player name file if you die
+      if (remove("PlayerName.txt") != 0)
+          perror("Error deleting file");
+      else
+          puts("File successfully deleted");
+
     Engine::ChangeScene((Scene*)&gameOver);
   }
 
@@ -301,8 +328,9 @@ void Level1Scene::Render()
   Engine::GetWindow().draw(hpBarS);
   Engine::GetWindow().draw(essBarS);
   Engine::GetWindow().draw(HUDs2);
-  Engine::GetWindow().draw(scoreT);
-  
+  Engine::GetWindow().draw(scoreT); 
+  Engine::GetWindow().draw(plName);
+
   Engine::GetWindow().setView(scene1view);
 
   Scene::Render();
