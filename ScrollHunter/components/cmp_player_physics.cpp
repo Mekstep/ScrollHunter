@@ -201,7 +201,7 @@ void PlayerPhysicsComponent::update(double dt) {
 
 	  auto p = bullet2->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(50.f, 50.f));
 	  bullet2->addComponent<BulletComponent>();
-	  _parent->setEssence(_parent->getEssence() - 1);
+	  _parent->setEssence(_parent->getEssence() - 2);
 	  wCooldown = 0.06f;
   }
 
@@ -234,7 +234,7 @@ void PlayerPhysicsComponent::update(double dt) {
   //1 powerup Shield
 
 
-  if (Keyboard::isKeyPressed(Keyboard::Num1) && shieldActive == false)
+  if (Keyboard::isKeyPressed(Keyboard::Num1) && shieldActive == false && _parent->getEssence() > 0)
   {
 	  shield = _parent->scene->makeEntity();
 	  auto s = shield->addComponent<SpriteSheetComponent>(Vector2f(150.f, 150.f));
@@ -242,9 +242,10 @@ void PlayerPhysicsComponent::update(double dt) {
 	  s->setSpritesheet(shieldSheet);
 	  s->setFrameCount(8);
 	  s->setFrameTime(0.09f);
-	  shieldDuration = 10.f;
+	  shieldDuration = 7.f;
 	  shieldActive = true;
 	  _parent->setShield(shieldActive);
+	  _parent->setEssence(_parent->getEssence() - 20);
   }
 
   if (shieldActive == true)
@@ -266,7 +267,7 @@ void PlayerPhysicsComponent::update(double dt) {
 
 
   //2 powerup Familiar
-  if (Keyboard::isKeyPressed(Keyboard::Num2) && familiarActive == false)
+  if (Keyboard::isKeyPressed(Keyboard::Num2) && familiarActive == false && _parent->getEssence() > 0)
   {
 	  familiar = _parent->scene->makeEntity();
 	  //auto s = familiar->addComponent<ShapeComponent>();
@@ -279,6 +280,7 @@ void PlayerPhysicsComponent::update(double dt) {
 	  auto t = familiar->addComponent<FamiliarComponent>();
 	  familiarDuration = 10.f;
 	  familiarActive = true;
+	  _parent->setEssence(_parent->getEssence() - 20);
   }
 
   if (familiarActive == true)
@@ -295,10 +297,11 @@ void PlayerPhysicsComponent::update(double dt) {
 
 
   //3 powerup Increase Default attack
-  if (Keyboard::isKeyPressed(Keyboard::Num3))
+  if (Keyboard::isKeyPressed(Keyboard::Num3) && increaseActive == false && _parent->getEssence() > 0)
   {
 	  increaseDuration = 5.f;
 	  increaseActive = true;
+	  _parent->setEssence(_parent->getEssence() - 20);
   }
 
   if (increaseActive == true)
