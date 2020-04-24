@@ -148,7 +148,7 @@ std::shared_ptr<Entity> Enemies::makeBoss(Scene* scene) {
 	//t->getShape().setOrigin(16.f, 16.f);
 
 	// Add EnemyAIComponent
-	boss->addComponent<BossAIComponent>();
+	//boss->addComponent<BossAIComponent>();
 	boss->addComponent<EnemyTurretComponent>();
 	//turret->addComponent<EnemyAIComponent>();
 

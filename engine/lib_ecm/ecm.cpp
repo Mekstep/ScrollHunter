@@ -24,6 +24,13 @@ void Entity::update(double dt) {
 
 bool Entity::is_fordeletion() const { return _fordeletion; }
 
+void Entity::Move(Vector2f target)
+{
+    setDirection(normalize(target - getPosition()));
+
+    setPosition(getPosition() + getDirection());
+}
+
 void Entity::render() {
   if (!_visible) {
     return;

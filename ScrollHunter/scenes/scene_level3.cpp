@@ -44,12 +44,27 @@ static Text plName;
 static string playerName;
 
 static shared_ptr<Entity> player;
+static shared_ptr<Entity> boss;
 
 static ofstream scoring;
 static ofstream score;
 static ifstream chkScore;
 static ifstream nameF;
 static string line;
+
+static float timer = 5.0f;
+
+//Boss Patterns
+static Vector2f bossPosOrigin = Vector2f(2460,510);
+static Vector2f bossPos1 = Vector2f(1800, 510);
+static Vector2f bossPos2 = Vector2f(1800, 270);
+static Vector2f bossPos3 = Vector2f(1800, 748);
+static Vector2f bossPos4 = Vector2f(2460, 270);
+static Vector2f bossPos5 = Vector2f(2460, 748);
+static int bossPattern = 1;
+static bool bossReturn = false;
+
+static int randPattern = rand() % 5 + 1;
 
 void Level3Scene::Load() {
   cout << "Scene 3 Load" << endl;
@@ -132,7 +147,7 @@ void Level3Scene::Load() {
   //***************************************************
 
   //Make Boss
-  auto boss = Enemies::makeBoss(this);
+  boss = Enemies::makeBoss(this);
 
 
   // ***********************************************************************
@@ -189,6 +204,105 @@ void Level3Scene::UnLoad() {
 
 
 void Level3Scene::Update(const double& dt) {
+
+	{
+		
+
+		if (bossPattern == 1 && bossReturn == false)
+		{
+			timer -= dt;
+			if (timer <= 0)
+			{
+				boss->Move(bossPos1);
+				if (length(bossPos1 - boss->getPosition()) < 10.0)
+				{
+					bossReturn = true;
+					timer = 5.0f;
+				}
+			}
+		}
+
+		if (bossPattern == 2 && bossReturn == false)
+		{
+			timer -= dt;
+			if (timer <= 0)
+			{
+				boss->Move(bossPos2);
+				if (length(bossPos2 - boss->getPosition()) < 10.0)
+				{
+					bossReturn = true;
+					timer = 5.0f;
+				}
+			}
+		}
+
+		if (bossPattern == 3 && bossReturn == false)
+		{
+			timer -= dt;
+			if (timer <= 0)
+			{
+				boss->Move(bossPos3);
+				if (length(bossPos3 - boss->getPosition()) < 10.0)
+				{
+					bossReturn = true;
+					timer = 5.0f;
+				}
+			}
+		}
+
+		if (bossPattern == 4 && bossReturn == false)
+		{
+			timer -= dt;
+			if (timer <= 0)
+			{
+				boss->Move(bossPos4);
+				if (length(bossPos4 - boss->getPosition()) < 10.0)
+				{
+					bossReturn = true;
+					timer = 5.0f;
+				}
+			}
+		}
+
+		if (bossPattern == 5 && bossReturn == false)
+		{
+			timer -= dt;
+			if (timer <= 0)
+			{
+				boss->Move(bossPos5);
+				if (length(bossPos5 - boss->getPosition()) < 10.0)
+				{
+					bossReturn = true;
+					timer = 5.0f;
+				}
+			}
+		}
+
+		if (bossReturn == true)
+		{
+			timer -= dt;
+			if (timer <= 0)
+			{
+				boss->Move(bossPosOrigin);
+				if (length(bossPosOrigin - boss->getPosition()) < 10.0)
+				{
+					bossPattern++;
+					bossReturn = false;
+					timer = 5.0f;
+					if (bossPattern > 5)
+					{
+						bossPattern = 1;
+					}
+				}
+			}
+		}
+
+
+
+		cout << bossPattern << endl;
+		cout << boss->getPosition() << endl;
+		cout << timer << endl;
+	}
 
 	//hp bar scaling
 	hpBarS.setScale(player->getHealth() / 10, 1);

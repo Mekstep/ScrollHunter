@@ -108,6 +108,8 @@ public:
 
   bool is_fordeletion() const;
 
+  void Move(Vector2f target);
+
   float getRotation() const;
 
   void setRotation(float _rotation);
