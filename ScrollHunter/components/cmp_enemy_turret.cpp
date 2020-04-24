@@ -15,11 +15,19 @@ static Texture tex;
 
 void EnemyTurretComponent::update(double dt) 
 {
-  _firetime -= dt;
-  if (_firetime <= 0.f) {
-    fire();
-    _firetime = 1.f;
-  }
+    
+            _firetime -= dt;
+            if (_firetime <= 0.f) 
+            {
+
+                    if (_parent->getPosition().x > _parent->scene->ents.find("player")[0]->getPosition().x - 960 && _parent->getPosition().x < _parent->scene->ents.find("player")[0]->getPosition().x + 960)
+                    {
+                        fire();
+                    }
+                
+                _firetime = 1.f;
+            }
+
   static float angle = 0.f;
   angle += 1.f * dt;
 
@@ -43,7 +51,7 @@ void EnemyTurretComponent::fire() const {
 
   if (_parent->getType() == "archer")
   {
-      bullet->addComponent<AimedBulletComponent>(true, Vector2f(8.f, 8.f));
+      bullet->addComponent<AimedBulletComponent>();
 	  auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
 	  tex.loadFromFile("res/archerAttack.png");
 	  s->setSpritesheet(tex);
@@ -52,7 +60,7 @@ void EnemyTurretComponent::fire() const {
   }
   else
   {
-      bullet->addComponent<BulletPhysicsComponent>(true, Vector2f(8.f, 8.f));
+      bullet->addComponent<BulletPhysicsComponent>();
 	  auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
 	  tex.loadFromFile("res/chiefAttack.png");
 	  s->setSpritesheet(tex);

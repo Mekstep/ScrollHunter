@@ -1,5 +1,6 @@
 #include "cmp_spritesheet.h"
 #include "system_renderer.h"
+#include "engine.h"
 #include <cmath>
 
 using namespace sf;
@@ -31,6 +32,10 @@ void SpriteSheetComponent::update(double dt) {
 			currentTexture.x = 0;
 		}
 	}
+
+	
+
+	//cout << _parent->scene->ents.find("enemy")[0]->isVisible() << endl;
 
 	currentFrame.left = currentTexture.x * set_size.x;
 	currentFrame.top = currentTexture.y * set_size.y;

@@ -1,13 +1,14 @@
 #include "cmp_enemy_ai.h"
+#include "engine.h"
 
 using namespace std;
 using namespace sf;
 
 void EnemyAIComponent::update(double dt) 
 {
-  if (!validMove(_parent->getPosition() + Vector2f(0,80)) || !validMove(_parent->getPosition() - Vector2f(0, 60))) {
-    _direction *= -1.f;
-  }
+    if (!validMove(_parent->getPosition() + Vector2f(0, 80)) || !validMove(_parent->getPosition() - Vector2f(0, 60))) {
+        _direction *= -1.f;
+    }
 
   move(_direction * (float)(dt * _speed));
   ActorMovementComponent::update(dt);

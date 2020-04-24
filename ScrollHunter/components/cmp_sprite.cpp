@@ -1,6 +1,7 @@
 
 #include "cmp_sprite.h"
 #include "system_renderer.h"
+#include "engine.h"
 
 using namespace std;
 
@@ -10,6 +11,8 @@ SpriteComponent::SpriteComponent(Entity* p)
 void SpriteComponent::update(double dt) {
   _sprite->setPosition(_parent->getPosition());
   _sprite->setRotation(_parent->getRotation());
+
+  
 }
 
 void SpriteComponent::render() { Renderer::queue(_sprite.get()); }

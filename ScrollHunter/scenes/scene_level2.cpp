@@ -220,11 +220,9 @@ void Level2Scene::Load()
 	      auto skeletonArcher = Enemies::makeSkeletonArcher(this);
           skeletonArcher->setPosition(pos);
       }
-  }
-
-  
-  
+  } 
   // ***********************************************************************
+
   // Add physics colliders to level tiles.
   {
     // *********************************
@@ -264,6 +262,7 @@ void Level2Scene::Update(const double& dt)
     //Update Score
     scoreT.setString("Score: " + to_string(player->scene->ents.find("player")[0]->getScore()));
 
+    
 
     //scroll screen as player reaches middle
     //*****************************************************
@@ -284,6 +283,7 @@ void Level2Scene::Update(const double& dt)
     scene2view.reset(FloatRect(position.x, 0, screenWidth, screenHeight));
     //*****************************************************
 
+    
 
     //Background Speeds
     //***********************************************************
