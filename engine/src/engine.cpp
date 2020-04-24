@@ -96,7 +96,7 @@ void Engine::Render(RenderWindow& window) {
 
 void Engine::Start(unsigned int width, unsigned int height,
                    const std::string& gameName, Scene* scn) {
-  RenderWindow window(VideoMode(width, height), gameName);
+  RenderWindow window(VideoMode(width, height), gameName, Style::Fullscreen);
   _gameName = gameName;
   _window = &window;
   Renderer::initialise(window);
@@ -111,10 +111,11 @@ void Engine::Start(unsigned int width, unsigned int height,
   plName.setFont(font);
   plName.setString("Type your name and hit enter");
   plName.setCharacterSize(20);
+  plName.setPosition(1920 / 2 - 190, 1080 / 2);
   
   //Set up Initial window to ask for player name
   //****************************************************************
-  sf::RenderWindow window2(sf::VideoMode(500, 500), "Text reader!");
+  sf::RenderWindow window2(sf::VideoMode(1920, 1080), "Text reader!", Style::Fullscreen);
 
   while (window2.isOpen()) {
       Event event;

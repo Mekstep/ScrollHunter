@@ -1,6 +1,7 @@
 #include "scene_menu.h"
 #include "../components/cmp_text.h"
 #include "../components/cmp_sprite.h"
+#include "../components/cmp_spritesheet.h"
 #include "../game.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
@@ -18,6 +19,8 @@ Sound gameOverMusic;
 
 Texture mainMenu;
 Sprite menuGFX;
+
+static Texture tex;
 
 Texture gameOverImg;
 Sprite gameOverGFX;
@@ -50,6 +53,36 @@ void MenuScene::Load() {
       cout << "Couldn't load game Over music!" << endl;
   }
 
+  {
+	  auto button1 = makeEntity();
+	  auto anim = button1->addComponent<SpriteSheetComponent>(Vector2f(128.f, 128.f));
+	  tex.loadFromFile("res/keys/key1.png");
+	  anim->setSpritesheet(tex);
+	  anim->setFrameCount(2);
+	  anim->setFrameTime(0.6f);
+	  button1->setPosition(Vector2f(500.f, 360.f));
+  }
+
+  {
+	  auto button2 = makeEntity();
+	  auto anim = button2->addComponent<SpriteSheetComponent>(Vector2f(128.f, 128.f));
+	  tex.loadFromFile("res/keys/key2.png");
+	  anim->setSpritesheet(tex);
+	  anim->setFrameCount(2);
+	  anim->setFrameTime(0.6f);
+	  button2->setPosition(Vector2f(500.f, 580.f));
+  }
+
+  {
+	  auto button3 = makeEntity();
+	  auto anim = button3->addComponent<SpriteSheetComponent>(Vector2f(128.f, 128.f));
+	  tex.loadFromFile("res/keys/escape.png");
+	  anim->setSpritesheet(tex);
+	  anim->setFrameCount(2);
+	  anim->setFrameTime(0.6f);
+	  button3->setPosition(Vector2f(500.f, 800.f));
+  }
+
 
   gameOverMusic.setBuffer(buff2);
   music.setBuffer(buff);
@@ -61,8 +94,13 @@ void MenuScene::Load() {
 void MenuScene::Update(const double& dt) {
   // cout << "Menu Update "<<dt<<"\n";
 
-  if (sf::Keyboard::isKeyPressed(Keyboard::Space)) {
+  if (sf::Keyboard::isKeyPressed(Keyboard::Num1)) {
       music.stop();
+	  Engine::ChangeScene(&level1);
+  }
+
+  if (sf::Keyboard::isKeyPressed(Keyboard::Num2)) {
+	  music.stop();
 	  Engine::ChangeScene(&level1);
   }
 
@@ -89,8 +127,36 @@ void GameOver::Load() {
 		gameOverGFX.setTexture(gameOverImg);
 
         gameOverMusic.play();
-		//auto txt = makeEntity();
-		//auto t = txt->addComponent<TextComponent>("GAME OVER!\nPress Space to retry!");
+	}
+
+	{
+		auto button1 = makeEntity();
+		auto anim = button1->addComponent<SpriteSheetComponent>(Vector2f(128.f, 128.f));
+		tex.loadFromFile("res/keys/key1.png");
+		anim->setSpritesheet(tex);
+		anim->setFrameCount(2);
+		anim->setFrameTime(0.6f);
+		button1->setPosition(Vector2f(500.f, 360.f));
+	}
+
+	{
+		auto button2 = makeEntity();
+		auto anim = button2->addComponent<SpriteSheetComponent>(Vector2f(128.f, 128.f));
+		tex.loadFromFile("res/keys/key2.png");
+		anim->setSpritesheet(tex);
+		anim->setFrameCount(2);
+		anim->setFrameTime(0.6f);
+		button2->setPosition(Vector2f(500.f, 580.f));
+	}
+
+	{
+		auto button3 = makeEntity();
+		auto anim = button3->addComponent<SpriteSheetComponent>(Vector2f(128.f, 128.f));
+		tex.loadFromFile("res/keys/escape.png");
+		anim->setSpritesheet(tex);
+		anim->setFrameCount(2);
+		anim->setFrameTime(0.6f);
+		button3->setPosition(Vector2f(500.f, 800.f));
 	}
 
 	setLoaded(true);
@@ -99,9 +165,14 @@ void GameOver::Load() {
 void GameOver::Update(const double& dt) {
 	// cout << "Menu Update "<<dt<<"\n";
 
-	if (sf::Keyboard::isKeyPressed(Keyboard::Space)) {
+	if (sf::Keyboard::isKeyPressed(Keyboard::Num1)) {
         gameOverMusic.stop();
 		Engine::ChangeScene(&level1);
+	}
+
+	if (sf::Keyboard::isKeyPressed(Keyboard::Num2)) {
+		gameOverMusic.stop();
+		Engine::ChangeScene(&menu);
 	}
 
 	Scene::Update(dt);
