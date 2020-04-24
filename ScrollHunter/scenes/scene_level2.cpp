@@ -330,6 +330,13 @@ void Level2Scene::Update(const double& dt)
   } 
   else if (!player->isAlive()) 
   {
+	  bckSprites2[0].setPosition(Vector2f(0, 0));
+	  bckSprites2[1].setPosition(Vector2f(0, 0));
+	  bckSprites2[2].setPosition(Vector2f(0, 0));
+	  bckSprites2[3].setPosition(Vector2f(0, 0));
+	  bckSprites2[4].setPosition(Vector2f(0, 0));
+	  bckSprites2[5].setPosition(Vector2f(0, 0));
+
       //Save final score to Scores.txt if you die
       //*********************************************************************
       score.open("Scores.txt", std::ios_base::app);

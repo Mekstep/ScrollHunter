@@ -22,6 +22,14 @@ Sprite menuGFX;
 Texture gameOverImg;
 Sprite gameOverGFX;
 
+//screen dimensions
+const int static screenWidth = 1920;
+const int static screenHeight = 1080;
+
+//views
+static View sceneview;
+
+
 
 void MenuScene::Load() {
   cout << "Menu Load \n";
@@ -72,6 +80,9 @@ void MenuScene::Render()
 
 void GameOver::Load() {
 
+	sceneview.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+	sceneview.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+
 	{
 		//load game over screen
 		gameOverImg.loadFromFile("res/gameOverScreen.png");
@@ -99,6 +110,8 @@ void GameOver::Update(const double& dt) {
 void GameOver::Render()
 {
 	Engine::GetWindow().draw(gameOverGFX);
+
+	Engine::GetWindow().setView(sceneview);
 
 	Scene::Render();
 
