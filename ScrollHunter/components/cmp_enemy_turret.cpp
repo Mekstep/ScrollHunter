@@ -15,7 +15,7 @@ static Texture tex;
 
 void EnemyTurretComponent::update(double dt) 
 {
-    
+       
             _firetime -= dt;
             if (_firetime <= 0.f) 
             {
@@ -23,9 +23,16 @@ void EnemyTurretComponent::update(double dt)
                     if (_parent->getPosition().x > _parent->scene->ents.find("player")[0]->getPosition().x - 960 && _parent->getPosition().x < _parent->scene->ents.find("player")[0]->getPosition().x + 960)
                     {
                         fire();
-                    }
-                
-                _firetime = 1.f;
+
+                        if (_parent->getType() == "boss")
+                        {
+                            _firetime = 0.5f;
+                        }
+                        else
+                        {
+                            _firetime = 2.0f;
+                        }
+                    }                                    
             }
 
   static float angle = 0.f;
@@ -81,4 +88,14 @@ void EnemyTurretComponent::fire() const {
 }
 
 EnemyTurretComponent::EnemyTurretComponent(Entity* p)
-    : Component(p), _firetime(2.f) {}
+    : Component(p), _firetime(2.f) 
+{
+    if (_parent->getType() == "boss")
+    {
+        _firetime = 0.5f;
+    }
+    else
+    {
+        _firetime = 2.0f;
+    }
+}

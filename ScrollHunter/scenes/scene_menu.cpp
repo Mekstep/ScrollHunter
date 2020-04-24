@@ -169,6 +169,12 @@ void GameOver::Update(const double& dt) {
 
 	if (sf::Keyboard::isKeyPressed(Keyboard::Num2)) {
 		gameOverMusic.stop();
+
+		if (remove("keepScore.txt") != 0)
+			perror("Error deleting file");
+		else
+			puts("File successfully deleted");
+
 		Engine::ChangeScene(&menu);
 	}
 

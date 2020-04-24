@@ -52,7 +52,7 @@ static ifstream chkScore;
 static ifstream nameF;
 static string line;
 
-static float timer = 5.0f;
+static float timer = 0.1f;
 
 //Boss Patterns
 static Vector2f bossPosOrigin = Vector2f(2460,510);
@@ -63,8 +63,7 @@ static Vector2f bossPos4 = Vector2f(2460, 270);
 static Vector2f bossPos5 = Vector2f(2460, 748);
 static int bossPattern = 1;
 static bool bossReturn = false;
-
-static int randPattern = rand() % 5 + 1;
+static bool startBoss = false;
 
 void Level3Scene::Load() {
   cout << "Scene 3 Load" << endl;
@@ -113,7 +112,7 @@ void Level3Scene::Load() {
 	  }
 	  chkScore.close();
   }
-  else cout << "Unable to open file";
+  else cout << "Unable to open keepScore file";
 
   player->scene->ents.find("player")[0]->setScore(stoi(line));
 
@@ -136,7 +135,7 @@ void Level3Scene::Load() {
 	  }
 	  nameF.close();
   }
-  else cout << "Unable to open file";
+  else cout << "Unable to open PlayerName file";
 
   plName.setFont(font);
   plName.setCharacterSize(50);
@@ -205,104 +204,108 @@ void Level3Scene::UnLoad() {
 
 void Level3Scene::Update(const double& dt) {
 
+	if (player->getPosition().x > 1000)
 	{
-		
+		startBoss = true;
+	}
 
-		if (bossPattern == 1 && bossReturn == false)
-		{
-			timer -= dt;
-			if (timer <= 0)
-			{
-				boss->Move(bossPos1);
-				if (length(bossPos1 - boss->getPosition()) < 10.0)
-				{
-					bossReturn = true;
-					timer = 5.0f;
-				}
-			}
-		}
 
-		if (bossPattern == 2 && bossReturn == false)
+	//Boss Patterns
+	//**********************************************************************************
+	{
+		if (startBoss == true)
 		{
-			timer -= dt;
-			if (timer <= 0)
+			if (bossPattern == 1 && bossReturn == false)
 			{
-				boss->Move(bossPos2);
-				if (length(bossPos2 - boss->getPosition()) < 10.0)
+				timer -= dt;
+				if (timer <= 0)
 				{
-					bossReturn = true;
-					timer = 5.0f;
-				}
-			}
-		}
-
-		if (bossPattern == 3 && bossReturn == false)
-		{
-			timer -= dt;
-			if (timer <= 0)
-			{
-				boss->Move(bossPos3);
-				if (length(bossPos3 - boss->getPosition()) < 10.0)
-				{
-					bossReturn = true;
-					timer = 5.0f;
-				}
-			}
-		}
-
-		if (bossPattern == 4 && bossReturn == false)
-		{
-			timer -= dt;
-			if (timer <= 0)
-			{
-				boss->Move(bossPos4);
-				if (length(bossPos4 - boss->getPosition()) < 10.0)
-				{
-					bossReturn = true;
-					timer = 5.0f;
-				}
-			}
-		}
-
-		if (bossPattern == 5 && bossReturn == false)
-		{
-			timer -= dt;
-			if (timer <= 0)
-			{
-				boss->Move(bossPos5);
-				if (length(bossPos5 - boss->getPosition()) < 10.0)
-				{
-					bossReturn = true;
-					timer = 5.0f;
-				}
-			}
-		}
-
-		if (bossReturn == true)
-		{
-			timer -= dt;
-			if (timer <= 0)
-			{
-				boss->Move(bossPosOrigin);
-				if (length(bossPosOrigin - boss->getPosition()) < 10.0)
-				{
-					bossPattern++;
-					bossReturn = false;
-					timer = 5.0f;
-					if (bossPattern > 5)
+					boss->Move(bossPos1);
+					if (length(bossPos1 - boss->getPosition()) < 10.0)
 					{
-						bossPattern = 1;
+						bossReturn = true;
+						timer = 5.0f;
 					}
 				}
 			}
-		}
 
+			if (bossPattern == 2 && bossReturn == false)
+			{
+				timer -= dt;
+				if (timer <= 0)
+				{
+					boss->Move(bossPos2);
+					if (length(bossPos2 - boss->getPosition()) < 10.0)
+					{
+						bossReturn = true;
+						timer = 5.0f;
+					}
+				}
+			}
 
+			if (bossPattern == 3 && bossReturn == false)
+			{
+				timer -= dt;
+				if (timer <= 0)
+				{
+					boss->Move(bossPos3);
+					if (length(bossPos3 - boss->getPosition()) < 10.0)
+					{
+						bossReturn = true;
+						timer = 5.0f;
+					}
+				}
+			}
 
-		cout << bossPattern << endl;
-		cout << boss->getPosition() << endl;
-		cout << timer << endl;
+			if (bossPattern == 4 && bossReturn == false)
+			{
+				timer -= dt;
+				if (timer <= 0)
+				{
+					boss->Move(bossPos4);
+					if (length(bossPos4 - boss->getPosition()) < 10.0)
+					{
+						bossReturn = true;
+						timer = 5.0f;
+					}
+				}
+			}
+
+			if (bossPattern == 5 && bossReturn == false)
+			{
+				timer -= dt;
+				if (timer <= 0)
+				{
+					boss->Move(bossPos5);
+					if (length(bossPos5 - boss->getPosition()) < 10.0)
+					{
+						bossReturn = true;
+						timer = 5.0f;
+					}
+				}
+			}
+
+			if (bossReturn == true)
+			{
+				timer -= dt;
+				if (timer <= 0)
+				{
+					boss->Move(bossPosOrigin);
+					if (length(bossPosOrigin - boss->getPosition()) < 10.0)
+					{
+						bossPattern = rand() % 5 + 1;
+						bossReturn = false;
+						timer = 5.0f;
+						if (bossPattern > 5)
+						{
+							bossPattern = 1;
+						}
+					}
+				}
+			}
+		}		
 	}
+	//**********************************************************************************
 
 	//hp bar scaling
 	hpBarS.setScale(player->getHealth() / 10, 1);
@@ -360,7 +363,7 @@ void Level3Scene::Update(const double& dt) {
 		  scoring << player->scene->ents.find("player")[0]->getScore();
 		  scoring.close();
 	  }
-	  else cout << "Unable to open file";
+	  else cout << "Unable to open keepScore file";
 	  //****************************************************************
 
 	  scene3view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
@@ -384,20 +387,8 @@ void Level3Scene::Update(const double& dt) {
 		  score << playerName << ", " << player->scene->ents.find("player")[0]->getScore() << "\n";
 		  score.close();
 	  }
-	  else cout << "Unable to open file";
+	  else cout << "Unable to open Scores file";
 	  //*********************************************************************
-
-	  //Remove the keep score file if you die
-	  if (remove("keepScore.txt") != 0)
-		  perror("Error deleting file");
-	  else
-		  puts("File successfully deleted");
-
-	  //Remove player name file if you die
-	  if (remove("PlayerName.txt") != 0)
-		  perror("Error deleting file");
-	  else
-		  puts("File successfully deleted");
 
 
 	  Engine::ChangeScene((Scene*)&gameOver);

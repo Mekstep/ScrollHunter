@@ -115,7 +115,7 @@ void Level2Scene::Load()
       }
       chkScore.close();
   }
-  else cout << "Unable to open file";
+  else cout << "Unable to open keepScore file";
 
   player->scene->ents.find("player")[0]->setScore(stoi(line));
 
@@ -138,7 +138,7 @@ void Level2Scene::Load()
       }
       nameF.close();
   }
-  else cout << "Unable to open file";
+  else cout << "Unable to open PlayerName file";
 
   plName.setFont(font);
   plName.setCharacterSize(50);
@@ -319,7 +319,7 @@ void Level2Scene::Update(const double& dt)
           scoring << player->scene->ents.find("player")[0]->getScore();
           scoring.close();
       }
-      else cout << "Unable to open file";
+      else cout << "Unable to open keepScore file";
       //****************************************************************
 
 	  scene2view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
@@ -345,20 +345,8 @@ void Level2Scene::Update(const double& dt)
           score << playerName << ", " << player->scene->ents.find("player")[0]->getScore() << "\n";
           score.close();
       }
-      else cout << "Unable to open file";
+      else cout << "Unable to open Scores file";
       //*********************************************************************
-
-      //Remove the keep score file if you die
-      if (remove("keepScore.txt") != 0)
-          perror("Error deleting file");
-      else
-          puts("File successfully deleted");
-
-      //Remove player name file if you die
-      if (remove("PlayerName.txt") != 0)
-          perror("Error deleting file");
-      else
-          puts("File successfully deleted");
 
     level.stop();
     Engine::ChangeScene((Scene*)&gameOver);
