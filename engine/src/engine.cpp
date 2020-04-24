@@ -1,5 +1,6 @@
 #include "engine.h"
 #include "maths.h"
+#include "ecm.h"
 #include "system_physics.h"
 #include "system_renderer.h"
 #include "system_resources.h"
@@ -30,6 +31,9 @@ static Text plName;
 static ofstream nameFile;
 static string line;
 
+//views
+static View sceneview;
+
 void Loading_update(float dt, const Scene* const scn) {
   //  cout << "Eng: Loading Screen\n";
   if (scn->isLoaded()) {
@@ -42,6 +46,8 @@ void Loading_update(float dt, const Scene* const scn) {
 }
 void Loading_render() {
   // cout << "Eng: Loading Screen Render\n";
+  sceneview.reset(sf::FloatRect(0, 0, 1920, 1080));
+  sceneview.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
   static CircleShape octagon(80, 8);
   octagon.setOrigin(80, 80);
   octagon.setRotation(loadingspinner);
@@ -50,6 +56,7 @@ void Loading_render() {
   static Text t("Loading", *Resources::get<sf::Font>("RobotoMono-Regular.ttf"));
   t.setFillColor(Color(255,255,255,min(255.f,40.f*loadingTime)));
   t.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f,0.3f));
+  _window->setView(sceneview);
   Renderer::queue(&t);
   Renderer::queue(&octagon);
 }

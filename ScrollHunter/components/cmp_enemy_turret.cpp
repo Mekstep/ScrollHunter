@@ -58,11 +58,20 @@ void EnemyTurretComponent::fire() const {
 	  s->setFrameCount(8);
 	  s->setFrameTime(0.05f);
   }
-  else
+  else if(_parent->getType() == "chief")
   {
       bullet->addComponent<BulletPhysicsComponent>();
 	  auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
 	  tex.loadFromFile("res/chiefAttack.png");
+	  s->setSpritesheet(tex);
+	  s->setFrameCount(8);
+	  s->setFrameTime(0.05f);
+  }
+  else
+  {
+	  bullet->addComponent<BulletPhysicsComponent>();
+	  auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+	  tex.loadFromFile("res/skeletonAttack.png");
 	  s->setSpritesheet(tex);
 	  s->setFrameCount(8);
 	  s->setFrameTime(0.05f);

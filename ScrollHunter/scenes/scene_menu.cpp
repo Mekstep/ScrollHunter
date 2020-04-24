@@ -40,9 +40,6 @@ void MenuScene::Load() {
 	  //load main menu screen
 	  mainMenu.loadFromFile("res/mainMenu.png");
 	  menuGFX.setTexture(mainMenu);
-		
-	  //auto txt = makeEntity();
-      //auto t = txt->addComponent<TextComponent>("Scroll Hunter\nPress Space to Start");
   }
   if (!buff.loadFromFile("res/menu.ogg"))
   {
