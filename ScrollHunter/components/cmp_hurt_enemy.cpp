@@ -27,6 +27,7 @@ void EnemyHurtComponent::update(double dt) {
 
 			if (pl->getHealth() <= 0)
 			{
+
 				//drop essence
 				auto e = pl->scene->makeEntity();
 				e->setPosition(_parent->getPosition());
@@ -49,8 +50,12 @@ void EnemyHurtComponent::update(double dt) {
 				{
 					_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 30);
 				}
+				if (pl->getType() == "boss")
+				{
+					_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 150);
+				}
 
-				
+				pl->setAlive(false);
 
 				//delete
 				pl->setForDelete();

@@ -67,6 +67,8 @@ static int bossPattern = 1;
 static bool bossReturn = false;
 static bool startBoss = false;
 
+static bool wallsLoaded = false;
+
 void Level3Scene::Load() {
   cout << "Scene 3 Load" << endl;
   ls::loadLevelFile("res/level_3.txt", 40.0f);
@@ -332,7 +334,32 @@ void Level3Scene::Update(const double& dt) {
 	}
 	//**********************************************************************************
 
-	cout << boss->getHealth() << endl;
+	if (boss->isAlive() == false)
+	{
+		for (auto w : player->scene->ents.find("wall"))
+		{
+			w->setForDelete();
+			templeTile.loadFromFile("res/templeTile.png");
+		}
+
+		ls::loadLevelFile("res/level_3_2.txt", 40.0f);
+
+		if (wallsLoaded == false)
+		{
+			auto walls = ls::findTiles(ls::WALL);
+			for (auto w : walls) {
+				auto pos = ls::getTilePosition(w);
+				pos += Vector2f(20.0f, 20.0f); // offset to centre
+				auto e = makeEntity();
+				e->setPosition(pos);
+				e->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
+				e->addTag("wall2");
+				auto s = e->addComponent<SpriteSheetComponent>(Vector2f(40.f, 40.f));
+				s->setSpritesheet(templeTile);
+			}
+			wallsLoaded = true;
+		}
+	}
 
 	//hp bar scaling
 	hpBarS.setScale(player->getHealth() / 10, 1);

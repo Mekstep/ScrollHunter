@@ -128,7 +128,7 @@ std::shared_ptr<Entity> Enemies::makeBoss(Scene* scene) {
 
 
 	auto boss = scene->makeEntity();
-	boss->setHealth(500);
+	boss->setHealth(10);
 	boss->setPosition(ls::getTilePosition(ls::findTiles('b')[0]) + Vector2f(20, 0));
 	boss->addTag("enemy");
 	boss->setType("boss");

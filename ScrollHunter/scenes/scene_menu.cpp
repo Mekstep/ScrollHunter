@@ -96,7 +96,7 @@ void MenuScene::Update(const double& dt) {
 
   if (sf::Keyboard::isKeyPressed(Keyboard::Num1)) {
       music.stop();
-	  Engine::ChangeScene(&level1);
+	  Engine::ChangeScene(&level3);
   }
 
   if (sf::Keyboard::isKeyPressed(Keyboard::Num2)) {
@@ -167,7 +167,7 @@ void GameOver::Update(const double& dt) {
 
 	if (sf::Keyboard::isKeyPressed(Keyboard::Num1)) {
         gameOverMusic.stop();
-		Engine::ChangeScene(&level1);
+		Engine::ChangeScene(&level3);
 	}
 
 	if (sf::Keyboard::isKeyPressed(Keyboard::Num2)) {
