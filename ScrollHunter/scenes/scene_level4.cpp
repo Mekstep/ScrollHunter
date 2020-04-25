@@ -1,4 +1,4 @@
-#include "scene_level3.h"
+#include "scene_level4.h"
 #include "../components/cmp_physics.h"
 #include "../components/cmp_player_physics.h"
 #include "../game.h"
@@ -31,14 +31,15 @@ static Texture hpBarT;
 static Sprite essBarS;
 static Texture essBarT;
 
-View scene3view;
-View scene3view2;
-View scene3view3;
+static View scene3view;
+static View scene3view2;
+static View scene3view3;
 
-Sprite bckSprites3[4];
-Texture bckTextures3[4];
+static Sprite bckSprites3[4];
+static Texture bckTextures3[4];
+static Sprite bckSprites1[6];
+static Texture bckTextures1[6];
 
-Texture templeTile;
 
 static Font font;
 static Text scoreT;
@@ -56,21 +57,10 @@ static string line;
 
 static float timer = 0.1f;
 
-//Boss Patterns
-static Vector2f bossPosOrigin = Vector2f(2460,510);
-static Vector2f bossPos1 = Vector2f(1800, 510);
-static Vector2f bossPos2 = Vector2f(1800, 270);
-static Vector2f bossPos3 = Vector2f(1800, 748);
-static Vector2f bossPos4 = Vector2f(2460, 270);
-static Vector2f bossPos5 = Vector2f(2460, 748);
-static int bossPattern = 1;
-static bool bossReturn = false;
-static bool startBoss = false;
 
-void Level3Scene::Load() {
-  cout << "Scene 3 Load" << endl;
-  ls::loadLevelFile("res/level_3.txt", 40.0f);
-  templeTile.loadFromFile("res/templeTile.png");
+void Level4Scene::Load() {
+  cout << "Scene 4 Load" << endl;
+  ls::loadLevelFile("res/level_4.txt", 40.0f);
 
   //Set Viewports for scrolling screen
   scene3view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
@@ -84,12 +74,29 @@ void Level3Scene::Load() {
   bckSprites3[2].setPosition(Vector2f(0, 0));
   bckSprites3[3].setPosition(Vector2f(0, 0));
 
+  bckSprites1[0].setPosition(Vector2f(0, 0));
+  bckSprites1[1].setPosition(Vector2f(0, 0));
+  bckSprites1[2].setPosition(Vector2f(0, 0));
+  bckSprites1[3].setPosition(Vector2f(0, 0));
+  bckSprites1[4].setPosition(Vector2f(0, 0));
+  bckSprites1[5].setPosition(Vector2f(0, 0));
+
 
   //Background
 // ***************************************************************************
+  for (int i = 0; i < 6; i++)
+  {
+	  if (!bckTextures1[i].loadFromFile("res/scene1/sky" + to_string(i + 1) + ".png"))
+	  {
+		  cout << "Couldn't load Background" + to_string(i + 1) + "!" << endl;
+	  }
+
+	  bckSprites1[i].setTexture(bckTextures1[i]);
+  }
+
   for (int i = 0; i < 4; i++)
   {
-	  if (!bckTextures3[i].loadFromFile("res/temple/temple" + to_string(i + 1) + ".png"))
+	  if (!bckTextures3[i].loadFromFile("res/finalScene/temple" + to_string(i + 1) + ".png"))
 	  {
 		  cout << "Couldn't load Background" + to_string(i + 1) + "!" << endl;
 	  }
@@ -152,16 +159,7 @@ void Level3Scene::Load() {
   plName.setOutlineColor(Color::Black);
   plName.setOutlineThickness(5);
   plName.setPosition(1520, 1010);
-  //***************************************************
 
-  //Make Boss
-  boss = Enemies::makeBoss(this);
-
-  auto invis = makeEntity();
-  invis->addTag("enemy");
-
-
-  // ***********************************************************************
   // Add physics colliders to level tiles.
   {
 	  // *********************************
@@ -173,8 +171,6 @@ void Level3Scene::Load() {
 		  e->setPosition(pos);
 		  e->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
 		  e->addTag("wall");
-		  auto s = e->addComponent<SpriteSheetComponent>(Vector2f(40.f, 40.f));
-		  s->setSpritesheet(templeTile);
 	  }
 
 	  auto exit = ls::findTiles(ls::END);
@@ -189,6 +185,7 @@ void Level3Scene::Load() {
 		  s->setSpritesheet(tex);
 	  }
 	  // *********************************
+  }
 
 	  //HP Bar & Essence & HUD
   //***********************************************
@@ -211,13 +208,58 @@ void Level3Scene::Load() {
 		  HUDbgs2.setTexture(HUDbg2);
 	  }
 	  //***********************************************
-  }
+
+
+ // Create Skeletons
+  // *****************************************************************
+	  {
+		  auto skeletons = ls::findTiles('k');
+		  for (auto s : skeletons)
+		  {
+			  auto pos = ls::getTilePosition(s);
+			  auto skeleton = Enemies::makeSkeleton(this);
+			  skeleton->setPosition(pos);
+		  }
+
+	  }
+	  // *****************************************************************
+
+
+	  // Create Skeleton Chiefs
+	  // *********************************************************************
+	  {
+		  auto skeletonChiefs = ls::findTiles('c');
+		  for (auto s : skeletonChiefs)
+		  {
+			  auto pos = ls::getTilePosition(s);
+			  auto skeletonChief = Enemies::makeSkeletonChief(this);
+			  skeletonChief->setPosition(pos);
+		  }
+	  }
+	  // *********************************************************************
+
+
+	  // Create Skeleton Archers
+	  // ***********************************************************************
+	  {
+		  auto skeletonArchers = ls::findTiles('a');
+		  for (auto s : skeletonArchers)
+		  {
+			  auto pos = ls::getTilePosition(s);
+			  auto skeletonArcher = Enemies::makeSkeletonArcher(this);
+			  skeletonArcher->setPosition(pos);
+		  }
+	  }
+	  // ***********************************************************************
+
+	  auto invis = makeEntity();
+	  invis->addTag("enemy");
 
   cout << " Scene 3 Load Done" << endl;
   setLoaded(true);
 }
 
-void Level3Scene::UnLoad() {
+void Level4Scene::UnLoad() {
   cout << "Scene 3 UnLoad" << endl;
   player.reset();
   ls::unload();
@@ -226,113 +268,7 @@ void Level3Scene::UnLoad() {
 
 
 
-void Level3Scene::Update(const double& dt) {
-
-	//Start boss
-	if (player->getPosition().x > 1000)
-	{
-		startBoss = true;
-	}
-
-
-	//Boss Patterns
-	//**********************************************************************************
-	{
-		if (startBoss == true)
-		{
-			if (bossPattern == 1 && bossReturn == false)
-			{
-				timer -= dt;
-				if (timer <= 0)
-				{
-					boss->Move(bossPos1);
-					if (length(bossPos1 - boss->getPosition()) < 10.0)
-					{
-						bossReturn = true;
-						timer = 5.0f;
-					}
-				}
-			}
-
-			if (bossPattern == 2 && bossReturn == false)
-			{
-				timer -= dt;
-				if (timer <= 0)
-				{
-					boss->Move(bossPos2);
-					if (length(bossPos2 - boss->getPosition()) < 10.0)
-					{
-						bossReturn = true;
-						timer = 5.0f;
-					}
-				}
-			}
-
-			if (bossPattern == 3 && bossReturn == false)
-			{
-				timer -= dt;
-				if (timer <= 0)
-				{
-					boss->Move(bossPos3);
-					if (length(bossPos3 - boss->getPosition()) < 10.0)
-					{
-						bossReturn = true;
-						timer = 5.0f;
-					}
-				}
-			}
-
-			if (bossPattern == 4 && bossReturn == false)
-			{
-				timer -= dt;
-				if (timer <= 0)
-				{
-					boss->Move(bossPos4);
-					if (length(bossPos4 - boss->getPosition()) < 10.0)
-					{
-						bossReturn = true;
-						timer = 5.0f;
-					}
-				}
-			}
-
-			if (bossPattern == 5 && bossReturn == false)
-			{
-				timer -= dt;
-				if (timer <= 0)
-				{
-					boss->Move(bossPos5);
-					if (length(bossPos5 - boss->getPosition()) < 10.0)
-					{
-						bossReturn = true;
-						timer = 5.0f;
-					}
-				}
-			}
-
-			if (bossReturn == true)
-			{
-				timer -= dt;
-				if (timer <= 0)
-				{
-					boss->Move(bossPosOrigin);
-					if (length(bossPosOrigin - boss->getPosition()) < 10.0)
-					{
-						bossPattern = rand() % 5 + 1;
-						bossReturn = false;
-						timer = 5.0f;
-						if (bossPattern > 5)
-						{
-							bossPattern = 1;
-						}
-					}
-				}
-			}
-		}		
-	}
-	//**********************************************************************************
-
-	cout << boss->getHealth() << endl;
+void Level4Scene::Update(const double& dt) {
 
 	//hp bar scaling
 	hpBarS.setScale(player->getHealth() / 10, 1);
@@ -369,6 +305,13 @@ void Level3Scene::Update(const double& dt) {
 		bckSprites3[1].move(Vector2f(-300 * dt, 0));
 		bckSprites3[2].move(Vector2f(-250 * dt, 0));
 		bckSprites3[3].move(Vector2f(-200 * dt, 0));
+
+		bckSprites1[0].move(Vector2f(-350 * dt, 0));
+		bckSprites1[1].move(Vector2f(-300 * dt, 0));
+		bckSprites1[2].move(Vector2f(-250 * dt, 0));
+		bckSprites1[3].move(Vector2f(-200 * dt, 0));
+		bckSprites1[4].move(Vector2f(-150 * dt, 0));
+		bckSprites1[5].move(Vector2f(-100 * dt, 0));
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Left) && position.x > 0)
 	{
@@ -376,6 +319,13 @@ void Level3Scene::Update(const double& dt) {
 		bckSprites3[1].move(Vector2f(300 * dt, 0));
 		bckSprites3[2].move(Vector2f(250 * dt, 0));
 		bckSprites3[3].move(Vector2f(200 * dt, 0));
+
+		bckSprites1[0].move(Vector2f(350 * dt, 0));
+		bckSprites1[1].move(Vector2f(300 * dt, 0));
+		bckSprites1[2].move(Vector2f(250 * dt, 0));
+		bckSprites1[3].move(Vector2f(200 * dt, 0));
+		bckSprites1[4].move(Vector2f(150 * dt, 0));
+		bckSprites1[5].move(Vector2f(100 * dt, 0));
 	}
 	//***********************************************************
 
@@ -397,7 +347,7 @@ void Level3Scene::Update(const double& dt) {
 	  scene3view2.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene3view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene3view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
-	  Engine::ChangeScene((Scene*)&finalScene);
+	  Engine::ChangeScene((Scene*)&level1);
   } 
   else if (!player->isAlive()) 
   {
@@ -405,6 +355,13 @@ void Level3Scene::Update(const double& dt) {
 	  bckSprites3[1].setPosition(Vector2f(0, 0));
 	  bckSprites3[2].setPosition(Vector2f(0, 0));
 	  bckSprites3[3].setPosition(Vector2f(0, 0));
+
+	  bckSprites1[0].setPosition(Vector2f(0, 0));
+	  bckSprites1[1].setPosition(Vector2f(0, 0));
+	  bckSprites1[2].setPosition(Vector2f(0, 0));
+	  bckSprites1[3].setPosition(Vector2f(0, 0));
+	  bckSprites1[4].setPosition(Vector2f(0, 0));
+	  bckSprites1[5].setPosition(Vector2f(0, 0));
 
 	  //Save final score to Scores.txt if you die
 	  //*********************************************************************
@@ -426,7 +383,7 @@ void Level3Scene::Update(const double& dt) {
   }
 
   if (sf::Keyboard::isKeyPressed(Keyboard::V)) {
-	  Level3Scene::UnLoad();
+	  Level4Scene::UnLoad();
 	  Engine::ChangeScene(&level1);
   }
 
@@ -434,8 +391,13 @@ void Level3Scene::Update(const double& dt) {
   
 }
 
-void Level3Scene::Render() {
+void Level4Scene::Render() {
 	Engine::GetWindow().setView(scene3view2);
+
+	for (int i = 5; i > -1; i--)
+	{
+		Engine::GetWindow().draw(bckSprites1[i]);
+	}
 
 	for (int i = 3; i > -1; i--)
 	{

@@ -31,6 +31,7 @@ static Texture HUDbg2;
 static Sprite HUDs2;
 static Sprite HUDbgs2;
 
+static Texture tex;
 static Sprite skeleton;
 
 //parallax background
@@ -230,6 +231,18 @@ void Level2Scene::Load()
 		  e->setPosition(pos);
 		  e->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
           e->addTag("wall");
+	  }
+
+	  auto exit = ls::findTiles(ls::END);
+	  for (auto e : exit)
+	  {
+		  auto pos = ls::getTilePosition(e);
+		  pos += Vector2f(20.0f, 20.0f); // offset to centre
+		  auto et = makeEntity();
+		  et->setPosition(pos);
+		  auto s = et->addComponent<SpriteSheetComponent>(Vector2f(40.f, 40.f));
+		  tex.loadFromFile("res/arrowTile.png");
+		  s->setSpritesheet(tex);
 	  }
     // *********************************
   }

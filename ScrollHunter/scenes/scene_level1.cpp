@@ -35,6 +35,8 @@ static Texture HUDbg2;
 static Sprite HUDs2;
 static Sprite HUDbgs2;
 
+static Texture tex;
+
 //health bar
 static Sprite hpBarS;
 static Texture hpBarT;
@@ -227,8 +229,18 @@ void Level1Scene::Load()
 		  e->addComponent<PhysicsComponent>(false, Vector2f(40.0f, 40.0f));
           e->addTag("wall");
 		  e->setVisible(false);
-		  //auto s = e->addComponent<SpriteSheetComponent>(Vector2f(40.f, 40.f));
-		  //s->setSpritesheet(templeTile1);
+	  }
+
+	  auto exit = ls::findTiles(ls::END);
+	  for (auto e : exit)
+	  {
+		  auto pos = ls::getTilePosition(e);
+		  pos += Vector2f(20.0f, 20.0f); // offset to centre
+		  auto et = makeEntity();
+		  et->setPosition(pos);
+		  auto s = et->addComponent<SpriteSheetComponent>(Vector2f(40.f, 40.f));
+		  tex.loadFromFile("res/arrowTile.png");
+		  s->setSpritesheet(tex);
 	  }
     // *********************************
   }

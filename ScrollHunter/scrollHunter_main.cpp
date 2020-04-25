@@ -10,6 +10,7 @@ HelpScene help;
 Level1Scene level1;
 Level2Scene level2;
 Level3Scene level3;
+Level4Scene finalScene;
 
 int main() {
   Engine::Start(1920, 1080, "Scroll Hunter",&menu);
