@@ -204,6 +204,7 @@ void Level3Scene::UnLoad() {
 
 void Level3Scene::Update(const double& dt) {
 
+	//Start boss
 	if (player->getPosition().x > 1000)
 	{
 		startBoss = true;
