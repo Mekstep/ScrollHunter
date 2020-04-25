@@ -17,11 +17,6 @@ static int bossBullet = 1;
 static int amount = 0;
 
 static Vector2f bossPosOrigin = Vector2f(2460, 510);
-static Vector2f bossPos1 = Vector2f(1800, 510);
-static Vector2f bossPos2 = Vector2f(1800, 270);
-static Vector2f bossPos3 = Vector2f(1800, 748);
-static Vector2f bossPos4 = Vector2f(2460, 270);
-static Vector2f bossPos5 = Vector2f(2460, 748);
 
 void EnemyTurretComponent::update(double dt) 
 {

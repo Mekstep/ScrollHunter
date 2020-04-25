@@ -166,6 +166,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 
       }
       if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+          window.close();
           window2.close();
       }
 
@@ -188,16 +189,16 @@ void Engine::Start(unsigned int width, unsigned int height,
         {
         case sf::Event::Closed:
 
-            //if (remove("keepScore.txt") != 0)
-            //    perror("Error deleting file");
-            //else
-            //    puts("File successfully deleted");
-            //
-            //
-            //if (remove("PlayerName.txt") != 0)
-            //    perror("Error deleting file");
-            //else
-            //    puts("File successfully deleted");
+            if (remove("keepScore.txt") != 0)
+                perror("Error deleting file");
+            else
+                puts("keepScore file successfully deleted");
+            
+            
+            if (remove("PlayerName.txt") != 0)
+                perror("Error deleting file");
+            else
+                puts("PlayerName file successfully deleted");
             window.close();
 
             break;
@@ -208,16 +209,16 @@ void Engine::Start(unsigned int width, unsigned int height,
     if (Keyboard::isKeyPressed(Keyboard::Escape)) 
     {
 
-        //if (remove("keepScore.txt") != 0)
-        //    perror("Error deleting file");
-        //else
-        //    puts("File successfully deleted");
-        //
-        //
-        //if (remove("PlayerName.txt") != 0)
-        //    perror("Error deleting file");
-        //else
-        //    puts("File successfully deleted");
+        if (remove("keepScore.txt") != 0)
+            perror("Error deleting file");
+        else
+            puts("keepScore file successfully deleted");
+
+
+        if (remove("PlayerName.txt") != 0)
+            perror("Error deleting file");
+        else
+            puts("PlayerName file successfully deleted");
       window.close();
     }
 

@@ -93,7 +93,7 @@ void MenuScene::Update(const double& dt) {
 
   if (sf::Keyboard::isKeyPressed(Keyboard::Num1)) {
       music.stop();
-	  Engine::ChangeScene(&level3);
+	  Engine::ChangeScene(&level1);
   }
 
   if (sf::Keyboard::isKeyPressed(Keyboard::Num2)) {
@@ -164,7 +164,7 @@ void GameOver::Update(const double& dt) {
 
 	if (sf::Keyboard::isKeyPressed(Keyboard::Num1)) {
         gameOverMusic.stop();
-		Engine::ChangeScene(&level3);
+		Engine::ChangeScene(&level1);
 	}
 
 	if (sf::Keyboard::isKeyPressed(Keyboard::Num2)) {
@@ -173,7 +173,7 @@ void GameOver::Update(const double& dt) {
 		if (remove("keepScore.txt") != 0)
 			perror("Error deleting file");
 		else
-			puts("File successfully deleted");
+			puts("keepScore file successfully deleted");
 
 		Engine::ChangeScene(&menu);
 	}

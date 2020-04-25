@@ -12,11 +12,21 @@ static int damage;
 
 float dmgTime = 0.8f;
 
+static float dist;
+
 void ContactComponent::update(double dt) {
 
 	for (auto pl : _parent->scene->ents.find("enemy"))
 	{
-		if (length(_parent->getPosition() - pl->getPosition()) < 70.0) {
+		if (pl->getType() == "boss")
+		{
+			dist = 240.0f;
+		}
+		else
+		{
+			dist = 100.0f;
+		}
+		if (length(_parent->getPosition() - pl->getPosition()) < dist) {
 		
 			dmgTime -= dt;
 		

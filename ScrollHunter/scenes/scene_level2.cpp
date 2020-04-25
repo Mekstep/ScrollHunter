@@ -163,9 +163,9 @@ void Level2Scene::Load()
 	  essBarS.setScale(player->getEssence() / 10, 1);
 	  essBarS.setPosition(Vector2f(164.f, 1041.f));
 
-	  HUD2.loadFromFile("res/HUD.png");
+	  HUD2.loadFromFile("res/HUD2.png");
 	  HUDs2.setTexture(HUD2);
-	  HUDbg2.loadFromFile("res/HUDbg.png");
+	  HUDbg2.loadFromFile("res/HUDbg2.png");
 	  HUDbgs2.setTexture(HUDbg2);
   }
   //***********************************************
