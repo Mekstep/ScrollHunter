@@ -13,6 +13,9 @@ using namespace sf;
 auto walls = ls::findTiles(ls::WALL);
 static Texture tex;
 
+static int bossBullet = 1;
+static int amount = 0;
+
 void EnemyTurretComponent::update(double dt) 
 {
        
@@ -73,6 +76,96 @@ void EnemyTurretComponent::fire() const {
 	  s->setSpritesheet(tex);
 	  s->setFrameCount(8);
 	  s->setFrameTime(0.05f);
+  }
+  else if (_parent->getType() == "boss")
+  {
+      if (bossBullet == 1)
+      {
+          bullet->addComponent<BulletPhysicsComponent>();
+          auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+          tex.loadFromFile("res/chiefAttack.png");
+          s->setSpritesheet(tex);
+          s->setFrameCount(8);
+          s->setFrameTime(0.05f);
+          amount++;
+          
+      }
+      if (bossBullet == 2)
+      {
+          bullet->addComponent<AimedBulletComponent>();
+          auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+          tex.loadFromFile("res/archerAttack.png");
+          s->setSpritesheet(tex);
+          s->setFrameCount(8);
+          s->setFrameTime(0.05f);
+          amount++;
+          
+      }
+      if (bossBullet == 3)
+      {
+          bullet->addComponent<BulletPhysicsComponent>();
+          auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
+          tex.loadFromFile("res/spell3Sheet.png");
+          s->setSpritesheet(tex);
+          s->setFrameCount(91);
+          s->setFrameTime(0.03f);
+          bullet->setPosition(bullet->getPosition() + Vector2f(0,-150));
+          amount++;
+          
+      }
+      if (bossBullet == 4)
+      {
+          bullet->addComponent<BulletPhysicsComponent>();
+          auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+          tex.loadFromFile("res/chiefAttack.png");
+          s->setSpritesheet(tex);
+          s->setFrameCount(8);
+          s->setFrameTime(0.05f);
+          amount++;
+          
+      }
+      if (bossBullet == 5)
+      {
+          bullet->addComponent<BulletPhysicsComponent>();
+          auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
+          tex.loadFromFile("res/spell3Sheet.png");
+          s->setSpritesheet(tex);
+          s->setFrameCount(91);
+          s->setFrameTime(0.03f);
+          bullet->setPosition(bullet->getPosition() + Vector2f(0, 150));
+          amount++;
+          
+      }
+
+      
+
+      if (amount == 2)
+      {
+          bossBullet++;
+      }
+      if (amount == 3)
+      {
+          bossBullet++;
+      }
+      if (amount == 4)
+      {
+          bossBullet++;
+      }
+      if (amount == 6)
+      {
+          bossBullet++;
+      }
+      if (amount == 7)
+      {
+          bossBullet = 1;
+          amount = 0;
+      }
+      
+      
+      
+
+      cout << "AMOUNT: " << amount << endl;
+      cout << "BOSSBULLET: " << bossBullet << endl;
   }
   else
   {
