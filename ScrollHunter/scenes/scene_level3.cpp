@@ -76,6 +76,13 @@ void Level3Scene::Load() {
   scene3view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
   scene3view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
 
+  //reset positions
+  bckSprites3[0].setPosition(Vector2f(0, 0));
+  bckSprites3[1].setPosition(Vector2f(0, 0));
+  bckSprites3[2].setPosition(Vector2f(0, 0));
+  bckSprites3[3].setPosition(Vector2f(0, 0));
+
+
   //Background
 // ***************************************************************************
   for (int i = 0; i < 4; i++)
@@ -399,6 +406,15 @@ void Level3Scene::Update(const double& dt) {
 
 	  Engine::ChangeScene((Scene*)&gameOver);
   } 
+
+  if (sf::Keyboard::isKeyPressed(Keyboard::B)) {
+	  Engine::ChangeScene(&menu);
+  }
+
+  if (sf::Keyboard::isKeyPressed(Keyboard::V)) {
+	  Level3Scene::UnLoad();
+	  Engine::ChangeScene(&level1);
+  }
 
   Scene::Update(dt);
   

@@ -25,3 +25,15 @@ public:
 
 	void Render() override;
 };
+
+class HelpScene : public Scene {
+public:
+	HelpScene() = default;
+	~HelpScene() override = default;
+
+	void Load() override;
+
+	void Update(const double& dt) override;
+
+	void Render() override;
+};

@@ -42,6 +42,9 @@ static Texture hpBarT;
 static Sprite essBarS;
 static Texture essBarT;
 
+//sound
+static SoundBuffer buffer;
+static Sound level;
 
 View scene1view;
 View scene1view1;
@@ -70,6 +73,14 @@ void Level1Scene::Load()
   scene1view1.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
   scene1view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
   scene1view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+
+  //reset positions
+  bckSprites1[0].setPosition(Vector2f(0, 0));
+  bckSprites1[1].setPosition(Vector2f(0, 0));
+  bckSprites1[2].setPosition(Vector2f(0, 0));
+  bckSprites1[3].setPosition(Vector2f(0, 0));
+  bckSprites1[4].setPosition(Vector2f(0, 0));
+  bckSprites1[5].setPosition(Vector2f(0, 0));
 
 
   //Background
@@ -151,6 +162,16 @@ void Level1Scene::Load()
   }
   //***********************************************
 
+	//Level Music
+  //************************************************
+  if (!buffer.loadFromFile("res/level.ogg"))
+  {
+	  cout << "Couldn't load level music!" << endl;
+  }
+  level.setBuffer(buffer);
+  level.play();
+  level.setLoop(true);
+  //************************************************
 
   // Create Skeletons
   // *****************************************************************
@@ -318,8 +339,17 @@ void Level1Scene::Update(const double& dt)
       }
       else cout << "Unable to open Scores file";
       //*********************************************************************
+	  level.stop();
+	  Engine::ChangeScene((Scene*)&gameOver);
+  }
 
-    Engine::ChangeScene((Scene*)&gameOver);
+  if (sf::Keyboard::isKeyPressed(Keyboard::B)) {
+	  Engine::ChangeScene(&menu);
+  }
+
+  if (sf::Keyboard::isKeyPressed(Keyboard::V)) {
+	  Level1Scene::UnLoad();
+	  Engine::ChangeScene(&level1);
   }
 
   Scene::Update(dt);

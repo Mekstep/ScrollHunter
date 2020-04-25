@@ -234,7 +234,7 @@ void PlayerPhysicsComponent::update(double dt) {
   //1 powerup Shield
 
 
-  if (Keyboard::isKeyPressed(Keyboard::Num1) && shieldActive == false && _parent->getEssence() > 0)
+  if (Keyboard::isKeyPressed(Keyboard::Num2) && shieldActive == false && _parent->getEssence() > 0)
   {
 	  shield = _parent->scene->makeEntity();
 	  auto s = shield->addComponent<SpriteSheetComponent>(Vector2f(150.f, 150.f));
@@ -267,7 +267,7 @@ void PlayerPhysicsComponent::update(double dt) {
 
 
   //2 powerup Familiar
-  if (Keyboard::isKeyPressed(Keyboard::Num2) && familiarActive == false && _parent->getEssence() > 0)
+  if (Keyboard::isKeyPressed(Keyboard::Num1) && familiarActive == false && _parent->getEssence() > 0)
   {
 	  familiar = _parent->scene->makeEntity();
 	  //auto s = familiar->addComponent<ShapeComponent>();
