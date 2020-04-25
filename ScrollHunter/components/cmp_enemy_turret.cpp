@@ -12,6 +12,7 @@ using namespace sf;
 
 auto walls = ls::findTiles(ls::WALL);
 static Texture tex;
+static shared_ptr<Entity> player;
 
 static int bossBullet = 1;
 static int amount = 0;
@@ -19,13 +20,12 @@ static int amount = 0;
 static Vector2f bossPosOrigin = Vector2f(2460, 510);
 
 void EnemyTurretComponent::update(double dt) 
-{
-       
+{       
             _firetime -= dt;
             if (_firetime <= 0.f) 
             {
 
-                    if (_parent->getPosition().x > _parent->scene->ents.find("player")[0]->getPosition().x - 960 && _parent->getPosition().x < _parent->scene->ents.find("player")[0]->getPosition().x + 960)
+                    if (_parent->getPosition().x > player->getPosition().x - 960 && _parent->getPosition().x < player->getPosition().x + 960)
                     {
                         fire();
 
@@ -222,6 +222,9 @@ void EnemyTurretComponent::fire() const {
 EnemyTurretComponent::EnemyTurretComponent(Entity* p)
     : Component(p), _firetime(2.f) 
 {
+
+	player = _parent->scene->ents.find("player")[0];
+
     if (_parent->getType() == "boss")
     {        
         if (length(bossPosOrigin - _parent->getPosition()) < 10.0)
