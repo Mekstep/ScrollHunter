@@ -238,8 +238,8 @@ void Level2Scene::Load()
     // *********************************
   }
 
-  //Simulate long loading times
-  //std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+  auto invis = makeEntity();
+  invis->addTag("enemy");
 
   cout << " Scene 2 Load Done" << endl;
   setLoaded(true);

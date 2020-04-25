@@ -148,6 +148,9 @@ void Level3Scene::Load() {
   //Make Boss
   boss = Enemies::makeBoss(this);
 
+  auto invis = makeEntity();
+  invis->addTag("enemy");
+
 
   // ***********************************************************************
   // Add physics colliders to level tiles.
@@ -307,6 +310,8 @@ void Level3Scene::Update(const double& dt) {
 		}		
 	}
 	//**********************************************************************************
+
+	cout << boss->getHealth() << endl;
 
 	//hp bar scaling
 	hpBarS.setScale(player->getHealth() / 10, 1);
