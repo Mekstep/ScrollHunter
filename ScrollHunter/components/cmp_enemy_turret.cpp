@@ -27,7 +27,7 @@ void EnemyTurretComponent::update(double dt)
 
                     if (_parent->getPosition().x > player->getPosition().x - 960 && _parent->getPosition().x < player->getPosition().x + 960)
                     {
-                        //fire();
+                        fire();
 
                         if (_parent->getType() == "boss")
                         {

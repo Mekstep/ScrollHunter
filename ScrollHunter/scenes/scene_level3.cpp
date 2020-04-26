@@ -24,6 +24,12 @@ static Sprite HUDbgs2;
 
 static Texture tex;
 
+shared_ptr<Entity> pedestal;
+static Texture ped;
+
+shared_ptr<Entity> scroll;
+static Texture scrollT;
+
 //health bar
 static Sprite hpBarS;
 static Texture hpBarT;
@@ -162,6 +168,25 @@ void Level3Scene::Load() {
   auto invis = makeEntity();
   invis->addTag("enemy");
 
+  //Pedestal
+  pedestal = makeEntity();
+  pedestal->setPosition(Vector2f(3550,550));
+  auto s = pedestal->addComponent<ShapeComponent>();
+  s->setShape<sf::RectangleShape>(Vector2f(840.f, 660.f));
+  ped.loadFromFile("res/pedestal.png");
+  s->getShape().setTexture(&ped);
+  s->getShape().setOrigin(420.f, 380.f);
+
+  //Scroll
+  scroll = makeEntity();
+  scroll->setPosition(Vector2f(3933, 1050));
+  auto s2 = scroll->addComponent<ShapeComponent>();
+  s2->setShape<sf::RectangleShape>(Vector2f(50.f, 50.f));
+  scrollT.loadFromFile("res/scroll.png");
+  s2->getShape().setTexture(&scrollT);
+  s2->getShape().setOrigin(420.f, 380.f);
+  scroll->addTag("scroll"); 
+
 
   // ***********************************************************************
   // Add physics colliders to level tiles.
@@ -228,8 +253,8 @@ void Level3Scene::UnLoad() {
 
 
 
-void Level3Scene::Update(const double& dt) {
-
+void Level3Scene::Update(const double& dt) 
+{
 	//Start boss
 	if (player->getPosition().x > 1000)
 	{
@@ -336,6 +361,9 @@ void Level3Scene::Update(const double& dt) {
 
 	if (boss->isAlive() == false)
 	{
+		pedestal->setPosition(Vector2f(3500, 550));
+		scroll->setPosition(Vector2f(3883, 1050));
+
 		for (auto w : player->scene->ents.find("wall"))
 		{
 			w->setForDelete();
@@ -359,7 +387,20 @@ void Level3Scene::Update(const double& dt) {
 			}
 			wallsLoaded = true;
 		}
+
+		auto plPosition = player->scene->ents.find("player")[0]->getPosition();
+
+		if (player->getPosition().x >= 2950)
+		{
+			player->scene->ents.find("player")[0]->GetCompatibleComponent<PlayerPhysicsComponent>()[0]->teleport(plPosition);
+		}
+
+		if (length(Vector2f(3490, 700) - player->getPosition()) < 25)
+		{			
+			scroll->setForDelete();
+		}
 	}
+	
 
 	//hp bar scaling
 	hpBarS.setScale(player->getHealth() / 10, 1);
@@ -390,19 +431,22 @@ void Level3Scene::Update(const double& dt) {
 
 	//Background Speeds
 	//***********************************************************
-	if (Keyboard::isKeyPressed(Keyboard::Right) && position.x > 0)
+	if (player->getPosition().x < 2950)
 	{
-		bckSprites3[0].move(Vector2f(-350 * dt, 0));
-		bckSprites3[1].move(Vector2f(-300 * dt, 0));
-		bckSprites3[2].move(Vector2f(-250 * dt, 0));
-		bckSprites3[3].move(Vector2f(-200 * dt, 0));
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Left) && position.x > 0)
-	{
-		bckSprites3[0].move(Vector2f(350 * dt, 0));
-		bckSprites3[1].move(Vector2f(300 * dt, 0));
-		bckSprites3[2].move(Vector2f(250 * dt, 0));
-		bckSprites3[3].move(Vector2f(200 * dt, 0));
+		if (Keyboard::isKeyPressed(Keyboard::Right) && position.x > 0)
+		{
+			bckSprites3[0].move(Vector2f(-350 * dt, 0));
+			bckSprites3[1].move(Vector2f(-300 * dt, 0));
+			bckSprites3[2].move(Vector2f(-250 * dt, 0));
+			bckSprites3[3].move(Vector2f(-200 * dt, 0));
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Left) && position.x > 0)
+		{
+			bckSprites3[0].move(Vector2f(350 * dt, 0));
+			bckSprites3[1].move(Vector2f(300 * dt, 0));
+			bckSprites3[2].move(Vector2f(250 * dt, 0));
+			bckSprites3[3].move(Vector2f(200 * dt, 0));
+		}
 	}
 	//***********************************************************
 
