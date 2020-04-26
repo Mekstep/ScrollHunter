@@ -75,6 +75,12 @@ static bool startBoss = false;
 
 static bool wallsLoaded = false;
 
+static float timer2 = 5.f;
+static bool startShake = false;
+static bool shake = true;
+static bool pause = false;
+static Vector2f tempPos;
+
 void Level3Scene::Load() {
   cout << "Scene 3 Load" << endl;
   ls::loadLevelFile("res/level_3.txt", 40.0f);
@@ -389,16 +395,28 @@ void Level3Scene::Update(const double& dt)
 		}
 
 		auto plPosition = player->scene->ents.find("player")[0]->getPosition();
+				
 
-		if (player->getPosition().x >= 2950)
-		{
-			player->scene->ents.find("player")[0]->GetCompatibleComponent<PlayerPhysicsComponent>()[0]->teleport(plPosition);
-		}
-
+		//Pick up Scroll
 		if (length(Vector2f(3490, 700) - player->getPosition()) < 25)
 		{			
 			scroll->setForDelete();
-		}
+
+			timer2 -= dt;
+
+			startShake = true;
+
+			pause = true;
+
+			if (timer2 > 0)
+			{
+				player->scene->ents.find("player")[0]->GetCompatibleComponent<PlayerPhysicsComponent>()[0]->teleport(plPosition);
+			}
+			else
+			{
+				pause = false;
+			}
+		}		
 	}
 	
 
@@ -429,9 +447,56 @@ void Level3Scene::Update(const double& dt)
 	//*****************************************************
 
 
-	//Background Speeds
+	//Background Speeds and shake
 	//***********************************************************
-	if (player->getPosition().x < 2950)
+	if (startShake == true)
+	{
+		if (shake == true)
+		{
+			bckSprites3[0].move(Vector2f(-700 * dt, 0));
+			bckSprites3[1].move(Vector2f(-600 * dt, 0));
+			bckSprites3[2].move(Vector2f(-500 * dt, 0));
+			bckSprites3[3].move(Vector2f(-400 * dt, 0));
+		}
+		else
+		{
+			bckSprites3[0].move(Vector2f(700 * dt, 0));
+			bckSprites3[1].move(Vector2f(600 * dt, 0));
+			bckSprites3[2].move(Vector2f(500 * dt, 0));
+			bckSprites3[3].move(Vector2f(400 * dt, 0));
+		}
+
+			if (bckSprites3[0].getPosition().x < tempPos.x - 5)
+			{
+				tempPos = bckSprites3[0].getPosition();
+				shake = false;
+			}
+
+			if (bckSprites3[0].getPosition().x > tempPos.x + 5)
+			{
+				tempPos = bckSprites3[0].getPosition();
+				shake = true;
+			}
+
+			if (pause == false)
+			{
+				if (Keyboard::isKeyPressed(Keyboard::Right) && position.x > 0)
+				{
+					bckSprites3[0].move(Vector2f(-350 * dt, 0));
+					bckSprites3[1].move(Vector2f(-300 * dt, 0));
+					bckSprites3[2].move(Vector2f(-250 * dt, 0));
+					bckSprites3[3].move(Vector2f(-200 * dt, 0));
+				}
+				if (Keyboard::isKeyPressed(Keyboard::Left) && position.x > 0)
+				{
+					bckSprites3[0].move(Vector2f(350 * dt, 0));
+					bckSprites3[1].move(Vector2f(300 * dt, 0));
+					bckSprites3[2].move(Vector2f(250 * dt, 0));
+					bckSprites3[3].move(Vector2f(200 * dt, 0));
+				}
+			}
+	}
+	if(startShake == false)
 	{
 		if (Keyboard::isKeyPressed(Keyboard::Right) && position.x > 0)
 		{

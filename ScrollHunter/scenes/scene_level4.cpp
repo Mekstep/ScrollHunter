@@ -57,6 +57,9 @@ static string line;
 
 static float timer = 0.1f;
 
+static bool shake = true;
+static Vector2f tempPos;
+
 
 void Level4Scene::Load() {
   cout << "Scene 4 Load" << endl;
@@ -299,19 +302,39 @@ void Level4Scene::Update(const double& dt) {
 
 	//Background Speeds
 	//***********************************************************
+	if (shake == true)
+	{
+		bckSprites3[0].move(Vector2f(-700 * dt, 0));
+		bckSprites3[1].move(Vector2f(-600 * dt, 0));
+		bckSprites3[2].move(Vector2f(-500 * dt, 0));
+		bckSprites3[3].move(Vector2f(-400 * dt, 0));
+	}
+	else
+	{
+		bckSprites3[0].move(Vector2f(700 * dt, 0));
+		bckSprites3[1].move(Vector2f(600 * dt, 0));
+		bckSprites3[2].move(Vector2f(500 * dt, 0));
+		bckSprites3[3].move(Vector2f(400 * dt, 0));
+	}
+
+	if (bckSprites3[0].getPosition().x < tempPos.x - 5)
+	{
+		tempPos = bckSprites3[0].getPosition();
+		shake = false;
+	}
+
+	if (bckSprites3[0].getPosition().x > tempPos.x + 5)
+	{
+		tempPos = bckSprites3[0].getPosition();
+		shake = true;
+	}
+
 	if (Keyboard::isKeyPressed(Keyboard::Right) && position.x > 0)
 	{
 		bckSprites3[0].move(Vector2f(-350 * dt, 0));
 		bckSprites3[1].move(Vector2f(-300 * dt, 0));
 		bckSprites3[2].move(Vector2f(-250 * dt, 0));
 		bckSprites3[3].move(Vector2f(-200 * dt, 0));
-
-		bckSprites1[0].move(Vector2f(-350 * dt, 0));
-		bckSprites1[1].move(Vector2f(-300 * dt, 0));
-		bckSprites1[2].move(Vector2f(-250 * dt, 0));
-		bckSprites1[3].move(Vector2f(-200 * dt, 0));
-		bckSprites1[4].move(Vector2f(-150 * dt, 0));
-		bckSprites1[5].move(Vector2f(-100 * dt, 0));
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Left) && position.x > 0)
 	{
@@ -319,13 +342,6 @@ void Level4Scene::Update(const double& dt) {
 		bckSprites3[1].move(Vector2f(300 * dt, 0));
 		bckSprites3[2].move(Vector2f(250 * dt, 0));
 		bckSprites3[3].move(Vector2f(200 * dt, 0));
-
-		bckSprites1[0].move(Vector2f(350 * dt, 0));
-		bckSprites1[1].move(Vector2f(300 * dt, 0));
-		bckSprites1[2].move(Vector2f(250 * dt, 0));
-		bckSprites1[3].move(Vector2f(200 * dt, 0));
-		bckSprites1[4].move(Vector2f(150 * dt, 0));
-		bckSprites1[5].move(Vector2f(100 * dt, 0));
 	}
 	//***********************************************************
 
