@@ -30,6 +30,7 @@ static float familiarDuration = 0.f;
 static bool familiarActive = false;
 
 //increased defualt attack
+static shared_ptr<Entity> powerup;
 static float increaseDuration = 0.f;
 static bool increaseActive = false;
 static shared_ptr<Entity> increaseBullet;
@@ -179,7 +180,7 @@ void PlayerPhysicsComponent::update(double dt) {
 	  }
 
 
-	  qCooldown = 1.f;
+	  qCooldown = 0.8f;
   }
 
   
@@ -190,7 +191,7 @@ void PlayerPhysicsComponent::update(double dt) {
   if (Keyboard::isKeyPressed(Keyboard::W) && wCooldown <= 0.f && _parent->getEssence() > 0)
   {
 	  bullet2 = _parent->scene->makeEntity();
-	  bullet2->setPosition(_parent->getPosition() + Vector2f(60, 10));
+	  bullet2->setPosition(_parent->getPosition() + Vector2f(80, 10));
 	  bullet2->addComponent<EnemyHurtComponent>(10);
 
 	  auto s = bullet2->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
@@ -201,7 +202,7 @@ void PlayerPhysicsComponent::update(double dt) {
 
 	  auto p = bullet2->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(50.f, 50.f));
 	  bullet2->addComponent<BulletComponent>();
-	  _parent->setEssence(_parent->getEssence() - 2);
+	  _parent->setEssence(_parent->getEssence() - 5);
 	  wCooldown = 0.06f;
   }
 
@@ -278,7 +279,7 @@ void PlayerPhysicsComponent::update(double dt) {
 	  sp->setFrameCount(61);
 	  sp->setFrameTime(0.05f);
 	  auto t = familiar->addComponent<FamiliarComponent>();
-	  familiarDuration = 10.f;
+	  familiarDuration = 12.f;
 	  familiarActive = true;
 	  _parent->setEssence(_parent->getEssence() - 20);
   }
@@ -299,19 +300,27 @@ void PlayerPhysicsComponent::update(double dt) {
   //3 powerup Increase Default attack
   if (Keyboard::isKeyPressed(Keyboard::Num3) && increaseActive == false && _parent->getEssence() > 0)
   {
-	  increaseDuration = 5.f;
+	  powerup = _parent->scene->makeEntity();
+	  auto sp = powerup->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+	  familiarSheet.loadFromFile("res/powerup3.png");
+	  sp->setSpritesheet(familiarSheet);
+	  sp->setFrameCount(8);
+	  sp->setFrameTime(0.05f);
+	  increaseDuration = 7.f;
 	  increaseActive = true;
 	  _parent->setEssence(_parent->getEssence() - 20);
   }
 
   if (increaseActive == true)
   {
+	  powerup->setPosition(_parent->getPosition() - Vector2f(10.f,50.f));
 	  increaseDuration -= dt;
   }
 
   if (increaseDuration < 0.f)
   {
 	  increaseActive = false;
+	  powerup->setForDelete();
   }
 
 

@@ -8,7 +8,7 @@ void AimedBulletComponent::update(double dt)
 {        
     for (auto bul : _parent->scene->ents.find("bullet"))
     {
-        bul->setPosition(bul->getPosition() + bul->getDirection() * (float)dt * 50.f);
+        bul->setPosition(bul->getPosition() + bul->getDirection() * (float)dt * 100.f);
     }           
 }
 

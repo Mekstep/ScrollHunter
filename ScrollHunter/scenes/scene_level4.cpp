@@ -302,6 +302,8 @@ void Level4Scene::Update(const double& dt) {
 
 	//Background Speeds
 	//***********************************************************
+
+	/*
 	if (shake == true)
 	{
 		bckSprites3[0].move(Vector2f(-700 * dt, 0));
@@ -328,6 +330,8 @@ void Level4Scene::Update(const double& dt) {
 		tempPos = bckSprites3[0].getPosition();
 		shake = true;
 	}
+
+	*/
 
 	if (Keyboard::isKeyPressed(Keyboard::Right) && position.x > 0)
 	{

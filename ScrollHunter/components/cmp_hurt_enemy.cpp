@@ -19,49 +19,83 @@ void EnemyHurtComponent::update(double dt) {
 
 	for (auto pl : _parent->scene->ents.find("enemy"))
 	{
-		if (length(pl->getPosition() - _parent->getPosition()) < 60.0) {
+		if (pl->getType() == "boss")
+		{
+			if (length(pl->getPosition() - _parent->getPosition()) < 160.0) {
 
-			pl->setHealth(pl->getHealth() - damage);
+				pl->setHealth(pl->getHealth() - damage);
 
-			_parent->setForDelete();
+				_parent->setForDelete();
 
-			if (pl->getHealth() <= 0)
-			{
-
-				//drop essence
-				auto e = pl->scene->makeEntity();
-				e->setPosition(_parent->getPosition());
-				auto sp = e->addComponent<SpriteSheetComponent>(Vector2f(24.f, 24.f));
-				tex.loadFromFile("res/essenceOrbSheet.png");
-				sp->setSpritesheet(tex);
-				sp->setFrameCount(16);
-				sp->setFrameTime(0.05f);
-				auto essence = e->addComponent<EssenceComponent>();
-
-				if (pl->getType() == "skeleton")
+				if (pl->getHealth() <= 0)
 				{
-					_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 10);
-				}
-				if (pl->getType() == "archer")
-				{
-					_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 20);
-				}
-				if (pl->getType() == "chief")
-				{
-					_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 30);
-				}
-				if (pl->getType() == "boss")
-				{
-					_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 150);
-				}
+					//drop essence
+					auto e = pl->scene->makeEntity();
+					e->setPosition(_parent->getPosition());
+					auto sp = e->addComponent<SpriteSheetComponent>(Vector2f(24.f, 24.f));
+					tex.loadFromFile("res/essenceOrbSheet.png");
+					sp->setSpritesheet(tex);
+					sp->setFrameCount(16);
+					sp->setFrameTime(0.05f);
+					auto essence = e->addComponent<EssenceComponent>();
 
-				pl->setAlive(false);
+					_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 150);					
 
-				//delete
-				pl->setForDelete();
+					pl->setAlive(false);
 
+					//delete
+					pl->setForDelete();
+
+				}
 			}
 		}
+		else
+		{
+			if (length(pl->getPosition() - _parent->getPosition()) < 60.0) {
+
+				pl->setHealth(pl->getHealth() - damage);
+
+				_parent->setForDelete();
+
+				if (pl->getHealth() <= 0)
+				{
+
+					//drop essence
+					auto e = pl->scene->makeEntity();
+					e->setPosition(_parent->getPosition());
+					auto sp = e->addComponent<SpriteSheetComponent>(Vector2f(24.f, 24.f));
+					tex.loadFromFile("res/essenceOrbSheet.png");
+					sp->setSpritesheet(tex);
+					sp->setFrameCount(16);
+					sp->setFrameTime(0.05f);
+					auto essence = e->addComponent<EssenceComponent>();
+
+					if (pl->getType() == "skeleton")
+					{
+						_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 10);
+					}
+					if (pl->getType() == "archer")
+					{
+						_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 20);
+					}
+					if (pl->getType() == "chief")
+					{
+						_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 30);
+					}
+					if (pl->getType() == "boss")
+					{
+						_parent->scene->ents.find("player")[0]->setScore(_parent->scene->ents.find("player")[0]->getScore() + 150);
+					}
+
+					pl->setAlive(false);
+
+					//delete
+					pl->setForDelete();
+
+				}
+			}
+		}
+
 		if (ls::getTileAt(_parent->getPosition()) == ls::WALL)
 		{
 			_parent->setForDelete();

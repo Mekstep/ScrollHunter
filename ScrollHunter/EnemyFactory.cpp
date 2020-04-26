@@ -33,7 +33,6 @@ std::shared_ptr<Entity> Enemies::makeSkeleton(Scene* scene)
 	skeleton->addTag("enemy");
 	skeleton->setType("skeleton");
 
-	// Add ShapeComponent, Red 16.f Circle
 	auto anim = skeleton->addComponent<SpriteSheetComponent>(Vector2f(160.f, 140.f));
 	skele.loadFromFile("res/skeletonIdle.png");
 	anim->setSpritesheet(skele);
@@ -42,7 +41,7 @@ std::shared_ptr<Entity> Enemies::makeSkeleton(Scene* scene)
 
 	// Add EnemyAIComponent
 	skeleton->addComponent<EnemyAIComponent>();
-	skeleton->addComponent<EnemyTurretComponent>();=
+	skeleton->addComponent<EnemyTurretComponent>();
 
 	return skeleton;
 }
@@ -56,7 +55,6 @@ std::shared_ptr<Entity> Enemies::makeSkeletonArcher(Scene* scene)
 	skeleArcher->addTag("enemy");
 	skeleArcher->setType("archer");
 
-	// Add ShapeComponent, Red 16.f Circle
 	auto anim = skeleArcher->addComponent<SpriteSheetComponent>(Vector2f(130.f, 140.f));
 	skeletArcher.loadFromFile("res/skeletonArcherIdle.png");
 	anim->setSpritesheet(skeletArcher);
@@ -79,7 +77,6 @@ std::shared_ptr<Entity> Enemies::makeSkeletonChief(Scene* scene)
 	skeleChief->addTag("enemy");
 	skeleChief->setType("chief");
 
-	// Add ShapeComponent, Red 16.f Circle
 	auto anim = skeleChief->addComponent<SpriteSheetComponent>(Vector2f(160.f, 180.f));
 	skeletChief.loadFromFile("res/skeletonChiefIdle.png");
 	anim->setSpritesheet(skeletChief);
@@ -102,7 +99,6 @@ std::shared_ptr<Entity> Enemies::makeBoss(Scene* scene)
 	boss->addTag("enemy");
 	boss->setType("boss");
 
-	// Add ShapeComponent, Red 16.f Circle
 	auto anim = boss->addComponent<SpriteSheetComponent>(Vector2f(487.f, 440.f));
 	bos.loadFromFile("res/boss.png");
 	anim->setSpritesheet(bos);

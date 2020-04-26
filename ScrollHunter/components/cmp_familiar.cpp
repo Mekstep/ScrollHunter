@@ -19,7 +19,7 @@ void FamiliarComponent::update(double dt)
   _firetime -= dt;
   if (_firetime <= 0.f) {
     fire();
-    _firetime = 1.f;
+    _firetime = 0.5f;
   }
 
 }
@@ -42,4 +42,4 @@ void FamiliarComponent::fire() const {
 }
 
 FamiliarComponent::FamiliarComponent(Entity* p)
-    : Component(p), _firetime(2.f) {}
+    : Component(p), _firetime(0.5f) {}

@@ -71,7 +71,7 @@ void EnemyTurretComponent::fire() const {
   else if(_parent->getType() == "chief")
   {
       bullet->addComponent<BulletPhysicsComponent>();
-	  auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+	  auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
 	  tex.loadFromFile("res/chiefAttack.png");
 	  s->setSpritesheet(tex);
 	  s->setFrameCount(8);
@@ -127,7 +127,7 @@ void EnemyTurretComponent::fire() const {
           {
               bullet->addComponent<BulletPhysicsComponent>();
               s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
-              tex.loadFromFile("res/spell3Sheet.png");
+              tex.loadFromFile("res/spell3SheetBoss.png");
               s->setFrameCount(91);
               s->setFrameTime(0.03f);
               bullet->setPosition(bullet->getPosition() + Vector2f(0, -150));
@@ -171,7 +171,7 @@ void EnemyTurretComponent::fire() const {
           {
               bullet->addComponent<BulletPhysicsComponent>();
               s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
-              tex.loadFromFile("res/spell3Sheet.png");
+              tex.loadFromFile("res/spell3SheetBoss.png");
               s->setFrameCount(91);
               s->setFrameTime(0.03f);
               bullet->setPosition(bullet->getPosition() + Vector2f(0, 150));
