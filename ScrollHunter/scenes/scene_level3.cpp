@@ -10,8 +10,20 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <SFML/Audio.hpp>
+
 using namespace std;
 using namespace sf;
+
+static SoundBuffer pickupBuff;
+static Sound pickup;
+static SoundBuffer shakeBuff;
+static Sound shakeSound;
+
+
+//sound
+static SoundBuffer buffer;
+static Sound level;
 
 const int static screenWidth = 1920;
 const int static screenHeight = 1080;
@@ -85,6 +97,18 @@ void Level3Scene::Load() {
   cout << "Scene 3 Load" << endl;
   ls::loadLevelFile("res/level_3.txt", 40.0f);
   templeTile.loadFromFile("res/templeTile.png");
+
+  if (!pickupBuff.loadFromFile("res/sounds/pickup.wav"))
+  {
+	  cout << "Couldn't load pickup sound!" << endl;
+  }
+  pickup.setBuffer(pickupBuff);
+
+  if (!pickupBuff.loadFromFile("res/sounds/shake.wav"))
+  {
+	  cout << "Couldn't load shake sound!" << endl;
+  }
+  shakeSound.setBuffer(shakeBuff);
 
   //Set Viewports for scrolling screen
   scene3view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
@@ -222,29 +246,41 @@ void Level3Scene::Load() {
 		  s->setSpritesheet(tex);
 	  }
 	  // *********************************
-
-	  //HP Bar & Essence & HUD
-  //***********************************************
-	  {
-		  //hp
-		  hpBarT.loadFromFile("res/hp.png");
-		  hpBarS.setTexture(hpBarT);
-		  hpBarS.setScale(player->getHealth() / 10, 1);
-		  hpBarS.setPosition(Vector2f(163.f, 995.f));
-
-		  //essence
-		  essBarT.loadFromFile("res/es.png");
-		  essBarS.setTexture(essBarT);
-		  essBarS.setScale(player->getEssence() / 10, 1);
-		  essBarS.setPosition(Vector2f(164.f, 1041.f));
-
-		  HUD2.loadFromFile("res/HUD2.png");
-		  HUDs2.setTexture(HUD2);
-		  HUDbg2.loadFromFile("res/HUDbg2.png");
-		  HUDbgs2.setTexture(HUDbg2);
-	  }
-	  //***********************************************
   }
+
+  //HP Bar & Essence & HUD
+//***********************************************
+  {
+	  //hp
+	  hpBarT.loadFromFile("res/hp.png");
+	  hpBarS.setTexture(hpBarT);
+	  hpBarS.setScale(player->getHealth() / 10, 1);
+	  hpBarS.setPosition(Vector2f(163.f, 995.f));
+
+	  //essence
+	  essBarT.loadFromFile("res/es.png");
+	  essBarS.setTexture(essBarT);
+	  essBarS.setScale(player->getEssence() / 10, 1);
+	  essBarS.setPosition(Vector2f(164.f, 1041.f));
+
+	  HUD2.loadFromFile("res/HUD2.png");
+	  HUDs2.setTexture(HUD2);
+	  HUDbg2.loadFromFile("res/HUDbg2.png");
+	  HUDbgs2.setTexture(HUDbg2);
+  }
+  //***********************************************
+
+	//Level Music
+//************************************************
+  if (!buffer.loadFromFile("res/music/level3.ogg"))
+  {
+	  cout << "Couldn't load level music!" << endl;
+  }
+  level.setBuffer(buffer);
+  level.play();
+  level.setLoop(true);
+  //************************************************
+
 
   cout << " Scene 3 Load Done" << endl;
   setLoaded(true);
@@ -391,6 +427,7 @@ void Level3Scene::Update(const double& dt)
 				auto s = e->addComponent<SpriteSheetComponent>(Vector2f(40.f, 40.f));
 				s->setSpritesheet(templeTile);
 			}
+
 			wallsLoaded = true;
 		}
 
@@ -402,9 +439,28 @@ void Level3Scene::Update(const double& dt)
 		{			
 			scroll->setForDelete();
 
+			auto exit = ls::findTiles(ls::END);
+			for (auto e : exit)
+			{
+				auto pos = ls::getTilePosition(e);
+				pos += Vector2f(20.0f, 20.0f); // offset to centre
+				auto et = makeEntity();
+				et->setPosition(pos);
+				auto s = et->addComponent<SpriteSheetComponent>(Vector2f(40.f, 40.f));
+				tex.loadFromFile("res/arrowTile.png");
+				s->setSpritesheet(tex);
+			}
+
+			if (timer2 == 5.f)
+			{
+				pickup.play();
+				shakeSound.play();
+			}
+
 			timer2 -= dt;
 
 			startShake = true;
+
 
 			pause = true;
 
@@ -518,6 +574,7 @@ void Level3Scene::Update(const double& dt)
   const auto pp = player->getPosition();
   if (ls::getTileAt(pp) == ls::END) 
   {
+	  level.stop();
 	  //Save current score at end of level to file so it can be carried over to next scene
 	  //****************************************************************
 	  scoring.open("keepScore.txt");
@@ -537,6 +594,7 @@ void Level3Scene::Update(const double& dt)
   } 
   else if (!player->isAlive()) 
   {
+	  level.stop();
 	  bckSprites3[0].setPosition(Vector2f(0, 0));
 	  bckSprites3[1].setPosition(Vector2f(0, 0));
 	  bckSprites3[2].setPosition(Vector2f(0, 0));
@@ -558,10 +616,12 @@ void Level3Scene::Update(const double& dt)
   } 
 
   if (sf::Keyboard::isKeyPressed(Keyboard::B)) {
+	  level.stop();
 	  Engine::ChangeScene(&menu);
   }
 
   if (sf::Keyboard::isKeyPressed(Keyboard::V)) {
+	  level.stop();
 	  Level3Scene::UnLoad();
 	  Engine::ChangeScene(&level1);
   }

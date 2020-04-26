@@ -6,6 +6,7 @@ using namespace std;
 
 MenuScene menu;
 GameOver gameOver;
+VictoryScene victory;
 HelpScene help;
 Level1Scene level1;
 Level2Scene level2;

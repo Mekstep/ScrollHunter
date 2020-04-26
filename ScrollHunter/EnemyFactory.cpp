@@ -99,7 +99,7 @@ std::shared_ptr<Entity> Enemies::makeBoss(Scene* scene)
 	boss->addTag("enemy");
 	boss->setType("boss");
 
-	auto anim = boss->addComponent<SpriteSheetComponent>(Vector2f(487.f, 440.f));
+	auto anim = boss->addComponent<SpriteSheetComponent>(Vector2f(500.f, 440.f));
 	bos.loadFromFile("res/boss.png");
 	anim->setSpritesheet(bos);
 	anim->setFrameCount(8);

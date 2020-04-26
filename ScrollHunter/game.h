@@ -9,6 +9,7 @@
 
 extern MenuScene menu;
 extern GameOver gameOver;
+extern VictoryScene victory;
 extern HelpScene help;
 extern Level1Scene level1;
 extern Level2Scene level2;

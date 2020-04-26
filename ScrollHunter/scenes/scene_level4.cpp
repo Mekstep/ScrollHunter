@@ -10,6 +10,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <SFML/Audio.hpp>
+
 using namespace std;
 using namespace sf;
 
@@ -23,6 +25,10 @@ static Sprite HUDs2;
 static Sprite HUDbgs2;
 
 static Texture tex;
+
+//sound
+static SoundBuffer buffer;
+static Sound level;
 
 //health bar
 static Sprite hpBarS;
@@ -190,7 +196,9 @@ void Level4Scene::Load() {
 	  // *********************************
   }
 
-	  //HP Bar & Essence & HUD
+
+
+		  //HP Bar & Essence & HUD
   //***********************************************
 	  {
 		  //hp
@@ -211,6 +219,18 @@ void Level4Scene::Load() {
 		  HUDbgs2.setTexture(HUDbg2);
 	  }
 	  //***********************************************
+
+		//Level Music
+  //************************************************
+	  if (!buffer.loadFromFile("res/music/level4.ogg"))
+	  {
+		  cout << "Couldn't load level music!" << endl;
+	  }
+	  level.setBuffer(buffer);
+	  level.play();
+	  level.setLoop(true);
+	  //************************************************
+
 
 
  // Create Skeletons
@@ -339,6 +359,13 @@ void Level4Scene::Update(const double& dt) {
 		bckSprites3[1].move(Vector2f(-300 * dt, 0));
 		bckSprites3[2].move(Vector2f(-250 * dt, 0));
 		bckSprites3[3].move(Vector2f(-200 * dt, 0));
+
+		bckSprites1[0].move(Vector2f(-350 * dt, 0));
+		bckSprites1[1].move(Vector2f(-300 * dt, 0));
+		bckSprites1[2].move(Vector2f(-250 * dt, 0));
+		bckSprites1[3].move(Vector2f(-200 * dt, 0));
+		bckSprites1[4].move(Vector2f(-150 * dt, 0));
+		bckSprites1[5].move(Vector2f(-100 * dt, 0));
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Left) && position.x > 0)
 	{
@@ -346,12 +373,20 @@ void Level4Scene::Update(const double& dt) {
 		bckSprites3[1].move(Vector2f(300 * dt, 0));
 		bckSprites3[2].move(Vector2f(250 * dt, 0));
 		bckSprites3[3].move(Vector2f(200 * dt, 0));
+
+		bckSprites1[0].move(Vector2f(350 * dt, 0));
+		bckSprites1[1].move(Vector2f(300 * dt, 0));
+		bckSprites1[2].move(Vector2f(250 * dt, 0));
+		bckSprites1[3].move(Vector2f(200 * dt, 0));
+		bckSprites1[4].move(Vector2f(150 * dt, 0));
+		bckSprites1[5].move(Vector2f(100 * dt, 0));
 	}
 	//***********************************************************
 
   const auto pp = player->getPosition();
   if (ls::getTileAt(pp) == ls::END) 
   {
+	  level.stop();
 	  //Save current score at end of level to file so it can be carried over to next scene
 	  //****************************************************************
 	  scoring.open("keepScore.txt");
@@ -367,10 +402,11 @@ void Level4Scene::Update(const double& dt) {
 	  scene3view2.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene3view3.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene3view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
-	  Engine::ChangeScene((Scene*)&level1);
+	  Engine::ChangeScene((Scene*)&victory);
   } 
   else if (!player->isAlive()) 
   {
+	  level.stop();
 	  bckSprites3[0].setPosition(Vector2f(0, 0));
 	  bckSprites3[1].setPosition(Vector2f(0, 0));
 	  bckSprites3[2].setPosition(Vector2f(0, 0));
@@ -399,10 +435,12 @@ void Level4Scene::Update(const double& dt) {
   } 
 
   if (sf::Keyboard::isKeyPressed(Keyboard::B)) {
+	  level.stop();
 	  Engine::ChangeScene(&menu);
   }
 
   if (sf::Keyboard::isKeyPressed(Keyboard::V)) {
+	  level.stop();
 	  Level4Scene::UnLoad();
 	  Engine::ChangeScene(&level1);
   }

@@ -7,6 +7,9 @@
 #include "cmp_bullet_physics.h"
 #include <LevelSystem.h>
 #include "cmp_aimed_bullet_physics.h"
+#include <SFML/Audio.hpp>
+
+
 using namespace std;
 using namespace sf;
 
@@ -18,6 +21,10 @@ static int bossBullet = 1;
 static int amount = 0;
 
 static Vector2f bossPosOrigin = Vector2f(2460, 510);
+
+//sounds
+static Sound cast;
+static SoundBuffer castB;
 
 void EnemyTurretComponent::update(double dt) 
 {       
@@ -54,10 +61,12 @@ void EnemyTurretComponent::update(double dt)
 }
 
 void EnemyTurretComponent::fire() const {
-  auto bullet = _parent->scene->makeEntity();
-  bullet->setPosition(_parent->getPosition());  
-  bullet->addComponent<HurtComponent>();
-  bullet->addTag("bullet"); 
+	cast.stop();
+	cast.play();
+	auto bullet = _parent->scene->makeEntity();
+	bullet->setPosition(_parent->getPosition());
+	bullet->addComponent<HurtComponent>();
+	bullet->addTag("bullet");
 
   if (_parent->getType() == "archer")
   {
@@ -92,7 +101,7 @@ void EnemyTurretComponent::fire() const {
           else
           {
               bullet->addComponent<BulletPhysicsComponent>();
-              s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+              s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
               tex.loadFromFile("res/chiefAttack.png");
           }
           
@@ -148,7 +157,7 @@ void EnemyTurretComponent::fire() const {
           else
           {
               bullet->addComponent<BulletPhysicsComponent>();
-              s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+              s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
               tex.loadFromFile("res/chiefAttack.png");
           }
           s->setSpritesheet(tex);
@@ -222,6 +231,8 @@ void EnemyTurretComponent::fire() const {
 EnemyTurretComponent::EnemyTurretComponent(Entity* p)
     : Component(p), _firetime(2.f) 
 {
+	castB.loadFromFile("res/sounds/shootEnemy.wav");
+	cast.setBuffer(castB);
 
 	player = _parent->scene->ents.find("player")[0];
 

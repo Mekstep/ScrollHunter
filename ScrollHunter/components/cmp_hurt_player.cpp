@@ -7,8 +7,8 @@
 using namespace std;
 using namespace sf;
 
-SoundBuffer hitBuff;
-Sound whack;
+static SoundBuffer hitBuff;
+static Sound whack;
 
 void HurtComponent::update(double dt) {
   if (auto pl = _player.lock()) {
@@ -47,7 +47,7 @@ void HurtComponent::update(double dt) {
 HurtComponent::HurtComponent(Entity* p)
     : Component(p), _player(_parent->scene->ents.find("player")[0]) 
 {
-    if (!hitBuff.loadFromFile("res/hit.flac"))
+    if (!hitBuff.loadFromFile("res/sounds/hit.wav"))
     {
         cout << "Couldn't load whack sound!" << endl;
     }

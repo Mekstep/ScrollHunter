@@ -13,6 +13,7 @@
 #include <iostream>
 #include "cmp_hurt_enemy.h"
 #include "ecm.h"
+#include <SFML/Audio.hpp>
 
 
 using namespace std;
@@ -54,6 +55,18 @@ static Texture shieldSheet;
 static Texture castSheet;
 
 static float timer = 2.f;
+
+//sounds
+static Sound cast;
+static SoundBuffer castB;
+static Sound cast2;
+static SoundBuffer castB2;
+static Sound cast3;
+static SoundBuffer castB3;
+
+static Sound powerupS;
+static SoundBuffer powerupB;
+
 
 bool PlayerPhysicsComponent::isGrounded() const {
   auto touch = getTouching();
@@ -145,6 +158,8 @@ void PlayerPhysicsComponent::update(double dt) {
   //Q Ability
   if (Keyboard::isKeyPressed(Keyboard::Q) && qCooldown <= 0.f)
   {
+	  cast.stop();
+	  cast.play();
 	  bullet = _parent->scene->makeEntity();
 	  bullet->setPosition(_parent->getPosition() + Vector2f(50, 0));
 	  bullet->addComponent<EnemyHurtComponent>(20);
@@ -190,9 +205,11 @@ void PlayerPhysicsComponent::update(double dt) {
   //W Ability
   if (Keyboard::isKeyPressed(Keyboard::W) && wCooldown <= 0.f && _parent->getEssence() > 0)
   {
+	  cast2.stop();
+	  cast2.play();
 	  bullet2 = _parent->scene->makeEntity();
 	  bullet2->setPosition(_parent->getPosition() + Vector2f(80, 10));
-	  bullet2->addComponent<EnemyHurtComponent>(10);
+	  bullet2->addComponent<EnemyHurtComponent>(15);
 
 	  auto s = bullet2->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
 	  wAttack.loadFromFile("res/beamSheet.png");
@@ -210,6 +227,8 @@ void PlayerPhysicsComponent::update(double dt) {
   //E ability
   if (Keyboard::isKeyPressed(Keyboard::E) && eCooldown <= 0.f)
   {
+	  cast3.stop();
+	  cast3.play();
 	  bullet3 = _parent->scene->makeEntity();
 	  bullet3->setPosition(_parent->getPosition() + Vector2f(80, 0));
 	  bullet3->addComponent<EnemyHurtComponent>(100);
@@ -237,6 +256,8 @@ void PlayerPhysicsComponent::update(double dt) {
 
   if (Keyboard::isKeyPressed(Keyboard::Num2) && shieldActive == false && _parent->getEssence() > 0)
   {
+	  powerupS.stop();
+	  powerupS.play();
 	  shield = _parent->scene->makeEntity();
 	  auto s = shield->addComponent<SpriteSheetComponent>(Vector2f(150.f, 150.f));
 	  shieldSheet.loadFromFile("res/shieldSheet.png");
@@ -270,6 +291,8 @@ void PlayerPhysicsComponent::update(double dt) {
   //2 powerup Familiar
   if (Keyboard::isKeyPressed(Keyboard::Num1) && familiarActive == false && _parent->getEssence() > 0)
   {
+	  powerupS.stop();
+	  powerupS.play();
 	  familiar = _parent->scene->makeEntity();
 	  //auto s = familiar->addComponent<ShapeComponent>();
 	  //s->setShape<sf::CircleShape>(25.f);
@@ -300,6 +323,8 @@ void PlayerPhysicsComponent::update(double dt) {
   //3 powerup Increase Default attack
   if (Keyboard::isKeyPressed(Keyboard::Num3) && increaseActive == false && _parent->getEssence() > 0)
   {
+	  powerupS.stop();
+	  powerupS.play();
 	  powerup = _parent->scene->makeEntity();
 	  auto sp = powerup->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
 	  familiarSheet.loadFromFile("res/powerup3.png");
@@ -343,4 +368,14 @@ PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p, const Vector2f& size) 
   _body->SetFixedRotation(true);
   //Bullet items have higher-res collision detection
   _body->SetBullet(true);
+
+  castB.loadFromFile("res/sounds/shootPlayer.wav");
+  cast.setBuffer(castB);
+  castB2.loadFromFile("res/sounds/shootPlayer2.wav");
+  cast2.setBuffer(castB2);
+  castB3.loadFromFile("res/sounds/shootPlayer3.wav");
+  cast3.setBuffer(castB3);
+
+  powerupB.loadFromFile("res/sounds/powerup.wav");
+  powerupS.setBuffer(powerupB);
 }

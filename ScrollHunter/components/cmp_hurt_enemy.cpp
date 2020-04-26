@@ -11,6 +11,9 @@ using namespace sf;
 static SoundBuffer hitBuff;
 static Sound whack;
 
+static SoundBuffer deathBuff;
+static Sound die;
+
 static Texture tex;
 
 int damage;
@@ -22,13 +25,17 @@ void EnemyHurtComponent::update(double dt) {
 		if (pl->getType() == "boss")
 		{
 			if (length(pl->getPosition() - _parent->getPosition()) < 160.0) {
-
+				whack.stop();
+				whack.play();
 				pl->setHealth(pl->getHealth() - damage);
 
 				_parent->setForDelete();
 
 				if (pl->getHealth() <= 0)
 				{
+					whack.stop();
+					die.stop();
+					die.play();
 					//drop essence
 					auto e = pl->scene->makeEntity();
 					e->setPosition(_parent->getPosition());
@@ -53,13 +60,17 @@ void EnemyHurtComponent::update(double dt) {
 		{
 			if (length(pl->getPosition() - _parent->getPosition()) < 60.0) {
 
+				whack.stop();
+				whack.play();
 				pl->setHealth(pl->getHealth() - damage);
 
 				_parent->setForDelete();
 
 				if (pl->getHealth() <= 0)
 				{
-
+					whack.stop();
+					die.stop();
+					die.play();
 					//drop essence
 					auto e = pl->scene->makeEntity();
 					e->setPosition(_parent->getPosition());
@@ -108,10 +119,16 @@ void EnemyHurtComponent::update(double dt) {
 	{
 		damage = _damage;
 
-		if (!hitBuff.loadFromFile("res/hit.flac"))
+		if (!hitBuff.loadFromFile("res/sounds/hit.wav"))
 		{
 			cout << "Couldn't load whack sound!" << endl;
 		}
 		whack.setBuffer(hitBuff);
+
+		if (!deathBuff.loadFromFile("res/sounds/die.wav"))
+		{
+			cout << "Couldn't load death sound!" << endl;
+		}
+		die.setBuffer(deathBuff);
 	}
 

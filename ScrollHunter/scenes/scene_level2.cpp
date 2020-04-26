@@ -50,7 +50,9 @@ static View scene2view;
 static View scene2view2;
 static View scene2view3;
 
-
+//sound
+static SoundBuffer buffer;
+static Sound level;
 
 static Font font;
 static Text scoreT;
@@ -176,6 +178,16 @@ void Level2Scene::Load()
   }
   //***********************************************
 
+	//Level Music
+  //************************************************
+  if (!buffer.loadFromFile("res/music/level2.ogg"))
+  {
+	  cout << "Couldn't load level music!" << endl;
+  }
+  level.setBuffer(buffer);
+  level.play();
+  level.setLoop(true);
+  //************************************************
 
 
  // Create Skeletons
@@ -320,6 +332,7 @@ void Level2Scene::Update(const double& dt)
 
   if (ls::getTileAt(pp) == ls::END) 
   {
+	  level.stop();
       //Save current score at end of level to file so it can be carried over to next scene
       //****************************************************************
       scoring.open("keepScore.txt");
@@ -339,6 +352,7 @@ void Level2Scene::Update(const double& dt)
   } 
   else if (!player->isAlive()) 
   {
+	  level.stop();
 	  bckSprites2[0].setPosition(Vector2f(0, 0));
 	  bckSprites2[1].setPosition(Vector2f(0, 0));
 	  bckSprites2[2].setPosition(Vector2f(0, 0));
@@ -362,10 +376,12 @@ void Level2Scene::Update(const double& dt)
   }
 
   if (sf::Keyboard::isKeyPressed(Keyboard::B)) {
+	  level.stop();
 	  Engine::ChangeScene(&menu);
   }
 
   if (sf::Keyboard::isKeyPressed(Keyboard::V)) {
+	  level.stop();
 	  Level2Scene::UnLoad();
 	  Engine::ChangeScene(&level1);
   }

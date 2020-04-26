@@ -12,10 +12,13 @@
 using namespace std;
 using namespace sf;
 
+//sounds
 SoundBuffer buff;
 SoundBuffer buff2;
+SoundBuffer buff3;
 Sound music;
 Sound gameOverMusic;
+Sound victoryMusic;
 
 Texture mainMenu;
 Sprite menuGFX;
@@ -27,6 +30,9 @@ Sprite gameOverGFX;
 
 Texture helpMenuImg;
 Sprite helpMenuGFX;
+
+Texture victoryImg;
+Sprite victoryGFX;
 
 //screen dimensions
 const int static screenWidth = 1920;
@@ -44,14 +50,11 @@ void MenuScene::Load() {
 	  mainMenu.loadFromFile("res/mainMenu.png");
 	  menuGFX.setTexture(mainMenu);
   }
-  if (!buff.loadFromFile("res/menu.ogg"))
+  if (!buff.loadFromFile("res/music/menu.ogg"))
   {
       cout << "Couldn't load menu music!" << endl;
   }
-  if (!buff2.loadFromFile("res/gameOver.ogg"))
-  {
-      cout << "Couldn't load game Over music!" << endl;
-  }
+
 
   {
 	  auto button1 = makeEntity();
@@ -84,7 +87,7 @@ void MenuScene::Load() {
   }
 
 
-  gameOverMusic.setBuffer(buff2);
+
   music.setBuffer(buff);
   music.play();
   music.setLoop(true);
@@ -104,6 +107,11 @@ void MenuScene::Update(const double& dt) {
 	  Engine::ChangeScene(&help);
   }
 
+  if (sf::Keyboard::isKeyPressed(Keyboard::V)) {
+	  music.stop();
+	  Engine::ChangeScene(&victory);
+  }
+
   Scene::Update(dt);
 }
 
@@ -120,6 +128,11 @@ void GameOver::Load() {
 
 	sceneview.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	sceneview.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+
+	if (!buff2.loadFromFile("res/music/gameOver.ogg"))
+	{
+		cout << "Couldn't load game Over music!" << endl;
+	}
 
 	{
 		//load game over screen
@@ -159,6 +172,10 @@ void GameOver::Load() {
 		button3->setPosition(Vector2f(500.f, 800.f));
 	}
 
+	gameOverMusic.setBuffer(buff2);
+	gameOverMusic.play();
+	gameOverMusic.setLoop(true);
+
 	setLoaded(true);
 }
 
@@ -187,6 +204,63 @@ void GameOver::Update(const double& dt) {
 void GameOver::Render()
 {
 	Engine::GetWindow().draw(gameOverGFX);
+
+	Engine::GetWindow().setView(sceneview);
+
+	Scene::Render();
+
+}
+
+void VictoryScene::Load() {
+
+	sceneview.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
+	sceneview.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+
+	if (!buff3.loadFromFile("res/music/victory.ogg"))
+	{
+		cout << "Couldn't load victory music!" << endl;
+	}
+
+	{
+		//load game over screen
+		victoryImg.loadFromFile("res/victoryScreen.png");
+		victoryGFX.setTexture(victoryImg);
+
+		victoryMusic.play();
+	}
+
+	{
+		auto button = makeEntity();
+		auto anim = button->addComponent<SpriteSheetComponent>(Vector2f(128.f, 128.f));
+		tex.loadFromFile("res/keys/keyB.png");
+		anim->setSpritesheet(tex);
+		anim->setFrameCount(2);
+		anim->setFrameTime(0.6f);
+		button->setPosition(Vector2f(80.f, 50.f));
+	}
+
+
+	victoryMusic.setBuffer(buff3);
+	victoryMusic.play();
+	victoryMusic.setLoop(true);
+
+	setLoaded(true);
+}
+
+void VictoryScene::Update(const double& dt) {	
+
+	if (sf::Keyboard::isKeyPressed(Keyboard::B)) {
+		victoryMusic.stop();
+		Engine::ChangeScene(&menu);
+
+	}
+
+	Scene::Update(dt);
+}
+
+void VictoryScene::Render()
+{
+	Engine::GetWindow().draw(victoryGFX);
 
 	Engine::GetWindow().setView(sceneview);
 

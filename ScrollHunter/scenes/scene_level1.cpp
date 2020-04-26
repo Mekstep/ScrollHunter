@@ -166,7 +166,7 @@ void Level1Scene::Load()
 
 	//Level Music
   //************************************************
-  if (!buffer.loadFromFile("res/level.ogg"))
+  if (!buffer.loadFromFile("res/music/level.ogg"))
   {
 	  cout << "Couldn't load level music!" << endl;
   }
@@ -315,6 +315,7 @@ void Level1Scene::Update(const double& dt)
 
   if (ls::getTileAt(pp) == ls::END) 
   {
+	  level.stop();
       //Save current score at end of level to file so it can be carried over to next scene
       //****************************************************************
       scoring.open("keepScore.txt");
@@ -356,10 +357,12 @@ void Level1Scene::Update(const double& dt)
   }
 
   if (sf::Keyboard::isKeyPressed(Keyboard::B)) {
+	  level.stop();
 	  Engine::ChangeScene(&menu);
   }
 
   if (sf::Keyboard::isKeyPressed(Keyboard::V)) {
+	  level.stop();
 	  Level1Scene::UnLoad();
 	  Engine::ChangeScene(&level1);
   }
