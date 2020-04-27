@@ -15,6 +15,7 @@
 using namespace std;
 using namespace sf;
 
+//ScreenBounds
 const int static screenWidth = 1920;
 const int static screenHeight = 1080;
 
@@ -37,24 +38,27 @@ static Texture hpBarT;
 static Sprite essBarS;
 static Texture essBarT;
 
+//Views
 static View scene3view;
 static View scene3view2;
 static View scene3view3;
 
+//Backgrounds
 static Sprite bckSprites3[4];
 static Texture bckTextures3[4];
 static Sprite bckSprites1[6];
 static Texture bckTextures1[6];
 
-
+//Player name
 static Font font;
 static Text scoreT;
 static Text plName;
 static string playerName;
 
+//Player reference
 static shared_ptr<Entity> player;
-static shared_ptr<Entity> boss;
 
+//Files for holding/checking scores and playername
 static ofstream scoring;
 static ofstream score;
 static ifstream chkScore;
@@ -62,7 +66,6 @@ static ifstream nameF;
 static string line;
 
 static float timer = 0.1f;
-
 static bool shake = true;
 static Vector2f tempPos;
 
@@ -120,7 +123,7 @@ void Level4Scene::Load() {
   }
   //**************************************************************************************
 
-  //Score
+  //Score & Name
   //***************************************************
   if (!font.loadFromFile("res/fonts/Gameplay.ttf"))
   {
@@ -462,11 +465,11 @@ void Level4Scene::Update(const double& dt) {
 void Level4Scene::Render() {
 	Engine::GetWindow().setView(scene3view2);
 
+	//Draw Background Sprites
 	for (int i = 5; i > -1; i--)
 	{
 		Engine::GetWindow().draw(bckSprites1[i]);
 	}
-
 	for (int i = 3; i > -1; i--)
 	{
 		Engine::GetWindow().draw(bckSprites3[i]);

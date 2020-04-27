@@ -53,15 +53,12 @@ protected:
   bool _visible;     // should be rendered
   bool _fordeletion; // should be deleted
   std::set<std::string> _tags;
-  int _health;
-  int _essence;
-  bool _shieldActive;
-
-  Vector2f _dir;
-
-  String _type;
-
-  int _score;
+  int _health; //health
+  int _essence; //essence
+  bool _shieldActive; //Is shield on
+  Vector2f _dir; //direction to be moved
+  String _type; // type of entity
+  int _score; // score
 
   
 
@@ -77,7 +74,7 @@ public:
 
   virtual void render();
 
-  //
+  //get and sets
   int getScore() const;
 
   void setScore(int _score);

@@ -168,7 +168,7 @@ void PlayerPhysicsComponent::update(double dt) {
 	  s->setSpritesheet(qAttack);
 	  s->setFrameCount(8);
 	  s->setFrameTime(0.05f);
-	  auto p = bullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(30.f, 30.f));
+	  auto p = bullet->addComponent<PlayerBulletPhysicsComponent>();
 	  bullet->addComponent<BulletComponent>();
 
 	  if (increaseActive == true)
@@ -180,7 +180,7 @@ void PlayerPhysicsComponent::update(double dt) {
 		  s->setSpritesheet(qAttack);
 		  s->setFrameCount(8);
 		  s->setFrameTime(0.05f);
-		  auto p = increaseBullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(30.f, 30.f));
+		  auto p = increaseBullet->addComponent<PlayerBulletPhysicsComponent>();
 		  increaseBullet->addComponent<BulletComponent>();
 
 		  increaseBullet2 = _parent->scene->makeEntity();
@@ -190,7 +190,7 @@ void PlayerPhysicsComponent::update(double dt) {
 		  s2->setSpritesheet(qAttack);
 		  s2->setFrameCount(8);
 		  s2->setFrameTime(0.05f);
-		  auto p2 = increaseBullet2->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(30.f, 30.f));
+		  auto p2 = increaseBullet2->addComponent<PlayerBulletPhysicsComponent>();
 		  increaseBullet2->addComponent<BulletComponent>();
 	  }
 
@@ -217,7 +217,7 @@ void PlayerPhysicsComponent::update(double dt) {
 	  s->setFrameCount(8);
 	  s->setFrameTime(0.05f);
 
-	  auto p = bullet2->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(50.f, 50.f));
+	  auto p = bullet2->addComponent<PlayerBulletPhysicsComponent>();
 	  bullet2->addComponent<BulletComponent>();
 	  _parent->setEssence(_parent->getEssence() - 5);
 	  wCooldown = 0.06f;
@@ -244,7 +244,7 @@ void PlayerPhysicsComponent::update(double dt) {
 	  sp->setFrameCount(91);
 	  sp->setFrameTime(0.03f);
 
-	  auto p = bullet3->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(100.f, 100.f));
+	  auto p = bullet3->addComponent<PlayerBulletPhysicsComponent>();
 	  bullet3->addComponent<BulletComponent>();
 
 	  eCooldown = 5.f;

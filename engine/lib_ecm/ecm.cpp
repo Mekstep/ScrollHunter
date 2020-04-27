@@ -24,6 +24,7 @@ void Entity::update(double dt) {
 
 bool Entity::is_fordeletion() const { return _fordeletion; }
 
+//Move entity towards position
 void Entity::Move(Vector2f target)
 {
     setDirection(normalize(target - getPosition()));
@@ -46,6 +47,7 @@ void Entity::setPosition(const sf::Vector2f& _position) {
   Entity::_position = _position;
 }
 
+//Get and sets
 int Entity::getScore() const { return _score; }
 
 void Entity::setScore(int _score) { Entity::_score = _score; }

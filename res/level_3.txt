@@ -6,14 +6,14 @@ w                                                                       w       
 w                                                                       w                           ew
 w                                                                       w                           ew
 w                                                                       w                           ew
-w          w                                                            w                           ew
-w          w                                                            w                           ew
-w          w                                                            w                           ew
-w     s    w                                                            w                           ew
-w          w                                                 b          w                           ew
-w          w                                                            w                           ew
-w          w                                                            w                           ew
-w          w                                                            w                           ew
+w                                                                       w                           ew
+w                                                                       w                           ew
+w                                                                       w                           ew
+w     s                                                                 w                           ew
+w                                                            b          w                           ew
+w                                                                       w                           ew
+w                                                                       w                           ew
+w                                                                       w                           ew
 w                                                                       w                           ew
 w                                                                       w                           ew
 w                                                                       w                           ew

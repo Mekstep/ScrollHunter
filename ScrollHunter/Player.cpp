@@ -32,14 +32,6 @@ std::shared_ptr<Entity> Player::makePlayer(Scene* scene, const Vector2f& pos) {
 	player->setScore(0);
 	player->addComponent<ContactComponent>(10);
 
-	/*
-	auto s = player->addComponent<ShapeComponent>();
-	s->setShape<sf::RectangleShape>(Vector2f(38.f, 64.f));
-	mage.loadFromFile("res/mage.png");
-	s->getShape().setTexture(&mage);
-	s->getShape().setOrigin(10.f, 15.f);
-	*/
-
 	//add spritesheet with dimension of each frame
 	auto anim = player->addComponent<SpriteSheetComponent>(Vector2f(60.f, 130.f));
 	texture.loadFromFile("res/idleSheet.png");

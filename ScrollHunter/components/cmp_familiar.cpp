@@ -45,7 +45,7 @@ void FamiliarComponent::fire() const {
 
 
 
-	auto p = bullet->addComponent<PlayerBulletPhysicsComponent>(true, Vector2f(30.f, 30.f));
+	auto p = bullet->addComponent<PlayerBulletPhysicsComponent>();
   
   
 }

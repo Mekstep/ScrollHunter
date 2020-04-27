@@ -26,33 +26,36 @@ static Vector2f bossPosOrigin = Vector2f(2460, 510);
 static Sound cast;
 static SoundBuffer castB;
 
+//fire Bullets
 void EnemyTurretComponent::update(double dt) 
-{       
-            _firetime -= dt;
-            if (_firetime <= 0.f) 
+{                   
+    //while player is close to enemies
+    if (_parent->getPosition().x > player->getPosition().x - 960 && _parent->getPosition().x < player->getPosition().x + 960)
+    {
+        //Fire every 2 seconds
+        _firetime -= dt;
+        if (_firetime <= 0.f)
+        {
+            fire();
+
+            //If boss, make him fire faster depending on position
+            if (_parent->getType() == "boss")
             {
-
-                    if (_parent->getPosition().x > player->getPosition().x - 960 && _parent->getPosition().x < player->getPosition().x + 960)
-                    {
-                        fire();
-
-                        if (_parent->getType() == "boss")
-                        {
-                            if (length(bossPosOrigin - _parent->getPosition()) < 10.0)
-                            {
-                                _firetime = 0.1f;
-                            }
-                            else
-                            {
-                                _firetime = 0.5f;
-                            }
-                        }
-                        else
-                        {
-                            _firetime = 2.0f;
-                        }
-                    }                                    
+                if (length(bossPosOrigin - _parent->getPosition()) < 10.0)
+                {
+                    _firetime = 0.1f;
+                }
+                else
+                {
+                    _firetime = 0.5f;
+                }
             }
+            else
+            {
+                _firetime = 2.0f;
+            }
+        }
+    }
 
   static float angle = 0.f;
   angle += 1.f * dt;
@@ -60,170 +63,186 @@ void EnemyTurretComponent::update(double dt)
   _parent->setRotation(270.f + sin(angle) * 45.f);
 }
 
-void EnemyTurretComponent::fire() const {
+void EnemyTurretComponent::fire() const 
+{
 	cast.stop();
 	cast.play();
+
+    //Create new bullet, get position from parent that fired it and add hurt component, tag it as bullet also
 	auto bullet = _parent->scene->makeEntity();
 	bullet->setPosition(_parent->getPosition());
 	bullet->addComponent<HurtComponent>();
 	bullet->addTag("bullet");
 
-  if (_parent->getType() == "archer")
-  {
-      bullet->addComponent<AimedBulletComponent>();
-	  auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
-	  tex.loadFromFile("res/archerAttack.png");
-	  s->setSpritesheet(tex);
-	  s->setFrameCount(8);
-	  s->setFrameTime(0.05f);
-  }
-  else if(_parent->getType() == "chief")
-  {
-      bullet->addComponent<BulletPhysicsComponent>();
-	  auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
-	  tex.loadFromFile("res/chiefAttack.png");
-	  s->setSpritesheet(tex);
-	  s->setFrameCount(8);
-	  s->setFrameTime(0.05f);
-  }
-  else if (_parent->getType() == "boss")
-  {
-      shared_ptr<SpriteSheetComponent> s;
+    //If bullets parent is an archer set up it's spritesheet
+    if (_parent->getType() == "archer")
+    {
+        bullet->addComponent<AimedBulletComponent>();
+	      auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+	      tex.loadFromFile("res/archerAttack.png");
+	      s->setSpritesheet(tex);
+	      s->setFrameCount(8);
+	      s->setFrameTime(0.05f);
+    }
+    //If bullets parent is an chief set up it's spritesheet
+    else if(_parent->getType() == "chief")
+    {
+        bullet->addComponent<BulletPhysicsComponent>();
+	      auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
+	      tex.loadFromFile("res/chiefAttack.png");
+	      s->setSpritesheet(tex);
+	      s->setFrameCount(8);
+	      s->setFrameTime(0.05f);
+    }
+    //If bullets parent is a boss set up it's spritesheet
+    else if (_parent->getType() == "boss")
+    {
+        shared_ptr<SpriteSheetComponent> s;
 
-      if (bossBullet == 1)
-      {
-          if (length(bossPosOrigin - _parent->getPosition()) < 10.0)
-          {
-              bullet->addComponent<AimedBulletComponent>();
-              s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
-              tex.loadFromFile("res/archerAttack.png");
-          }
-          else
-          {
-              bullet->addComponent<BulletPhysicsComponent>();
-              s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
-              tex.loadFromFile("res/chiefAttack.png");
-          }
-          
-          s->setSpritesheet(tex);
-          s->setFrameCount(8);
-          s->setFrameTime(0.05f);
-          amount++;
-          
-      }
-      if (bossBullet == 2)
-      {
-          bullet->addComponent<AimedBulletComponent>();
-          s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
-          tex.loadFromFile("res/archerAttack.png");
-          s->setSpritesheet(tex);
-          s->setFrameCount(8);
-          s->setFrameTime(0.05f);
-          amount++;
-          
-      }
-      if (bossBullet == 3)
-      {
-          if (length(bossPosOrigin - _parent->getPosition()) < 10.0)
-          {
-              bullet->addComponent<AimedBulletComponent>();
-              s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
-              tex.loadFromFile("res/archerAttack.png");
-              s->setFrameCount(8);
-              s->setFrameTime(0.05f);
-          }
-          else
-          {
-              bullet->addComponent<BulletPhysicsComponent>();
-              s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
-              tex.loadFromFile("res/spell3SheetBoss.png");
-              s->setFrameCount(91);
-              s->setFrameTime(0.03f);
-              bullet->setPosition(bullet->getPosition() + Vector2f(0, -150));
-          }
-          s->setSpritesheet(tex);         
-          
-          amount++;
-          
-      }
-      if (bossBullet == 4)
-      {
-          if (length(bossPosOrigin - _parent->getPosition()) < 10.0)
-          {
-              bullet->addComponent<AimedBulletComponent>();
-              s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
-              tex.loadFromFile("res/archerAttack.png");
-          }
-          else
-          {
-              bullet->addComponent<BulletPhysicsComponent>();
-              s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
-              tex.loadFromFile("res/chiefAttack.png");
-          }
-          s->setSpritesheet(tex);
-          s->setFrameCount(8);
-          s->setFrameTime(0.05f);
-          amount++;
-          
-      }
-      if (bossBullet == 5)
-      {
-          if (length(bossPosOrigin - _parent->getPosition()) < 10.0)
-          {
-              bullet->addComponent<AimedBulletComponent>();
-              s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
-              tex.loadFromFile("res/archerAttack.png");
-              s->setFrameCount(8);
-              s->setFrameTime(0.05f);
-          }
-          else
-          {
-              bullet->addComponent<BulletPhysicsComponent>();
-              s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
-              tex.loadFromFile("res/spell3SheetBoss.png");
-              s->setFrameCount(91);
-              s->setFrameTime(0.03f);
-              bullet->setPosition(bullet->getPosition() + Vector2f(0, 150));
-          }
-          s->setSpritesheet(tex);                    
-          amount++;          
-      }
+        //Fire first bullet
+        if (bossBullet == 1)
+        {
+            //If boss at original pos, fire string of aimed bullets, else do normal attack
+            if (length(bossPosOrigin - _parent->getPosition()) < 10.0)
+            {
+                bullet->addComponent<AimedBulletComponent>();
+                s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+                tex.loadFromFile("res/archerAttack.png");
+            }
+            else
+            {
+                bullet->addComponent<BulletPhysicsComponent>();
+                s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
+                tex.loadFromFile("res/chiefAttack.png");
+            }
+            
+            s->setSpritesheet(tex);
+            s->setFrameCount(8);
+            s->setFrameTime(0.05f);
+            amount++;
+            
+        }
+        //Fire second bullet
+        if (bossBullet == 2)
+        {
+            bullet->addComponent<AimedBulletComponent>();
+            s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+            tex.loadFromFile("res/archerAttack.png");
+            s->setSpritesheet(tex);
+            s->setFrameCount(8);
+            s->setFrameTime(0.05f);
+            amount++;
+            
+        }
+        //Fire third bullet
+        if (bossBullet == 3)
+        {
+            //If boss at original pos, fire string of aimed bullets, else do normal attack
+            if (length(bossPosOrigin - _parent->getPosition()) < 10.0)
+            {
+                bullet->addComponent<AimedBulletComponent>();
+                s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+                tex.loadFromFile("res/archerAttack.png");
+                s->setFrameCount(8);
+                s->setFrameTime(0.05f);
+            }
+            else
+            {
+                bullet->addComponent<BulletPhysicsComponent>();
+                s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
+                tex.loadFromFile("res/spell3SheetBoss.png");
+                s->setFrameCount(91);
+                s->setFrameTime(0.03f);
+                bullet->setPosition(bullet->getPosition() + Vector2f(0, -150));
+            }
+            s->setSpritesheet(tex);         
+            
+            amount++;
+            
+        }
+        //Fire fourth bullet
+        if (bossBullet == 4)
+        {
+            //If boss at original pos, fire string of aimed bullets, else do normal attack
+            if (length(bossPosOrigin - _parent->getPosition()) < 10.0)
+            {
+                bullet->addComponent<AimedBulletComponent>();
+                s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+                tex.loadFromFile("res/archerAttack.png");
+            }
+            else
+            {
+                bullet->addComponent<BulletPhysicsComponent>();
+                s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
+                tex.loadFromFile("res/chiefAttack.png");
+            }
+            s->setSpritesheet(tex);
+            s->setFrameCount(8);
+            s->setFrameTime(0.05f);
+            amount++;
+            
+        }
+        //Fire fifth bullet
+        if (bossBullet == 5)
+        {
+            //If boss at original pos, fire string of aimed bullets, else do normal attack
+            if (length(bossPosOrigin - _parent->getPosition()) < 10.0)
+            {
+                bullet->addComponent<AimedBulletComponent>();
+                s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+                tex.loadFromFile("res/archerAttack.png");
+                s->setFrameCount(8);
+                s->setFrameTime(0.05f);
+            }
+            else
+            {
+                bullet->addComponent<BulletPhysicsComponent>();
+                s = bullet->addComponent<SpriteSheetComponent>(Vector2f(100.f, 100.f));
+                tex.loadFromFile("res/spell3SheetBoss.png");
+                s->setFrameCount(91);
+                s->setFrameTime(0.03f);
+                bullet->setPosition(bullet->getPosition() + Vector2f(0, 150));
+            }
+            s->setSpritesheet(tex);                    
+            amount++;          
+        }
 
-      
-      if (amount == 2)
-      {
-          bossBullet++;
-      }
-      if (amount == 3)
-      {
-          bossBullet++;
-      }
-      if (amount == 4)
-      {
-          bossBullet++;
-      }
-      if (amount == 6)
-      {
-          bossBullet++;
-      }
-      if (amount == 7)
-      {
-          bossBullet = 1;
-          amount = 0;
-      }
-                 
-      cout << "AMOUNT: " << amount << endl;
-      cout << "BOSSBULLET: " << bossBullet << endl;
-  }
-  else
-  {
-	  bullet->addComponent<BulletPhysicsComponent>();
-	  auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
-	  tex.loadFromFile("res/skeletonAttack.png");
-	  s->setSpritesheet(tex);
-	  s->setFrameCount(8);
-	  s->setFrameTime(0.05f);
-  }
+        //Increase bullet fired by the amount that has been fired
+        if (amount == 2)
+        {
+            bossBullet++;
+        }
+        if (amount == 3)
+        {
+            bossBullet++;
+        }
+        if (amount == 4)
+        {
+            bossBullet++;
+        }
+        if (amount == 6)
+        {
+            bossBullet++;
+        }
+        if (amount == 7)
+        {
+            bossBullet = 1;
+            amount = 0;
+        }
+                   
+        cout << "AMOUNT: " << amount << endl;
+        cout << "BOSSBULLET: " << bossBullet << endl;
+    }
+    //else bullets parent is a skeleton, so set up it's spritesheet
+    else
+    {
+	      bullet->addComponent<BulletPhysicsComponent>();
+	      auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(50.f, 50.f));
+	      tex.loadFromFile("res/skeletonAttack.png");
+	      s->setSpritesheet(tex);
+	      s->setFrameCount(8);
+	      s->setFrameTime(0.05f);
+    }
   
   
 }
@@ -234,8 +253,10 @@ EnemyTurretComponent::EnemyTurretComponent(Entity* p)
 	castB.loadFromFile("res/sounds/shootEnemy.wav");
 	cast.setBuffer(castB);
 
+    //Reference player
 	player = _parent->scene->ents.find("player")[0];
 
+    //Make boss fire faster
     if (_parent->getType() == "boss")
     {        
         if (length(bossPosOrigin - _parent->getPosition()) < 10.0)

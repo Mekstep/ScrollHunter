@@ -18,12 +18,14 @@
 using namespace std;
 using namespace sf;
 
+//Player reference
 static shared_ptr<Entity> player;
-static shared_ptr<Entity> monst;
 
+//Screenbounds
 const int screenWidth = 1920;
 const int screenHeight = 1080;
 
+//Backgrounds
 Sprite bckSprites1[6];
 Texture bckTextures1[6];
 
@@ -48,16 +50,18 @@ static Texture essBarT;
 static SoundBuffer buffer;
 static Sound level;
 
+//Views
 View scene1view;
 View scene1view1;
 View scene1view3;
 
+//Player name
 static Font font;
 static Text scoreT;
 static Text plName;
 static string playerName;
 
-
+//Files for holding/checking scores and playername
 static ofstream scoring;
 static ofstream score;
 static ifstream nameF;
@@ -374,6 +378,7 @@ void Level1Scene::Render()
 {
   Engine::GetWindow().setView(scene1view1);
     
+  //Draw Background Sprites
   for (int i = 5; i > -1; i--)
   {
       Engine::GetWindow().draw(bckSprites1[i]);

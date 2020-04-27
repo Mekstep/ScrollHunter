@@ -6,6 +6,7 @@ using namespace sf;
 
 void EnemyAIComponent::update(double dt) 
 {
+    //Move enemies up and down if they come across a wall
     if (!validMove(_parent->getPosition() + Vector2f(0, 80)) || !validMove(_parent->getPosition() - Vector2f(0, 60))) {
         _direction *= -1.f;
     }

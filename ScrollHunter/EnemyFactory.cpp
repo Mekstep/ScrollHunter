@@ -39,7 +39,6 @@ std::shared_ptr<Entity> Enemies::makeSkeleton(Scene* scene)
 	anim->setFrameCount(8);
 	anim->setFrameTime(0.1f);
 
-	// Add EnemyAIComponent
 	skeleton->addComponent<EnemyAIComponent>();
 	skeleton->addComponent<EnemyTurretComponent>();
 
@@ -61,7 +60,6 @@ std::shared_ptr<Entity> Enemies::makeSkeletonArcher(Scene* scene)
 	anim->setFrameCount(8);
 	anim->setFrameTime(0.1f);
 
-	// Add EnemyAIComponent
 	skeleArcher->addComponent<EnemyAIComponent>();
 	skeleArcher->addComponent<EnemyTurretComponent>();
 
@@ -83,7 +81,6 @@ std::shared_ptr<Entity> Enemies::makeSkeletonChief(Scene* scene)
 	anim->setFrameCount(8);
 	anim->setFrameTime(0.1f);
 
-	// Add EnemyAIComponent
 	skeleChief->addComponent<EnemyAIComponent>();
 	skeleChief->addComponent<EnemyTurretComponent>();
 
@@ -105,7 +102,6 @@ std::shared_ptr<Entity> Enemies::makeBoss(Scene* scene)
 	anim->setFrameCount(8);
 	anim->setFrameTime(0.1f);
 
-	// Add EnemyAIComponent
 	boss->addComponent<EnemyTurretComponent>();
 
 	return boss;

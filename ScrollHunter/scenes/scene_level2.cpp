@@ -18,8 +18,8 @@
 using namespace std;
 using namespace sf;
 
+//Player Reference
 static shared_ptr<Entity> player;
-static shared_ptr<Entity> monst;
 
 //screen dimensions
 const int static screenWidth = 1920;
@@ -54,12 +54,13 @@ static View scene2view3;
 static SoundBuffer buffer;
 static Sound level;
 
+//PlayerName
 static Font font;
 static Text scoreT;
 static Text plName;
 static string playerName;
 
-
+//Files for holding/checking scores and playername
 static ofstream scoring;
 static ofstream score;
 static ifstream chkScore;
@@ -403,6 +404,7 @@ void Level2Scene::Render()
 {
   Engine::GetWindow().setView(scene2view2);
     
+  //Draw Background Sprites
   for (int i = 5; i > -1; i--)
   {
       Engine::GetWindow().draw(bckSprites2[i]);

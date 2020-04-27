@@ -111,7 +111,7 @@ void MenuScene::Update(const double& dt) {
 
   if (sf::Keyboard::isKeyPressed(Keyboard::Num1)) {
       music.stop();
-	  Engine::ChangeScene(&victory);
+	  Engine::ChangeScene(&level1);
   }
 
   if (sf::Keyboard::isKeyPressed(Keyboard::Num2)) {
@@ -196,7 +196,7 @@ void GameOver::Update(const double& dt) {
 
 	if (sf::Keyboard::isKeyPressed(Keyboard::Num1)) {
         gameOverMusic.stop();
-		Engine::ChangeScene(&victory);
+		Engine::ChangeScene(&level1);
 	}
 
 	if (sf::Keyboard::isKeyPressed(Keyboard::Num2)) {
@@ -251,11 +251,13 @@ void VictoryScene::Load() {
 		button->setPosition(Vector2f(80.f, 50.f));
 	}
 
+	//Load Game Font
 	if (!font.loadFromFile("res/fonts/Gameplay.ttf"))
 	{
 		cout << "Couldn't load font!" << endl;
 	}	
 
+	//Open Total Scores .txt to get all lines within it and add to scorelist
 	scores.open("Scores.txt");
 	if (scores.is_open())
 	{
@@ -271,23 +273,28 @@ void VictoryScene::Load() {
 
 	int yPos = 200;
 
+	//Sort scorelist
 	scorelist.sort();
+	//Set top of list to be A Header
+	string n = "-------------";
+	scorelist.push_back(n);
 	string scoreT = "! High Scores !";
 	scorelist.push_back(scoreT);
+
+	//Reverse list after sort
 	scorelist.reverse();
 
 	int place = 0;
 
+	//Set list of Text items strings as scorelist strings and set up positions and colours
 	for (auto n : scorelist)
-	{
-		
-
+	{		
 		Text temp;
 
 		temp.setFont(font);
 		temp.setString(n);
 		temp.setCharacterSize(50);
-		if (place == 0)
+		if (place < 2)
 		{
 			temp.setFillColor(Color::Red);
 		}
@@ -305,6 +312,7 @@ void VictoryScene::Load() {
 		place++;
 	}
 
+	//Get the top of the High scores position
 	scoreTop = names[0].getPosition() + Vector2f(0,-10);
 	
 	victoryMusic.setBuffer(buff3);
@@ -353,6 +361,7 @@ void VictoryScene::Render()
 {
 	Engine::GetWindow().draw(victoryGFX);
 
+	//Render all scores if they are below the victory title
 	for (auto r : names)
 	{
 		if (r.getPosition().y > scoreTop.y)

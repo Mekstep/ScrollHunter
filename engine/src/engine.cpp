@@ -22,12 +22,13 @@ static float loadingspinner = 0.f;
 static float loadingTime;
 static RenderWindow* _window;
 
+//PlayerName
 string playerName;
 Text playerText;
-
 static Font font;
 static Text plName;
 
+//File for player name
 static ofstream nameFile;
 static string line;
 
@@ -110,11 +111,13 @@ void Engine::Start(unsigned int width, unsigned int height,
   Physics::initialise();
   ChangeScene(scn);
 
+  //Load gameplay font
   if (!font.loadFromFile("res/fonts/Gameplay.ttf"))
   {
       cout << "Couldn't load font!" << endl;
   }
 
+  //Set name from name file
   plName.setFont(font);
   plName.setString("Type your name and hit enter");
   plName.setCharacterSize(20);
@@ -189,16 +192,18 @@ void Engine::Start(unsigned int width, unsigned int height,
         {
         case sf::Event::Closed:
 
+            //Remove KeepScore file if window is closed
             if (remove("keepScore.txt") != 0)
                 perror("Error deleting file");
             else
                 puts("keepScore file successfully deleted");
             
-            
+            //Remove PlayerName file if window is closed
             if (remove("PlayerName.txt") != 0)
                 perror("Error deleting file");
             else
                 puts("PlayerName file successfully deleted");
+
             window.close();
 
             break;
@@ -209,16 +214,18 @@ void Engine::Start(unsigned int width, unsigned int height,
     if (Keyboard::isKeyPressed(Keyboard::Escape)) 
     {
 
+        //Remove KeepScore file if player presses escape
         if (remove("keepScore.txt") != 0)
             perror("Error deleting file");
         else
             puts("keepScore file successfully deleted");
 
-
+        //Remove PlayerName file if player presses escape
         if (remove("PlayerName.txt") != 0)
             perror("Error deleting file");
         else
             puts("PlayerName file successfully deleted");
+
       window.close();
     }
 

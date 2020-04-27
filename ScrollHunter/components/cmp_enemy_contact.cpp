@@ -14,30 +14,37 @@ float dmgTime = 0.8f;
 
 static float dist;
 
+//Hurt player as they come into contact with an enemy itself
 void ContactComponent::update(double dt) {
 
-	for (auto pl : _parent->scene->ents.find("enemy"))
+	for (auto en : _parent->scene->ents.find("enemy"))
 	{
-		if (pl->getType() == "boss")
+		//If its a boss make the hitbox larger
+		if (en->getType() == "boss")
 		{
 			dist = 240.0f;
 		}
+		//else normal enemy
 		else
 		{
 			dist = 100.0f;
 		}
-		if (length(_parent->getPosition() - pl->getPosition()) < dist) {
+		//Check distance between enemy and player
+		if (length(_parent->getPosition() - en->getPosition()) < dist) {
 		
 			dmgTime -= dt;
 		
+			//Damage player every second while contacting enemy
 			if (dmgTime <= 0.f) 
 			{
+				//Remove health
 				_parent->setHealth(_parent->getHealth() - damage);
-				cout << _parent->getHealth() << endl;
 		
+				//Reset damage timer
 				dmgTime = 0.8f;
 			}			
-					
+			
+			//If player health is less than 0, dead
 			if (_parent->getHealth() <= 0)
 			{
 				//delete

@@ -10,38 +10,42 @@ using namespace sf;
 static SoundBuffer hitBuff;
 static Sound whack;
 
-void HurtComponent::update(double dt) {
-  if (auto pl = _player.lock()) {
-    if (length(pl->getPosition() - _parent->getPosition()) < 60.0) {
-
-        whack.play();
-
-		if (pl->getShield() == true)
-		{
-			pl->setHealth(pl->getHealth());
-		}
-		else
-		{
-			pl->setHealth(pl->getHealth() - 10);
-		}
-        
-
-        _parent->setForDelete();
-
-        cout << pl->getHealth() << endl;
-
+void HurtComponent::update(double dt) 
+{
+    if (auto pl = _player.lock()) {
+        //If player health is less than 0, delete them
         if (pl->getHealth() <= 0)
         {
             pl->setForDelete();
         }
-    }
 
-    if (ls::getTileAt(_parent->getPosition()) == ls::WALL)
-    {
-        _parent->setForDelete();
-    }
+        //If bullet hits player
+        if (length(pl->getPosition() - _parent->getPosition()) < 60.0) {
 
-  }
+            whack.play();
+
+            //If shield is on do not remove health otherwise remove health
+	      	if (pl->getShield() == true)
+	      	{
+	      		pl->setHealth(pl->getHealth());
+	      	}
+	      	else
+	      	{
+	      		pl->setHealth(pl->getHealth() - 10);
+	      	}
+            
+              //Delete bullet
+            _parent->setForDelete();
+         
+        }
+
+        //Delete bullets as they hit walls
+        if (ls::getTileAt(_parent->getPosition()) == ls::WALL)
+        {
+            _parent->setForDelete();
+        }
+
+    }
 }
 
 HurtComponent::HurtComponent(Entity* p)

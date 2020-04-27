@@ -11,20 +11,20 @@
 #include <fstream>
 #include <string>
 #include <SFML/Audio.hpp>
-
 using namespace std;
 using namespace sf;
 
+//Sounds
 static SoundBuffer pickupBuff;
 static Sound pickup;
 static SoundBuffer shakeBuff;
 static Sound shakeSound;
 
-
 //sound
 static SoundBuffer buffer;
 static Sound level;
 
+//ScreenBounds
 const int static screenWidth = 1920;
 const int static screenHeight = 1080;
 
@@ -36,9 +36,11 @@ static Sprite HUDbgs2;
 
 static Texture tex;
 
+//Pedestal
 shared_ptr<Entity> pedestal;
 static Texture ped;
 
+//Scroll
 shared_ptr<Entity> scroll;
 static Texture scrollT;
 
@@ -49,23 +51,28 @@ static Texture hpBarT;
 static Sprite essBarS;
 static Texture essBarT;
 
+//Views
 View scene3view;
 View scene3view2;
 View scene3view3;
 
+//Backgrounds
 Sprite bckSprites3[4];
 Texture bckTextures3[4];
 
 Texture templeTile;
 
+//PlayerName
 static Font font;
 static Text scoreT;
 static Text plName;
 static string playerName;
 
+//Player / Boss reference
 static shared_ptr<Entity> player;
 static shared_ptr<Entity> boss;
 
+//Files for holding/checking scores and playername
 static ofstream scoring;
 static ofstream score;
 static ifstream chkScore;
@@ -85,8 +92,10 @@ static int bossPattern = 1;
 static bool bossReturn = false;
 static bool startBoss = false;
 
+//Have second walls loaded
 static bool wallsLoaded = false;
 
+//Background shake
 static float timer2 = 5.f;
 static bool startShake = false;
 static bool shake = true;
@@ -142,7 +151,7 @@ void Level3Scene::Load() {
   }
   //**************************************************************************************
 
-  //Score
+   //Score & Name
   //***************************************************
   if (!font.loadFromFile("res/fonts/Gameplay.ttf"))
   {
@@ -643,6 +652,7 @@ void Level3Scene::Update(const double& dt)
 void Level3Scene::Render() {
 	Engine::GetWindow().setView(scene3view2);
 
+	//Draw Background Sprites
 	for (int i = 3; i > -1; i--)
 	{
 		Engine::GetWindow().draw(bckSprites3[i]);
