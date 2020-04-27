@@ -11,6 +11,8 @@
 #include <stdexcept>
 #include <string>
 #include <conio.h>
+#include "../lib_ecm/ecm.h"
+#include "../ScrollHunter/components/cmp_spritesheet.h"
 
 using namespace sf;
 using namespace std;
