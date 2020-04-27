@@ -605,7 +605,7 @@ void Level3Scene::Update(const double& dt)
 	  score.open("Scores.txt", std::ios_base::app);
 	  if (score.is_open())
 	  {
-		  score << playerName << ", " << player->scene->ents.find("player")[0]->getScore() << "\n";
+		  score << player->scene->ents.find("player")[0]->getScore() << " : " << playerName << "\n";
 		  score.close();
 	  }
 	  else cout << "Unable to open Scores file";
@@ -616,11 +616,21 @@ void Level3Scene::Update(const double& dt)
   } 
 
   if (sf::Keyboard::isKeyPressed(Keyboard::B)) {
+	  //Remove the players current score
+	  if (remove("keepScore.txt") != 0)
+		  perror("Error deleting file");
+	  else
+		  puts("keepScore file successfully deleted");
 	  level.stop();
 	  Engine::ChangeScene(&menu);
   }
 
   if (sf::Keyboard::isKeyPressed(Keyboard::V)) {
+	  //Remove the players current score
+	  if (remove("keepScore.txt") != 0)
+		  perror("Error deleting file");
+	  else
+		  puts("keepScore file successfully deleted");
 	  level.stop();
 	  Level3Scene::UnLoad();
 	  Engine::ChangeScene(&level1);

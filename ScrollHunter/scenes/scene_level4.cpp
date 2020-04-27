@@ -387,16 +387,16 @@ void Level4Scene::Update(const double& dt) {
   if (ls::getTileAt(pp) == ls::END) 
   {
 	  level.stop();
-	  //Save current score at end of level to file so it can be carried over to next scene
-	  //****************************************************************
-	  scoring.open("keepScore.txt");
-	  if (scoring.is_open())
+	  //Save players score once they complete game
+	  //*********************************************************************
+	  score.open("Scores.txt", std::ios_base::app);
+	  if (score.is_open())
 	  {
-		  scoring << player->scene->ents.find("player")[0]->getScore();
-		  scoring.close();
+		  score << player->scene->ents.find("player")[0]->getScore() << " : " << playerName << "\n";
+		  score.close();
 	  }
-	  else cout << "Unable to open keepScore file";
-	  //****************************************************************
+	  else cout << "Unable to open Scores file";
+	  //*********************************************************************
 
 	  scene3view.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
 	  scene3view2.reset(sf::FloatRect(0, 0, screenWidth, screenHeight));
@@ -424,7 +424,7 @@ void Level4Scene::Update(const double& dt) {
 	  score.open("Scores.txt", std::ios_base::app);
 	  if (score.is_open())
 	  {
-		  score << playerName << ", " << player->scene->ents.find("player")[0]->getScore() << "\n";
+		  score << player->scene->ents.find("player")[0]->getScore() << " : " << playerName << "\n";
 		  score.close();
 	  }
 	  else cout << "Unable to open Scores file";
@@ -435,11 +435,21 @@ void Level4Scene::Update(const double& dt) {
   } 
 
   if (sf::Keyboard::isKeyPressed(Keyboard::B)) {
+	  //Remove the players current score
+	  if (remove("keepScore.txt") != 0)
+		  perror("Error deleting file");
+	  else
+		  puts("keepScore file successfully deleted");
 	  level.stop();
 	  Engine::ChangeScene(&menu);
   }
 
   if (sf::Keyboard::isKeyPressed(Keyboard::V)) {
+	  //Remove the players current score
+	  if (remove("keepScore.txt") != 0)
+		  perror("Error deleting file");
+	  else
+		  puts("keepScore file successfully deleted");
 	  level.stop();
 	  Level4Scene::UnLoad();
 	  Engine::ChangeScene(&level1);

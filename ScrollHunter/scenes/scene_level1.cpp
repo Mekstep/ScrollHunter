@@ -347,7 +347,7 @@ void Level1Scene::Update(const double& dt)
       score.open("Scores.txt", std::ios_base::app);
       if (score.is_open())
       {
-          score << playerName << ", " <<player->scene->ents.find("player")[0]->getScore() << "\n";
+          score << player->scene->ents.find("player")[0]->getScore() << " : " << playerName << "\n";
           score.close();
       }
       else cout << "Unable to open Scores file";

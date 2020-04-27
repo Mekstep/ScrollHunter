@@ -5,8 +5,11 @@
 #include "../game.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <SFML/Audio.hpp>
 #include <LevelSystem.h>
+#include <list>
 
 
 using namespace std;
@@ -41,7 +44,16 @@ const int static screenHeight = 1080;
 //views
 static View sceneview;
 
+static ifstream scores;
+static string line;
+static vector<string> topScores;
+static vector<Text> names;
+static vector<string> points;
+static list<string> scorelist;
 
+static Font font;
+
+static Vector2f scoreTop;
 
 void MenuScene::Load() {
   cout << "Menu Load \n";
@@ -99,7 +111,7 @@ void MenuScene::Update(const double& dt) {
 
   if (sf::Keyboard::isKeyPressed(Keyboard::Num1)) {
       music.stop();
-	  Engine::ChangeScene(&level1);
+	  Engine::ChangeScene(&victory);
   }
 
   if (sf::Keyboard::isKeyPressed(Keyboard::Num2)) {
@@ -184,7 +196,7 @@ void GameOver::Update(const double& dt) {
 
 	if (sf::Keyboard::isKeyPressed(Keyboard::Num1)) {
         gameOverMusic.stop();
-		Engine::ChangeScene(&level1);
+		Engine::ChangeScene(&victory);
 	}
 
 	if (sf::Keyboard::isKeyPressed(Keyboard::Num2)) {
@@ -239,7 +251,62 @@ void VictoryScene::Load() {
 		button->setPosition(Vector2f(80.f, 50.f));
 	}
 
+	if (!font.loadFromFile("res/fonts/Gameplay.ttf"))
+	{
+		cout << "Couldn't load font!" << endl;
+	}	
 
+	scores.open("Scores.txt");
+	if (scores.is_open())
+	{
+		int i = 0;
+		while (getline(scores, line))
+		{
+			cout << line << '\n';
+			scorelist.push_back(line);
+		}
+		scores.close();
+	}
+	else cout << "Unable to open Scores file";
+
+	int yPos = 200;
+
+	scorelist.sort();
+	string scoreT = "! High Scores !";
+	scorelist.push_back(scoreT);
+	scorelist.reverse();
+
+	int place = 0;
+
+	for (auto n : scorelist)
+	{
+		
+
+		Text temp;
+
+		temp.setFont(font);
+		temp.setString(n);
+		temp.setCharacterSize(50);
+		if (place == 0)
+		{
+			temp.setFillColor(Color::Red);
+		}
+		else
+		{
+			temp.setFillColor(Color::White);
+		}
+		temp.setOutlineColor(Color::Black);
+		temp.setOutlineThickness(5);
+		temp.setPosition(960 - temp.getGlobalBounds().width / 2, yPos);
+
+		names.push_back(temp);
+
+		yPos += 75;
+		place++;
+	}
+
+	scoreTop = names[0].getPosition() + Vector2f(0,-10);
+	
 	victoryMusic.setBuffer(buff3);
 	victoryMusic.play();
 	victoryMusic.setLoop(true);
@@ -251,8 +318,32 @@ void VictoryScene::Update(const double& dt) {
 
 	if (sf::Keyboard::isKeyPressed(Keyboard::B)) {
 		victoryMusic.stop();
-		Engine::ChangeScene(&menu);
 
+		//Remove the players current score
+		if (remove("keepScore.txt") != 0)
+			perror("Error deleting file");
+		else
+			puts("keepScore file successfully deleted");
+
+		Engine::ChangeScene(&menu);
+	}
+
+	//Scroll scores up
+	if (Keyboard::isKeyPressed(Keyboard::Up) && !Keyboard::isKeyPressed(Keyboard::Down) && names[0].getPosition().y < scoreTop.y)
+	{
+		for (int i = 0; i < names.size(); i ++)
+		{
+			names[i].setPosition(names[i].getPosition() + Vector2f(0, 500 * dt));
+		}
+	}
+
+	//scroll scores down
+	if (Keyboard::isKeyPressed(Keyboard::Down) && !Keyboard::isKeyPressed(Keyboard::Up) && names.back().getPosition().y > scoreTop.y + names[0].getGlobalBounds().height)
+	{
+		for (int i = 0; i < names.size(); i++)
+		{
+			names[i].setPosition(names[i].getPosition() + Vector2f(0, -500 * dt));
+		}
 	}
 
 	Scene::Update(dt);
@@ -261,6 +352,14 @@ void VictoryScene::Update(const double& dt) {
 void VictoryScene::Render()
 {
 	Engine::GetWindow().draw(victoryGFX);
+
+	for (auto r : names)
+	{
+		if (r.getPosition().y > scoreTop.y)
+		{
+			Engine::GetWindow().draw(r);
+		}
+	}
 
 	Engine::GetWindow().setView(sceneview);
 
