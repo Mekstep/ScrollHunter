@@ -37,6 +37,7 @@ void ContactComponent::update(double dt) {
 			//Damage player every second while contacting enemy
 			if (dmgTime <= 0.f) 
 			{
+				whack.play();
 				//Remove health
 				_parent->setHealth(_parent->getHealth() - damage);
 		
@@ -59,7 +60,7 @@ void ContactComponent::update(double dt) {
 	{
 		damage = _damage;
 
-		if (!hitBuff.loadFromFile("res/hit.flac"))
+		if (!hitBuff.loadFromFile("res/sounds/hit.wav"))
 		{
 			cout << "Couldn't load whack sound!" << endl;
 		}

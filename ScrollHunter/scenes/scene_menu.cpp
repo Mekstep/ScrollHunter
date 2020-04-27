@@ -119,10 +119,6 @@ void MenuScene::Update(const double& dt) {
 	  Engine::ChangeScene(&help);
   }
 
-  if (sf::Keyboard::isKeyPressed(Keyboard::V)) {
-	  music.stop();
-	  Engine::ChangeScene(&victory);
-  }
 
   Scene::Update(dt);
 }
@@ -249,6 +245,26 @@ void VictoryScene::Load() {
 		anim->setFrameCount(2);
 		anim->setFrameTime(0.6f);
 		button->setPosition(Vector2f(80.f, 50.f));
+	}
+
+	{
+		auto button = makeEntity();
+		auto anim = button->addComponent<SpriteSheetComponent>(Vector2f(128.f, 128.f));
+		tex.loadFromFile("res/keys/keyUp.png");
+		anim->setSpritesheet(tex);
+		anim->setFrameCount(2);
+		anim->setFrameTime(0.6f);
+		button->setPosition(Vector2f(1300.f, 300.f));
+	}
+
+	{
+		auto button = makeEntity();
+		auto anim = button->addComponent<SpriteSheetComponent>(Vector2f(128.f, 128.f));
+		tex.loadFromFile("res/keys/keyDown.png");
+		anim->setSpritesheet(tex);
+		anim->setFrameCount(2);
+		anim->setFrameTime(0.6f);
+		button->setPosition(Vector2f(1300.f, 900.f));
 	}
 
 	//Load Game Font

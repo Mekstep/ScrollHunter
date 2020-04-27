@@ -18,7 +18,8 @@
 using namespace sf;
 using namespace std;
 
-Texture texture;
+static Texture texture;
+static Texture cloud;
 
 //create player
 std::shared_ptr<Entity> Player::makePlayer(Scene* scene, const Vector2f& pos) {
@@ -32,12 +33,21 @@ std::shared_ptr<Entity> Player::makePlayer(Scene* scene, const Vector2f& pos) {
 	player->setScore(0);
 	player->addComponent<ContactComponent>(10);
 
+	//cloud
+	auto cloudP = player->addComponent<SpriteSheetComponent>(Vector2f(152.f, 256.f));
+	cloud.loadFromFile("res/cloud.png");
+	cloudP->setSpritesheet(cloud);
+	cloudP->setFrameCount(1);
+
 	//add spritesheet with dimension of each frame
 	auto anim = player->addComponent<SpriteSheetComponent>(Vector2f(60.f, 130.f));
 	texture.loadFromFile("res/idleSheet.png");
 	anim->setSpritesheet(texture);
 	anim->setFrameCount(10);
 	anim->setFrameTime(0.1f);
+
+
+
 
 
 	return player;

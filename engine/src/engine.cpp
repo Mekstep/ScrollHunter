@@ -34,11 +34,17 @@ static Text plName;
 static ofstream nameFile;
 static string line;
 
+static Texture tex;
+static Texture tex2;
+static Sprite scroll;
+static Sprite loadingScreen;
+
 //views
 static View sceneview;
 
 void Loading_update(float dt, const Scene* const scn) {
   //  cout << "Eng: Loading Screen\n";
+
   if (scn->isLoaded()) {
     cout << "Eng: Exiting Loading Screen\n";
     loading = false;
@@ -48,20 +54,19 @@ void Loading_update(float dt, const Scene* const scn) {
   }
 }
 void Loading_render() {
-  // cout << "Eng: Loading Screen Render\n";
-  sceneview.reset(sf::FloatRect(0, 0, 1920, 1080));
-  sceneview.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
-  static CircleShape octagon(80, 8);
-  octagon.setOrigin(80, 80);
-  octagon.setRotation(loadingspinner);
-  octagon.setPosition(Vcast<float>(Engine::getWindowSize()) * .5f);
-  octagon.setFillColor(Color(255,255,255,min(255.f,40.f*loadingTime)));
-  static Text t("Loading", *Resources::get<sf::Font>("RobotoMono-Regular.ttf"));
-  t.setFillColor(Color(255,255,255,min(255.f,40.f*loadingTime)));
-  t.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.4f,0.3f));
-  _window->setView(sceneview);
-  Renderer::queue(&t);
-  Renderer::queue(&octagon);
+	tex.loadFromFile("res/scroll.png");
+	scroll.setTexture(tex);
+	scroll.setRotation(loadingspinner);
+	scroll.setOrigin(80, 80);
+	scroll.setPosition(Vcast<float>(Engine::getWindowSize()) * .5f);
+	tex2.loadFromFile("res/loadingScreen.png");
+	loadingScreen.setTexture(tex2);
+	// cout << "Eng: Loading Screen Render\n";
+	sceneview.reset(sf::FloatRect(0, 0, 1920, 1080));
+	sceneview.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+	_window->setView(sceneview);
+	Renderer::queue(&loadingScreen);
+	Renderer::queue(&scroll);
 }
 
 float frametimes[256] = {};
@@ -112,6 +117,7 @@ void Engine::Start(unsigned int width, unsigned int height,
   Renderer::initialise(window);
   Physics::initialise();
   ChangeScene(scn);
+
 
   //Load gameplay font
   if (!font.loadFromFile("res/fonts/Gameplay.ttf"))

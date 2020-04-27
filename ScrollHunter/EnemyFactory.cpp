@@ -13,7 +13,7 @@
 #include <LevelSystem.h>
 #include <SFML/Graphics/Transformable.hpp>
 #include "components/cmp_bullet_physics.h"
-#include "components/cmp_boss_ai.h"
+
 
 
 using namespace sf;

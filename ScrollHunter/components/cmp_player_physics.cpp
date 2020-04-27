@@ -162,7 +162,7 @@ void PlayerPhysicsComponent::update(double dt) {
 	  cast.play();
 	  bullet = _parent->scene->makeEntity();
 	  bullet->setPosition(_parent->getPosition() + Vector2f(50, 0));
-	  bullet->addComponent<EnemyHurtComponent>(20);
+	  bullet->addComponent<EnemyHurtComponent>(25);
 	  auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(55.f, 55.f));
 	  qAttack.loadFromFile("res/attackOrbSheet.png");
 	  s->setSpritesheet(qAttack);

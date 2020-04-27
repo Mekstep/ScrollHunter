@@ -36,7 +36,7 @@ void FamiliarComponent::fire() const {
 	cast.play();
 	auto bullet = _parent->scene->makeEntity();
 	bullet->setPosition(_parent->getPosition());
-	bullet->addComponent<EnemyHurtComponent>(10);
+	bullet->addComponent<EnemyHurtComponent>(20);
 	auto s = bullet->addComponent<SpriteSheetComponent>(Vector2f(55.f, 55.f));
 	tex.loadFromFile("res/attackOrbSheet.png");
 	s->setSpritesheet(tex);
